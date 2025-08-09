@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Fortishield-Matrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #0099cc);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #cc5529);
+            --shadow-glow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 150px 0 80px;
+            text-align: center;
+            background: var(--dark-bg);
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            font-family: 'Orbitron', monospace;
+            color: var(--primary-color);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 50px 0;
+            background: var(--card-bg);
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 25px;
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Projects Grid */
+        .projects-grid-section {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .project-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .project-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .project-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .project-item:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .project-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .project-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .project-info {
+            padding: 25px;
+        }
+
+        .project-category {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .project-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .project-info p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--primary-color);
+        }
+
+        /* Chatbot Styles */
+        #chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        #chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: var(--transition);
+            color: white;
+            font-size: 24px;
+        }
+
+        #chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        #chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            box-shadow: var(--shadow-glow);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .chatbot-hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+
+        .chatbot-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bot-message,
+        .user-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+
+        .bot-message {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chatbot-input {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .chatbot-input input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .chatbot-input button {
+            padding: 10px 15px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chatbot-input button:hover {
+            background: var(--secondary-color);
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: var(--dark-bg);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .filter-buttons {
+                justify-content: center;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            #chatbot-window {
+                width: 300px;
+                height: 400px;
+            }
+
+            #chatbot-container {
+                right: 20px;
+                bottom: 80px;
+            }
+
+            .whatsapp-float {
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .back-to-top {
+                left: 20px;
+                bottom: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+     <!--Navigation--> 
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link active">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+     <!--Page Header--> 
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Our Projects</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Showcasing our expertise through successful implementations across diverse industries</p>
+        </div>
+    </section>
+
+     <!--Filter Section--> 
+    <section class="filter-section">
+        <div class="container">
+            <div class="filter-buttons" data-aos="fade-up">
+                <button class="filter-btn active" data-filter="all">All Projects</button>
+                <button class="filter-btn" data-filter="development">Development</button>
+                <button class="filter-btn" data-filter="servers">Servers</button>
+                <button class="filter-btn" data-filter="security">Security</button>
+                <button class="filter-btn" data-filter="networks">Networks</button>
+                <button class="filter-btn" data-filter="cloud">Cloud</button>
+                <button class="filter-btn" data-filter="consulting">Consulting</button>
+            </div>
+        </div>
+    </section>
+
+     <!--Projects Grid--> 
+    <section class="projects-grid-section">
+        <div class="container">
+            <div class="projects-grid">
+                 <!--Enterprise Security System--> 
+                <div class="project-item" data-category="security" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-image">
+                        <img src="Enterprice.jpg" alt="Enterprise Security System">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project1')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Cybersecurity</div>
+                        <h3>Enterprise Security Overhaul</h3>
+                        <p>Complete cybersecurity transformation for Fortune 500 company with advanced threat detection, SIEM integration, and zero-trust architecture.</p>
+                    </div>
+                </div>
+
+                 <!--Cloud Infrastructure--> 
+                <div class="project-item" data-category="cloud servers" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-image">
+                        <img src="Project.jpg" alt="Multi-Cloud Infrastructure">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project2')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Cloud & Infrastructure</div>
+                        <h3>Multi-Cloud Architecture</h3>
+                        <p>Scalable multi-cloud deployment with auto-scaling, load balancing, and disaster recovery for high-growth tech startup.</p>
+                    </div>
+                </div>
+
+                 <!--Custom ERP System--> 
+                <div class="project-item" data-category="development" data-aos="fade-up" data-aos-delay="300">
+                    <div class="project-image">
+                        <img src="ERP.jpg" alt="Custom ERP System">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project3')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">System Development</div>
+                        <h3>Enterprise ERP Solution</h3>
+                        <p>Custom enterprise resource planning system with real-time analytics, inventory management, and financial reporting modules.</p>
+                    </div>
+                </div>
+
+                 <!--Network Infrastructure--> 
+                <div class="project-item" data-category="networks" data-aos="fade-up" data-aos-delay="400">
+                    <div class="project-image">
+                        <img src="Corporate Network Redesign.jpg" alt="Network Infrastructure">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project4')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Network Design</div>
+                        <h3>Corporate Network Redesign</h3>
+                        <p>Complete network infrastructure overhaul with SD-WAN implementation, enhanced security protocols, and 99.9% uptime guarantee.</p>
+                    </div>
+                </div>
+
+                 <!--E-commerce Platform--> 
+                <div class="project-item" data-category="development" data-aos="fade-up" data-aos-delay="500">
+                    <div class="project-image">
+                        <img src="High-Performance E-commerce.jpg" alt="E-commerce Platform">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project5')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Web Development</div>
+                        <h3>High-Performance E-commerce</h3>
+                        <p>Scalable e-commerce platform with microservices architecture, handling millions of transactions with advanced payment integration.</p>
+                    </div>
+                </div>
+
+                 <!--Data Center Setup--> 
+                <div class="project-item" data-category="servers" data-aos="fade-up" data-aos-delay="600">
+                    <div class="project-image">
+                        <img src="Enterprise Data Center.jpg" alt="Data Center Setup">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project6')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Server Infrastructure</div>
+                        <h3>Enterprise Data Center</h3>
+                        <p>Complete data center setup with redundancy, disaster recovery, virtualization, and 24/7 monitoring systems.</p>
+                    </div>
+                </div>
+
+                <!--Mobile Banking App--> 
+                <div class="project-item" data-category="development security" data-aos="fade-up" data-aos-delay="700">
+                    <div class="project-image">
+                        <img src="Secure Banking Application.jpg" alt="Mobile Banking App">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project7')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Mobile Development</div>
+                        <h3>Secure Banking Application</h3>
+                        <p>Cross-platform mobile banking app with biometric authentication, real-time fraud detection, and PCI DSS compliance.</p>
+                    </div>
+                </div>
+
+                 <!--Cloud Migration--> 
+                <div class="project-item" data-category="cloud consulting" data-aos="fade-up" data-aos-delay="800">
+                    <div class="project-image">
+                        <img src="Cloud Migration.jpg" alt="Cloud Migration">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project8')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Cloud Migration</div>
+                        <h3>Legacy System Modernization</h3>
+                        <p>Complete migration of legacy systems to AWS cloud with containerization, microservices architecture, and cost optimization.</p>
+                    </div>
+                </div>
+
+                 <!--IoT Platform--> 
+                <div class="project-item" data-category="development networks" data-aos="fade-up" data-aos-delay="900">
+                    <div class="project-image">
+                        <img src="IoT Development.jpg" alt="IoT Platform">
+                        <div class="project-overlay">
+                            <div class="project-actions">
+                                <button class="project-btn" onclick="openProjectModal('project9')" title="View Project">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="#" class="project-btn" title="Open project in new tab">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">IoT Development</div>
+                        <h3>Smart Manufacturing Platform</h3>
+                        <p>Industrial IoT platform with real-time monitoring, predictive analytics, and automated quality control for manufacturing operations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Project Modal--> 
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProjectModal()">&times;</span>
+            <div id="modalContent">
+                 Dynamic content will be loaded here 
+            </div>
+        </div>
+    </div>
+
+     <!--Footer--> 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+     <!--WhatsApp Floating Button--> 
+    <a href="https://wa.me/+255743981440" class="whatsapp-float" target="_blank" rel="noopener" title="Contact us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+     <!--Back to Top Button--> 
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+     <!--Chatbot--> 
+    <div id="chatbot-container">
+        <div id="chatbot-toggle" onclick="toggleChatbot()">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div id="chatbot-window" class="chatbot-hidden">
+            <div class="chatbot-header">
+                <h4>Fortishield Assistant</h4>
+                <button onclick="toggleChatbot()" class="chatbot-close">×</button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="bot-message">
+                    <p>Hello! I'm your Fortishield-Matrix assistant. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message..." onkeypress="handleChatInput(event)">
+                <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+     <!--Scripts--> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Mobile Navigation Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Project filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const projectItems = document.querySelectorAll('.project-item');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Filter projects
+                    projectItems.forEach(item => {
+                        const categories = item.getAttribute('data-category');
+                        if (filter === 'all' || categories.includes(filter)) {
+                            item.style.display = 'block';
+                            item.style.animation = 'fadeIn 0.5s ease';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+
+        // Project modal functionality
+        const projectData = {
+            project1: {
+                title: "Enterprise Security Overhaul",
+                category: "Cybersecurity",
+                image: "/placeholder.svg?height=400&width=600&text=Enterprise Security System",
+                description: "A comprehensive cybersecurity transformation for a Fortune 500 company, implementing advanced threat detection, SIEM integration, multi-factor authentication, and zero-trust architecture to protect against evolving cyber threats.",
+                technologies: ["Advanced Threat Detection", "SIEM Integration", "Multi-Factor Authentication", "Zero Trust Architecture", "Endpoint Protection", "Security Orchestration"],
+                challenges: "The client faced increasing sophisticated cyber threats, compliance requirements, and needed a scalable security infrastructure that could protect their global operations while maintaining business continuity.",
+                solution: "We implemented a comprehensive multi-layered security approach including advanced threat detection systems, SIEM integration, zero-trust network architecture, employee security training programs, and 24/7 security operations center.",
+                results: ["99.9% threat detection accuracy", "75% reduction in security incidents", "Full compliance with industry regulations", "24/7 SOC monitoring implemented", "Zero successful breaches post-implementation"]
+            },
+            project2: {
+                title: "Multi-Cloud Architecture",
+                category: "Cloud & Infrastructure",
+                image: "/placeholder.svg?height=400&width=600&text=Multi-Cloud Infrastructure",
+                description: "Scalable multi-cloud deployment with auto-scaling capabilities, load balancing, and disaster recovery designed for a rapidly growing tech startup requiring high availability and global reach.",
+                technologies: ["AWS", "Azure", "Google Cloud", "Kubernetes", "Docker", "Terraform", "Ansible", "Prometheus"],
+                challenges: "The startup needed a scalable infrastructure that could handle rapid growth, ensure high availability across multiple regions, while maintaining cost efficiency and performance optimization.",
+                solution: "We designed and implemented a multi-cloud architecture with auto-scaling capabilities, intelligent load balancing, comprehensive monitoring, and automated disaster recovery across AWS, Azure, and Google Cloud platforms.",
+                results: ["99.99% uptime achieved", "500% traffic growth handled seamlessly", "60% cost reduction through optimization", "Global deployment in 12 regions", "Auto-scaling reducing manual intervention by 90%"]
+            },
+            project3: {
+                title: "Enterprise ERP Solution",
+                category: "System Development",
+                image: "/placeholder.svg?height=400&width=600&text=Custom ERP System",
+                description: "A tailored enterprise resource planning solution with advanced analytics, real-time reporting, inventory management, and financial modules designed for a large manufacturing company.",
+                technologies: ["React", "Node.js", "PostgreSQL", "Redis", "Docker", "Microservices", "GraphQL", "Machine Learning"],
+                challenges: "The client needed a custom ERP system that could integrate with their existing processes, provide real-time analytics, handle complex manufacturing workflows, and scale with business growth.",
+                solution: "We developed a comprehensive ERP system with modular architecture including inventory management, production planning, financial reporting, HR management, and advanced analytics with machine learning capabilities.",
+                results: ["70% improvement in operational efficiency", "Real-time reporting across all departments", "Seamless integration with existing systems", "User adoption rate: 98%", "ROI achieved within 8 months"]
+            },
+            project4: {
+                title: "Corporate Network Redesign",
+                category: "Network Design",
+                image: "/placeholder.svg?height=400&width=600&text=Network Infrastructure",
+                description: "Complete network infrastructure overhaul with SD-WAN implementation, enhanced security protocols, and 99.9% uptime guarantee for a multinational corporation with 50+ offices.",
+                technologies: ["SD-WAN", "Cisco", "Fortinet", "MPLS", "VPN", "Network Segmentation", "QoS", "Network Monitoring"],
+                challenges: "The client had an outdated network infrastructure causing performance issues, security vulnerabilities, and high operational costs across their global offices.",
+                solution: "We implemented a modern SD-WAN solution with enhanced security protocols, network segmentation, quality of service optimization, and comprehensive monitoring across all locations.",
+                results: ["99.9% network uptime achieved", "60% improvement in network performance", "50% reduction in networking costs", "Enhanced security across all sites", "Centralized network management implemented"]
+            },
+            project5: {
+                title: "High-Performance E-commerce",
+                category: "Web Development",
+                image: "/placeholder.svg?height=400&width=600&text=E-commerce Platform",
+                description: "Scalable e-commerce platform with microservices architecture, handling millions of transactions daily with advanced payment integration, inventory management, and customer analytics.",
+                technologies: ["React", "Node.js", "MongoDB", "Redis", "Elasticsearch", "Docker", "Kubernetes", "Payment APIs"],
+                challenges: "The client needed a high-performance e-commerce platform that could handle massive traffic spikes, process millions of transactions, and provide real-time inventory management.",
+                solution: "We built a scalable e-commerce platform using microservices architecture with advanced caching, real-time inventory management, multiple payment gateways, and comprehensive analytics.",
+                results: ["10M+ daily transactions processed", "99.99% platform availability", "3-second average page load time", "40% increase in conversion rates", "Real-time inventory across 1000+ products"]
+            },
+            project6: {
+                title: "Enterprise Data Center",
+                category: "Server Infrastructure",
+                image: "/placeholder.svg?height=400&width=600&text=Data Center Setup",
+                description: "Complete data center setup with redundancy, disaster recovery, virtualization, and 24/7 monitoring systems for a financial services company requiring maximum uptime and security.",
+                technologies: ["VMware vSphere", "Dell PowerEdge", "NetApp Storage", "Cisco Networking", "Backup Solutions", "Monitoring Tools"],
+                challenges: "The client needed a highly secure and reliable data center infrastructure with redundancy, disaster recovery capabilities, and compliance with financial industry regulations.",
+                solution: "We designed and implemented a state-of-the-art data center with redundant power, cooling, networking, virtualized infrastructure, automated backup systems, and comprehensive monitoring.",
+                results: ["99.99% uptime achieved", "Full disaster recovery capability", "50% reduction in hardware costs through virtualization", "Compliance with financial regulations", "24/7 monitoring and support"]
+            },
+            project7: {
+                title: "Secure Banking Application",
+                category: "Mobile Development",
+                image: "/placeholder.svg?height=400&width=600&text=Mobile Banking App",
+                description: "Cross-platform mobile banking application with biometric authentication, real-time fraud detection, and PCI DSS compliance for a regional bank serving 500,000+ customers.",
+                technologies: ["React Native", "Node.js", "MongoDB", "Biometric APIs", "Fraud Detection AI", "Encryption", "PCI DSS"],
+                challenges: "The bank needed a secure, user-friendly mobile banking app that could handle high transaction volumes while maintaining strict security standards and regulatory compliance.",
+                solution: "We developed a cross-platform mobile banking app with advanced security features including biometric authentication, real-time fraud detection, end-to-end encryption, and seamless user experience.",
+                results: ["500K+ active users", "99.9% transaction success rate", "Zero security breaches", "PCI DSS compliance achieved", "4.8/5 app store rating"]
+            },
+            project8: {
+                title: "Legacy System Modernization",
+                category: "Cloud Migration",
+                image: "/placeholder.svg?height=400&width=600&text=Cloud Migration",
+                description: "Complete migration of legacy systems to AWS cloud with containerization, microservices architecture, and cost optimization for a healthcare organization.",
+                technologies: ["AWS", "Docker", "Kubernetes", "Microservices", "API Gateway", "Lambda", "RDS", "CloudFormation"],
+                challenges: "The healthcare organization had outdated legacy systems that were expensive to maintain, difficult to scale, and posed security risks while handling sensitive patient data.",
+                solution: "We executed a phased migration to AWS cloud, containerizing applications, implementing microservices architecture, ensuring HIPAA compliance, and optimizing costs through cloud-native services.",
+                results: ["80% reduction in infrastructure costs", "99.9% application availability", "HIPAA compliance maintained", "50% faster deployment cycles", "Improved disaster recovery capabilities"]
+            },
+            project9: {
+                title: "Smart Manufacturing Platform",
+                category: "IoT Development",
+                image: "/placeholder.svg?height=400&width=600&text=IoT Platform",
+                description: "Industrial IoT platform with real-time monitoring, predictive analytics, and automated quality control for manufacturing operations across multiple facilities.",
+                technologies: ["IoT Sensors", "Edge Computing", "Machine Learning", "Real-time Analytics", "Industrial Protocols", "Cloud Integration"],
+                challenges: "The manufacturing company needed to modernize their operations with IoT technology to improve efficiency, reduce downtime, and implement predictive maintenance across their facilities.",
+                solution: "We developed a comprehensive IoT platform with sensor integration, edge computing, real-time analytics, predictive maintenance algorithms, and automated quality control systems.",
+                results: ["30% reduction in equipment downtime", "25% improvement in production efficiency", "Predictive maintenance implemented", "Real-time monitoring across 5 facilities", "ROI achieved within 12 months"]
+            }
+        };
+
+        function openProjectModal(projectId) {
+            const modal = document.getElementById('projectModal');
+            const modalContent = document.getElementById('modalContent');
+            const project = projectData[projectId];
+
+            if (project) {
+                modalContent.innerHTML = `
+                    <div style="padding: 30px;">
+                        <img src="${project.image}" alt="${project.title}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="color: var(--secondary-color); font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; text-transform: uppercase;">${project.category}</div>
+                        <h2 style="color: var(--primary-color); margin-bottom: 20px; font-size: 2rem;">${project.title}</h2>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 30px; font-size: 1.1rem;">${project.description}</p>
+                        
+                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">Technologies Used</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
+                            ${project.technologies.map(tech => `<span style="background: rgba(0, 212, 255, 0.1); color: var(--primary-color); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">${tech}</span>`).join('')}
+                        </div>
+                        
+                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">Challenge</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 30px;">${project.challenges}</p>
+                        
+                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">Solution</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 30px;">${project.solution}</p>
+                        
+                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">Results</h3>
+                        <ul style="color: var(--text-secondary); line-height: 1.8;">
+                            ${project.results.map(result => `<li style="margin-bottom: 8px;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 10px;"></i>${result}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                modal.style.display = 'block';
+            }
+        }
+
+        function closeProjectModal() {
+            document.getElementById('projectModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('projectModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Chatbot functionality
+        let chatbotOpen = false;
+
+        function toggleChatbot() {
+            const chatbotWindow = document.getElementById('chatbot-window');
+            chatbotOpen = !chatbotOpen;
+            
+            if (chatbotOpen) {
+                chatbotWindow.classList.remove('chatbot-hidden');
+            } else {
+                chatbotWindow.classList.add('chatbot-hidden');
+            }
+        }
+
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Simulate bot response
+                setTimeout(() => {
+                    const response = getBotResponse(message);
+                    addMessage(response, 'bot');
+                }, 1000);
+            }
+        }
+
+        function addMessage(message, sender) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('service') || lowerMessage.includes('what do you do')) {
+                return "We offer comprehensive tech solutions including System Development, Server Design, Cybersecurity, Network Design, Cloud Solutions, and System Analysis. Would you like to know more about any specific service?";
+            } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+                return "Our pricing varies based on project requirements and scope. I'd recommend contacting our team for a personalized quote. Would you like me to connect you with our sales team?";
+            } else if (lowerMessage.includes('contact') || lowerMessage.includes('reach')) {
+                return "You can reach us through our contact page, WhatsApp, or email at fortishield-matrix@gmail.com. Our team is available 24/7 to assist you. What's the best way for us to get in touch with you?";
+            } else if (lowerMessage.includes('security') || lowerMessage.includes('cybersecurity')) {
+                return "Our cybersecurity services include security audits, penetration testing, incident response, and security training. We've helped over 500 companies secure their digital assets. What specific security concerns do you have?";
+            } else if (lowerMessage.includes('project') || lowerMessage.includes('portfolio')) {
+                return "We've completed over 500 projects across various industries including healthcare, finance, manufacturing, and e-commerce. You can view our detailed project portfolio on this page. Are you looking for examples in a specific industry or technology?";
+            } else if (lowerMessage.includes('cloud') || lowerMessage.includes('migration')) {
+                return "Our cloud solutions include migration services, multi-cloud architecture, and optimization. We work with AWS, Azure, and Google Cloud to provide scalable and cost-effective solutions. Are you considering cloud migration?";
+            } else if (lowerMessage.includes('development') || lowerMessage.includes('software')) {
+                return "We specialize in custom software development including web applications, mobile apps, enterprise systems, and API development. Our team uses modern technologies and agile methodologies. What type of application are you looking to develop?";
+            } else {
+                return "Thank you for your message! I'm here to help you learn more about Fortishield-Matrix and our projects. You can ask me about our services, specific projects, pricing, or how to get in touch with our team. How can I assist you today?";
+            }
+        }
+    </script>
+</body>
+</html>

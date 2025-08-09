@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Fortishield-Matrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #0099cc);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #cc5529);
+            --shadow-glow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 150px 0 80px;
+            text-align: center;
+            background: var(--dark-bg);
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-loading {
+            display: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            font-family: 'Orbitron', monospace;
+            color: var(--primary-color);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .contact-form-container h2,
+        .contact-info h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .contact-form {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: var(--dark-bg);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .contact-info {
+            color: var(--text-secondary);
+        }
+
+        .contact-info p {
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .contact-icon i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .contact-details h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .contact-details p {
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .quick-contact {
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .quick-contact h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .quick-contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .quick-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .quick-btn.whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .quick-btn.phone {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .quick-btn.email {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Map Section */
+        .map-section {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .map-container {
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .faq-question h4 {
+            color: var(--text-primary);
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .faq-question i {
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer.active {
+            max-height: 200px;
+        }
+
+        .faq-answer p {
+            padding: 0 25px 25px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Chatbot Styles */
+        #chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        #chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: var(--transition);
+            color: white;
+            font-size: 24px;
+        }
+
+        #chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        #chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            box-shadow: var(--shadow-glow);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .chatbot-hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+
+        .chatbot-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bot-message,
+        .user-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+
+        .bot-message {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chatbot-input {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .chatbot-input input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .chatbot-input button {
+            padding: 10px 15px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chatbot-input button:hover {
+            background: var(--secondary-color);
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: var(--dark-bg);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .contact-form {
+                padding: 30px 20px;
+            }
+
+            .quick-contact-buttons {
+                flex-direction: column;
+            }
+
+            #chatbot-window {
+                width: 300px;
+                height: 400px;
+            }
+
+            #chatbot-container {
+                right: 20px;
+                bottom: 80px;
+            }
+
+            .whatsapp-float {
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .back-to-top {
+                left: 20px;
+                bottom: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+     <!--Navigation--> 
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link active">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+     <!--Page Header--> 
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Contact Us</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Get in touch with our expert team</p>
+        </div>
+    </section>
+
+     <!--Contact Section--> 
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                 <!--Contact Form--> 
+                <div class="contact-form-container" data-aos="fade-right">
+                    <h2>Send us a Message</h2>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Service Interested In</label>
+                            <select id="service" name="service">
+                                <option value="">Select a service</option>
+                                <option value="system-development">System Development</option>
+                                <option value="server-design">Server Design</option>
+                                <option value="cybersecurity">Cybersecurity</option>
+                                <option value="network-design">Network Design</option>
+                                <option value="system-analysis">System Analysis</option>
+                                <option value="cloud-solutions">Cloud Solutions</option>
+                                <option value="consultation">General Consultation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                            <span class="btn-loading">
+                                <i class="fas fa-spinner fa-spin"></i> Sending...
+                            </span>
+                            <span class="btn-loading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Sending...
+                            </span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-text">Send Message</span>
+                            <span class="btn-loading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Sending...
+                            </span>
+                        </button>
+                    </form>
+                </div>
+
+                 <!--Contact Info--> 
+                <div class="contact-info" data-aos="fade-left">
+                    <h2>Get in Touch</h2>
+                    <p>Ready to transform your business with cutting-edge technology solutions? Our expert team is here to help you achieve your goals.</p>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Office Address</h4>
+                            <p>123 Tech Street, Innovation District<br>Digital City, DC 12345</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Phone Number</h4>
+                            <p>(+255)673591440</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Email Address</h4>
+                            <p>fortishield-matrix@gmail.com</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Business Hours</h4>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM<br>24/7 Emergency Support Available</p>
+                        </div>
+                    </div>
+
+                     <!--Quick Contact Options--> 
+                    <div class="quick-contact">
+                        <h3>Quick Contact</h3>
+                        <div class="quick-contact-buttons">
+                            <a href="https://wa.me/+255743981440" class="quick-btn whatsapp" target="_blank" rel="noopener">
+                                <i class="fab fa-whatsapp"></i>
+                                WhatsApp
+                            </a>
+                            <a href="tel:+255743981440" class="quick-btn phone">
+                                <i class="fas fa-phone"></i>
+                                Call Now
+                            </a>
+                            <a href="mailto:fortishield-matrix@gmail.com" class="quick-btn email">
+                                <i class="fas fa-envelope"></i>
+                                Email Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Map Section-->
+    <section class="map-section" data-aos="fade-up">
+        <div class="container">
+            <h2 class="section-title">Find Us</h2>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343008!2d-74.00425878459418!3d40.74844097932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1635959872076!5m2!1sen!2sus" width="100%" height="400" style="border:0; border-radius: 15px;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+     <!--FAQ Section-->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>How quickly can you start working on my project?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We can typically begin initial consultations within 24-48 hours of your inquiry. Project start times vary based on scope and current workload, but we prioritize urgent requests and can often accommodate expedited timelines.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>Do you provide ongoing support after project completion?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer comprehensive post-project support including maintenance, updates, monitoring, and 24/7 technical assistance. Our support packages are tailored to your specific needs and can include regular system health checks and performance optimization.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>What industries do you specialize in?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We work across various industries including healthcare, finance, e-commerce, manufacturing, education, and government sectors. Our team has extensive experience adapting our solutions to meet industry-specific compliance requirements and standards.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h4>How do you ensure the security of our data?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Data security is our top priority. We implement multi-layered security protocols, encryption, secure development practices, and comply with industry standards like ISO 27001, SOC 2, and GDPR. All team members undergo regular security training and background checks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Footer---> 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!--WhatsApp Floating Button--> 
+    <a href="https://wa.me/+255743981440" class="whatsapp-float" target="_blank" rel="noopener" title="Contact us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+     <!--Back to Top Button--> 
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+     <!--Chatbot--> 
+    <div id="chatbot-container">
+        <div id="chatbot-toggle" onclick="toggleChatbot()">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div id="chatbot-window" class="chatbot-hidden">
+            <div class="chatbot-header">
+                <h4>Fortishield Assistant</h4>
+                <button onclick="toggleChatbot()" class="chatbot-close">×</button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="bot-message">
+                    <p>Hello! I'm your Fortishield-Matrix assistant. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message..." onkeypress="handleChatInput(event)">
+                <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+     <!--Scripts--> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Mobile Navigation Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Form submission handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('button[type="submit"]');
+            const btnText = btn.querySelector('.btn-text');
+            const btnLoading = btn.querySelector('.btn-loading');
+            
+            // Show loading state
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline-block';
+            btn.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                // Reset button state
+                btnText.style.display = 'inline-block';
+                btnLoading.style.display = 'none';
+                btn.disabled = false;
+                
+                // Show success message
+                alert('Thank you for your message! We will get back to you within 24 hours.');
+                
+                // Reset form
+                this.reset();
+            }, 2000);
+        });
+
+        // FAQ functionality
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const isActive = element.classList.contains('active');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.classList.remove('active');
+                q.parentElement.querySelector('.faq-answer').classList.remove('active');
+            });
+            
+            // Toggle current FAQ
+            if (!isActive) {
+                element.classList.add('active');
+                answer.classList.add('active');
+            }
+        }
+
+        // Enhanced Chatbot functionality with intelligent responses
+        let chatbotOpen = false;
+        let conversationContext = {
+            lastTopic: null,
+            userInfo: {},
+            askedQuestions: []
+        };
+
+        function toggleChatbot() {
+            const chatbotWindow = document.getElementById('chatbot-window');
+            chatbotOpen = !chatbotOpen;
+            
+            if (chatbotOpen) {
+                chatbotWindow.classList.remove('chatbot-hidden');
+            } else {
+                chatbotWindow.classList.add('chatbot-hidden');
+            }
+        }
+
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Simulate bot response with realistic delay
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = getIntelligentBotResponse(message);
+                    addMessage(response, 'bot');
+                }, 1500);
+            }
+        }
+
+        function addMessage(message, sender) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'bot-message typing-indicator';
+            typingDiv.innerHTML = '<p><i class="fas fa-circle"></i> <i class="fas fa-circle"></i> <i class="fas fa-circle"></i></p>';
+            typingDiv.style.opacity = '0.6';
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.querySelector('.typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function getIntelligentBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            const words = lowerMessage.split(' ');
+            
+            // Extract user information
+            extractUserInfo(message);
+            
+            // Greeting responses
+            if (lowerMessage.match(/^(hi|hello|hey|good morning|good afternoon|good evening)/)) {
+                conversationContext.lastTopic = 'greeting';
+                const greetings = [
+                    "Hello! Welcome to Fortishield-Matrix. I'm here to help you with any questions about our tech solutions.",
+                    "Hi there! Thanks for reaching out to Fortishield-Matrix. How can I assist you today?",
+                    "Hey! Great to see you're interested in our services. What can I help you with?"
+                ];
+                return greetings[Math.floor(Math.random() * greetings.length)];
+            }
+            
+            // Service-related queries
+            if (lowerMessage.includes('service') || lowerMessage.includes('what do you do') || lowerMessage.includes('offer')) {
+                conversationContext.lastTopic = 'services';
+                return "We offer comprehensive technology solutions including:\n\n🔧 System Development - Custom software and applications\n🖥️ Server Design - Infrastructure and cloud solutions\n🛡️ Cybersecurity - Protection and compliance\n🌐 Network Design - Architecture and optimization\n☁️ Cloud Solutions - Migration and management\n📊 System Analysis - Consulting and optimization\n\nWhich service interests you most?";
+            }
+            
+            // Specific service inquiries
+            if (lowerMessage.includes('cybersecurity') || lowerMessage.includes('security')) {
+                conversationContext.lastTopic = 'cybersecurity';
+                return "Our cybersecurity services are comprehensive and industry-leading:\n\n• Security audits and vulnerability assessments\n• Penetration testing and threat analysis\n• Incident response and recovery\n• Compliance consulting (ISO 27001, SOC 2, GDPR)\n• Employee security training\n• 24/7 monitoring and support\n\nWe've helped over 500 companies secure their digital assets. What specific security challenges are you facing?";
+            }
+            
+            if (lowerMessage.includes('cloud') || lowerMessage.includes('migration')) {
+                conversationContext.lastTopic = 'cloud';
+                return "Our cloud solutions help businesses modernize and scale efficiently:\n\n• Cloud migration strategies (AWS, Azure, Google Cloud)\n• Multi-cloud architecture design\n• Cost optimization and performance tuning\n• Disaster recovery planning\n• Cloud security implementation\n• Ongoing management and support\n\nAre you looking to migrate existing systems or build new cloud infrastructure?";
+            }
+            
+            if (lowerMessage.includes('development') || lowerMessage.includes('software') || lowerMessage.includes('app')) {
+                conversationContext.lastTopic = 'development';
+                return "We specialize in custom software development across various platforms:\n\n• Web applications (React, Node.js, Python)\n• Mobile apps (iOS, Android, React Native)\n• Enterprise systems and ERP solutions\n• API development and integration\n• Database design and optimization\n• E-commerce platforms\n\nWhat type of application or system are you looking to develop?";
+            }
+            
+            // Pricing inquiries
+            if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('budget') || lowerMessage.includes('quote')) {
+                conversationContext.lastTopic = 'pricing';
+                return "Our pricing is tailored to each project's specific requirements and scope. Factors that influence cost include:\n\n• Project complexity and timeline\n• Technology stack and integrations\n• Team size and expertise required\n• Ongoing support and maintenance needs\n\nI'd be happy to connect you with our team for a detailed quote. Could you tell me more about your project requirements?";
+            }
+            
+            // Contact and support
+            if (lowerMessage.includes('contact') || lowerMessage.includes('reach') || lowerMessage.includes('phone') || lowerMessage.includes('email')) {
+                conversationContext.lastTopic = 'contact';
+                return "You can reach our team through multiple channels:\n\n📞 Phone: +1 (555) 123-4567\n📧 Email: info@fortishield-matrix.com\n💬 WhatsApp: Available 24/7\n🏢 Office: 123 Tech Street, Digital City\n\nOur business hours are Monday-Friday, 9 AM-6 PM, with 24/7 emergency support available. Would you prefer to schedule a call or continue chatting here?";
+            }
+            
+            // Timeline and project start
+            if (lowerMessage.includes('how long') || lowerMessage.includes('timeline') || lowerMessage.includes('when') || lowerMessage.includes('start')) {
+                conversationContext.lastTopic = 'timeline';
+                return "Our project timelines vary based on scope and complexity:\n\n• Initial consultation: 24-48 hours\n• Small projects: 2-4 weeks\n• Medium projects: 1-3 months\n• Large enterprise projects: 3-12 months\n\nWe can often accommodate expedited timelines for urgent projects. We also provide detailed project roadmaps with milestones. What's your target timeline?";
+            }
+            
+            // Company information
+            if (lowerMessage.includes('about') || lowerMessage.includes('company') || lowerMessage.includes('team') || lowerMessage.includes('experience')) {
+                conversationContext.lastTopic = 'company';
+                return "Fortishield-Matrix is a leading technology solutions provider with:\n\n• 10+ years of industry experience\n• 500+ successful projects completed\n• Expert team of certified professionals\n• 24/7 support and monitoring\n• Clients across healthcare, finance, e-commerce, and more\n\nWe combine technical expertise with business acumen to deliver solutions that drive real results. What industry are you in?";
+            }
+            
+            // Support and maintenance
+            if (lowerMessage.includes('support') || lowerMessage.includes('maintenance') || lowerMessage.includes('help')) {
+                conversationContext.lastTopic = 'support';
+                return "We provide comprehensive ongoing support:\n\n• 24/7 technical assistance\n• Regular system health checks\n• Performance monitoring and optimization\n• Security updates and patches\n• Backup and disaster recovery\n• User training and documentation\n\nOur support packages are customized to your needs. Are you looking for support on an existing system or planning for a new project?";
+            }
+            
+            // Follow-up based on context
+            if (conversationContext.lastTopic) {
+                return getContextualResponse(lowerMessage, conversationContext.lastTopic);
+            }
+            
+            // Default intelligent response
+            const defaultResponses = [
+                "That's an interesting question! Could you provide more details so I can give you the most helpful information?",
+                "I'd be happy to help you with that. Can you tell me more about your specific needs or requirements?",
+                "Thanks for reaching out! To better assist you, could you share more context about what you're looking for?",
+                "I want to make sure I give you the most relevant information. Could you elaborate on your question?"
+            ];
+            
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)] + 
+                   "\n\nYou can also ask me about our services, pricing, timelines, or how to get in touch with our team.";
+        }
+
+        function getContextualResponse(message, lastTopic) {
+            const lowerMessage = message.toLowerCase();
+            
+            switch(lastTopic) {
+                case 'services':
+                    if (lowerMessage.includes('all') || lowerMessage.includes('everything')) {
+                        return "Great! We can definitely discuss a comprehensive solution that covers multiple services. Many of our clients benefit from integrated approaches. Would you like to schedule a consultation to discuss your complete technology needs?";
+                    }
+                    break;
+                    
+                case 'pricing':
+                    if (lowerMessage.includes('expensive') || lowerMessage.includes('cheap')) {
+                        return "We focus on delivering value and ROI rather than just low cost. Our solutions typically pay for themselves through improved efficiency and reduced operational costs. We also offer flexible payment options. Would you like to discuss your budget range?";
+                    }
+                    break;
+                    
+                case 'timeline':
+                    if (lowerMessage.includes('urgent') || lowerMessage.includes('asap') || lowerMessage.includes('quickly')) {
+                        return "We understand urgent needs and can often fast-track projects. We have dedicated rapid deployment teams for critical situations. Let me connect you with our project manager to discuss your urgent requirements immediately.";
+                    }
+                    break;
+            }
+            
+            return "I'd be happy to provide more specific information about that. What particular aspect would you like to know more about?";
+        }
+
+        function extractUserInfo(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Extract potential company name
+            if (lowerMessage.includes('company') || lowerMessage.includes('business')) {
+                const words = message.split(' ');
+                const companyIndex = words.findIndex(word => 
+                    word.toLowerCase().includes('company') || word.toLowerCase().includes('business')
+                );
+                if (companyIndex > 0) {
+                    conversationContext.userInfo.company = words[companyIndex - 1];
+                }
+            }
+            
+            // Extract industry mentions
+            const industries = ['healthcare', 'finance', 'retail', 'manufacturing', 'education', 'government', 'startup'];
+            industries.forEach(industry => {
+                if (lowerMessage.includes(industry)) {
+                    conversationContext.userInfo.industry = industry;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

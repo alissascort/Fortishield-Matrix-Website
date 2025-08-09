@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Solutions - Fortishield-Matrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader {
+            text-align: center;
+        }
+
+        .cyber-loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loader p {
+            color: var(--primary-color);
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .hero-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 3px solid var(--primary-color);
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--primary-color); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-right: 2px solid var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            transform: rotate(45deg);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); }
+            40% { transform: translateY(-10px) rotate(45deg); }
+            60% { transform: translateY(-5px) rotate(45deg); }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Services Preview */
+        .services-preview {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .service-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .service-link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Projects Carousel */
+        .projects-carousel {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .project-swiper {
+            padding: 20px 0 60px;
+        }
+
+        .project-slide {
+            background: var(--dark-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .project-slide:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .project-slide img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .project-info {
+            padding: 30px;
+        }
+
+        .project-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .project-info p {
+            color: var(--text-secondary);
+        }
+
+        /* Why Choose Us */
+        .why-choose-us {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .testimonial-card {
+            background: var(--dark-bg);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .testimonial-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .testimonial-author img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+        }
+
+        .author-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .author-info span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            text-decoration: none;
+            z-index: 1000;
+            animation: bounce-whatsapp 2s infinite;
+            transition: var(--transition);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
+        }
+
+        @keyframes bounce-whatsapp {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Swiper Customization */
+        .swiper-pagination-bullet {
+            background: var(--primary-color);
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 25px;
+            }
+
+            .back-to-top {
+                bottom: 80px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Focus styles for accessibility */
+        button:focus,
+        a:focus,
+        input:focus,
+        textarea:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Service Page Specific Styles */
+        .service-hero {
+            padding: 120px 0 80px;
+            background: var(--dark-bg);
+            margin-top: 70px;
+        }
+
+        .service-hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .service-breadcrumb {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .service-breadcrumb a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .service-hero h1 {
+            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .service-hero p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .service-hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .service-hero-image img {
+            width: 100%;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .service-details {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .service-overview {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .service-overview h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .service-overview p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .service-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-item {
+            background: var(--dark-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .cloud-offerings-section {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .cloud-offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .cloud-offering-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .cloud-offering-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .cloud-offering-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .cloud-offering-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .cloud-offering-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .cloud-offering-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cloud-offering-card li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .cloud-offering-card li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .technologies-section {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .tech-category {
+            background: var(--dark-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            text-align: center;
+        }
+
+        .tech-category h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .tech-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .tech-item {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .process-section {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .process-timeline {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .process-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 80px;
+            width: 2px;
+            height: 50px;
+            background: var(--gradient-primary);
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-family: 'Orbitron', monospace;
+            margin-right: 30px;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .benefits-section {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .benefit-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .benefit-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .service-cta {
+            padding: 100px 0;
+            background: var(--dark-bg);
+            text-align: center;
+        }
+
+        .service-cta h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .service-cta p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .service-hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .service-hero h1 {
+                font-size: 2rem;
+            }
+
+            .service-hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .service-features {
+                grid-template-columns: 1fr;
+            }
+
+            .cloud-offerings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .process-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .step-number {
+                margin: 0 auto 20px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+     <!--Navigation--> 
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+     <!--Service Hero--> 
+    <section class="service-hero">
+        <div class="container">
+            <div class="service-hero-content">
+                <div class="service-hero-text" data-aos="fade-right">
+                    <div class="service-breadcrumb">
+                        <a href="index.html">Home</a> &gt; <a href="services.html">Services</a> &gt; Cloud Solutions
+                    </div>
+                    <h1>Cloud Solutions & Digital Transformation</h1>
+                    <p>Unlock the power of the cloud with scalable, secure, and cost-effective solutions. From migration to optimization, we empower your business in the digital era.</p>
+                    <div class="service-hero-buttons">
+                        <a href="contact.html" class="btn btn-primary">Get Cloud Ready</a>
+                        <a href="#service-details" class="btn btn-secondary">Learn More</a>
+                    </div>
+                </div>
+                <div class="service-hero-image" data-aos="fade-left">
+                    <img src="solot.jpg" alt="Cloud Solutions">
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Service Details--> 
+    <section class="service-details" id="service-details">
+        <div class="container">
+            <div class="service-overview" data-aos="fade-up">
+                <h2>Comprehensive Cloud Services</h2>
+                <p>Our cloud solutions are designed to help businesses leverage the full potential of cloud computing, ensuring agility, efficiency, and innovation. We provide end-to-end services tailored to your unique needs, from initial strategy to ongoing management.</p>
+            </div>
+            <div class="service-features">
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h3>Cloud Migration</h3>
+                    <p>Seamless migration of your applications, data, and infrastructure to the cloud with minimal downtime and risk.</p>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Cloud Architecture</h3>
+                    <p>Designing robust, scalable, and resilient cloud infrastructures optimized for performance and cost-efficiency.</p>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Cloud Security</h3>
+                    <p>Implementing advanced security measures, compliance frameworks, and threat protection for your cloud environments.</p>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <h3>Cost Optimization</h3>
+                    <p>Strategies and tools to optimize your cloud spending, ensuring maximum value from your cloud investments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Cloud Service Offerings--> 
+    <section class="cloud-offerings-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Our Cloud Service Offerings</h2>
+            <div class="cloud-offerings-grid">
+                <div class="cloud-offering-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="cloud-offering-icon"><i class="fas fa-server"></i></div>
+                    <h3>Infrastructure as a Service (IaaS)</h3>
+                    <p>Flexible virtualized computing resources including virtual machines, storage, and networking.</p>
+                    <ul>
+                        <li>Scalable Virtual Machines</li>
+                        <li>Managed Storage Solutions</li>
+                        <li>Virtual Networking</li>
+                        <li>Pay-as-you-go Model</li>
+                    </ul>
+                </div>
+                <div class="cloud-offering-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="cloud-offering-icon"><i class="fas fa-code-branch"></i></div>
+                    <h3>Platform as a Service (PaaS)</h3>
+                    <p>Development and deployment platforms for building, running, and managing applications without complex infrastructure.</p>
+                    <ul>
+                        <li>Application Development Platforms</li>
+                        <li>Managed Databases</li>
+                        <li>Middleware & Runtime Environments</li>
+                        <li>Simplified Deployment</li>
+                    </ul>
+                </div>
+                <div class="cloud-offering-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="cloud-offering-icon"><i class="fas fa-cogs"></i></div>
+                    <h3>Software as a Service (SaaS)</h3>
+                    <p>Ready-to-use cloud-based applications accessible over the internet, managed by the provider.</p>
+                    <ul>
+                        <li>CRM & ERP Solutions</li>
+                        <li>Collaboration Tools</li>
+                        <li>Business Intelligence</li>
+                        <li>Subscription-based Access</li>
+                    </ul>
+                </div>
+                <div class="cloud-offering-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="cloud-offering-icon"><i class="fas fa-cloud-meatball"></i></div>
+                    <h3>Hybrid Cloud Solutions</h3>
+                    <p>Seamless integration between your on-premises infrastructure and public cloud environments for optimal flexibility.</p>
+                    <ul>
+                        <li>Data Synchronization</li>
+                        <li>Unified Management</li>
+                        <li>Workload Portability</li>
+                        <li>Enhanced Security</li>
+                    </ul>
+                </div>
+                <div class="cloud-offering-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="cloud-offering-icon"><i class="fas fa-plane-departure"></i></div>
+                    <h3>Cloud Migration Services</h3>
+                    <p>Strategic planning and execution for moving your existing applications and data to the cloud.</p>
+                    <ul>
+                        <li>Discovery & Assessment</li>
+                        <li>Re-platforming & Re-factoring</li>
+                        <li>Data Migration</li>
+                        <li>Post-Migration Optimization</li>
+                    </ul>
+                </div>
+                <div class="cloud-offering-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="cloud-offering-icon"><i class="fas fa-lock"></i></div>
+                    <h3>Cloud Security & Compliance</h3>
+                    <p>Protecting your cloud assets from threats and ensuring adherence to industry regulations.</p>
+                    <ul>
+                        <li>Identity & Access Management</li>
+                        <li>Data Encryption</li>
+                        <li>Compliance Audits (HIPAA, GDPR)</li>
+                        <li>Threat Detection & Response</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Technologies--> 
+    <section class="technologies-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Cloud Technologies & Platforms</h2>
+            <div class="tech-grid">
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="100">
+                    <h3>Cloud Platforms</h3>
+                    <div class="tech-items">
+                        <span class="tech-item">AWS</span>
+                        <span class="tech-item">Azure</span>
+                        <span class="tech-item">Google Cloud</span>
+                        <span class="tech-item">Oracle Cloud</span>
+                    </div>
+                </div>
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="200">
+                    <h3>Containerization & Serverless</h3>
+                    <div class="tech-items">
+                        <span class="tech-item">Docker</span>
+                        <span class="tech-item">Kubernetes</span>
+                        <span class="tech-item">AWS Lambda</span>
+                        <span class="tech-item">Azure Functions</span>
+                    </div>
+                </div>
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="300">
+                    <h3>Cloud Databases</h3>
+                    <div class="tech-items">
+                        <span class="tech-item">Amazon RDS</span>
+                        <span class="tech-item">Azure SQL Database</span>
+                        <span class="tech-item">Google Cloud Spanner</span>
+                        <span class="tech-item">DynamoDB</span>
+                    </div>
+                </div>
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="400">
+                    <h3>DevOps & Automation</h3>
+                    <div class="tech-items">
+                        <span class="tech-item">Terraform</span>
+                        <span class="tech-item">Ansible</span>
+                        <span class="tech-item">Jenkins</span>
+                        <span class="tech-item">GitLab CI/CD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Process--> 
+    <section class="process-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Our Cloud Adoption Process</h2>
+            <div class="process-timeline">
+                <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Assessment & Strategy</h3>
+                        <p>Comprehensive evaluation of your current infrastructure, business goals, and regulatory requirements to define a tailored cloud adoption roadmap.</p>
+                    </div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Planning & Design</h3>
+                        <p>Development of detailed cloud architecture, security policies, cost models, and migration plans to ensure a smooth transition.</p>
+                    </div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Migration & Implementation</h3>
+                        <p>Execution of phased migration, deployment of cloud services, and integration with existing systems with minimal disruption.</p>
+                    </div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="400">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Optimization & Management</h3>
+                        <p>Continuous monitoring, performance tuning, cost optimization, and ongoing support to maximize your cloud investment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Benefits--> 
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Benefits of Cloud Solutions</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="benefit-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                    <h3>Scalability & Flexibility</h3>
+                    <p>Easily scale resources up or down to meet fluctuating demands, ensuring your infrastructure always matches your needs.</p>
+                </div>
+                <div class="benefit-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="benefit-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <h3>Cost Efficiency</h3>
+                    <p>Reduce operational costs with pay-as-you-go models, eliminating large upfront investments in hardware and maintenance.</p>
+                </div>
+                <div class="benefit-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="benefit-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Agility & Innovation</h3>
+                    <p>Accelerate development cycles, deploy new features faster, and foster innovation with access to cutting-edge cloud services.</p>
+                </div>
+                <div class="benefit-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="benefit-icon"><i class="fas fa-life-ring"></i></div>
+                    <h3>Enhanced Reliability & DR</h3>
+                    <p>Robust backup, disaster recovery, and high availability solutions ensure business continuity and data protection.</p>
+                </div>
+                <div class="benefit-item" data-aos="fade-up" data-aos-delay="500">
+                    <div class="benefit-icon"><i class="fas fa-globe"></i></div>
+                    <h3>Global Reach</h3>
+                    <p>Deploy applications and services globally to serve customers worldwide with low latency and improved user experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--CTA Section--> 
+    <section class="service-cta">
+        <div class="container">
+            <div class="cta-content" data-aos="fade-up">
+                <h2>Ready to Embrace the Cloud?</h2>
+                <p>Let Fortishield-Matrix guide your cloud journey. Contact us today for a personalized cloud strategy consultation and unlock your business's full potential.</p>
+                <div class="cta-buttons">
+                    <a href="contact.html" class="btn btn-primary">Start Your Cloud Journey</a>
+                    <a href="projects.html" class="btn btn-secondary">View Cloud Projects</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!--Footer--> 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                        <li><a href="service-system-analysis.html">System Analysis</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+     <!--WhatsApp Floating Button--> 
+    <a href="https://wa.me/+255743981440" class="whatsapp-float" target="_blank" rel="noopener" title="Chat with us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+     <!--Back to Top Button--> 
+    <button class="back-to-top" id="backToTop" title="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+     <!--Chatbot--> 
+    <div id="chatbot-container">
+        <div id="chatbot-toggle" onclick="toggleChatbot()">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div id="chatbot-window" class="chatbot-hidden">
+            <div class="chatbot-header">
+                <h4>Fortishield Assistant</h4>
+                <button onclick="toggleChatbot()" class="chatbot-close">×</button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="bot-message">
+                    <p>Hello! I'm your Fortishield-Matrix assistant. How can I help you today?</p>
+                </div>
+            </div>
+          <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message..." onkeypress="handleChatInput(event)">
+                <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+     <!--Scripts--> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                setTimeout(() => {
+                    preloader.style.opacity = '0';
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 500);
+                }, 1000);
+            }
+        });
+
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+        if (mobileMenu && navMenu) {
+            mobileMenu.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mobileMenu && navMenu) {
+                    mobileMenu.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        if (backToTopButton) {
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Chatbot functionality
+        let chatbotOpen = false;
+
+        function toggleChatbot() {
+            const chatbotWindow = document.getElementById('chatbot-window');
+            chatbotOpen = !chatbotOpen;
+            
+            if (chatbotOpen) {
+                chatbotWindow.classList.remove('chatbot-hidden');
+            } else {
+                chatbotWindow.classList.add('chatbot-hidden');
+            }
+        }
+
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Simulate bot response
+                setTimeout(() => {
+                    const response = getBotResponse(message);
+                    addMessage(response, 'bot');
+                }, 1000);
+            }
+        }
+
+        function addMessage(message, sender) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('service') || lowerMessage.includes('what do you do')) {
+                return "We offer comprehensive tech solutions including System Development, Server Design, Cybersecurity, Network Design, Cloud Solutions, and System Analysis. Would you like to know more about any specific service?";
+            } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+                return "Our pricing varies based on project requirements and scope. I'd recommend contacting our team for a personalized quote. Would you like me to connect you with our sales team?";
+            } else if (lowerMessage.includes('contact') || lowerMessage.includes('reach')) {
+                return "You can reach us through our contact page, WhatsApp, or email at info@fortishield-matrix.com. Our team is available 24/7 to assist you. What's the best way for us to get in touch with you?";
+            } else if (lowerMessage.includes('security') || lowerMessage.includes('cybersecurity')) {
+                return "Our cybersecurity services include security audits, penetration testing, incident response, and security training. We've helped over 500 companies secure their digital assets. What specific security concerns do you have?";
+            } else if (lowerMessage.includes('project') || lowerMessage.includes('portfolio')) {
+                return "We've completed over 500 projects across various industries including healthcare, finance, manufacturing, and e-commerce. You can view our detailed project portfolio on this page. Are you looking for examples in a specific industry or technology?";
+            } else if (lowerMessage.includes('cloud') || lowerMessage.includes('migration')) {
+                return "Our cloud solutions include migration services, multi-cloud architecture, and optimization. We work with AWS, Azure, and Google Cloud to provide scalable and cost-effective solutions. Are you considering cloud migration?";
+            } else if (lowerMessage.includes('development') || lowerMessage.includes('software')) {
+                return "We specialize in custom software development including web applications, mobile apps, enterprise systems, and API development. Our team uses modern technologies and agile methodologies. What type of application are you looking to develop?";
+            } else {
+                return "Thank you for your message! I'm here to help you learn more about Fortishield-Matrix and our projects. You can ask me about our services, specific projects, pricing, or how to get in touch with our team. How can I assist you today?";
+            }
+        }
+    </script>
+</body>
+</html>
