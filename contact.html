@@ -1076,384 +1076,291 @@
      <!--Scripts--> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-  // Import AOS
-const AOS = window.AOS
-const emailjs = window.emailjs // Declare the emailjs variable
+    // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
 
-// Ensure EmailJS is loaded before proceeding
-// The emailjs object should be globally available from the script tag in contact.html
-// We add a small delay and check to ensure it's ready.
-function initializeEmailJS() {
-  if (typeof emailjs !== "undefined" && emailjs.init) {
-    emailjs.init("P91QjvyS7Eu43w42Y")
-    console.log("EmailJS initialized with Public Key: P91QjvyS7Eu43w42Y")
-    attachFormListener() // Attach form listener only after EmailJS is ready
-  } else {
-    console.warn("EmailJS not yet loaded, retrying initialization...")
-    setTimeout(initializeEmailJS, 100) // Retry after 100ms
-  }
-}
+        // Mobile Navigation Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
 
-// Call the initialization function
-initializeEmailJS()
+        mobileMenu.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
 
-// Mobile Navigation Toggle
-const mobileMenu = document.getElementById("mobile-menu")
-const navMenu = document.getElementById("nav-menu")
+        // Back to Top Button
+        const backToTopButton = document.getElementById('backToTop');
 
-if (mobileMenu && navMenu) {
-  mobileMenu.addEventListener("click", () => {
-    navMenu.classList.toggle("active")
-  })
-} else {
-  console.warn("Mobile menu elements not found.")
-}
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
 
-// Back to Top Button
-const backToTopButton = document.getElementById("backToTop")
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
 
-if (backToTopButton) {
-  window.addEventListener("scroll", () => {
-    if (window.pageYOffset > 300) {
-      backToTopButton.classList.add("show")
-    } else {
-      backToTopButton.classList.remove("show")
-    }
-  })
+        // Form submission handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('button[type="submit"]');
+            const btnText = btn.querySelector('.btn-text');
+            const btnLoading = btn.querySelector('.btn-loading');
+            
+            // Show loading state
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline-block';
+            btn.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                // Reset button state
+                btnText.style.display = 'inline-block';
+                btnLoading.style.display = 'none';
+                btn.disabled = false;
+                
+                // Show success message
+                alert('Thank you for your message! We will get back to you within 24 hours.');
+                
+                // Reset form
+                this.reset();
+            }, 2000);
+        });
 
-  backToTopButton.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    })
-  })
-} else {
-  console.warn("Back to Top button not found.")
-}
+        // FAQ functionality
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const isActive = element.classList.contains('active');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.classList.remove('active');
+                q.parentElement.querySelector('.faq-answer').classList.remove('active');
+            });
+            
+            // Toggle current FAQ
+            if (!isActive) {
+                element.classList.add('active');
+                answer.classList.add('active');
+            }
+        }
 
-// Form submission handling with EmailJS
-function attachFormListener() {
-  const contactForm = document.getElementById("contactForm")
-  if (contactForm) {
-    contactForm.addEventListener("submit", function (e) {
-      console.log("Form submission event triggered.")
-      e.preventDefault() // Prevent default form submission (page refresh)
-      console.log("Default form submission prevented.")
+        // Enhanced Chatbot functionality with intelligent responses
+        let chatbotOpen = false;
+        let conversationContext = {
+            lastTopic: null,
+            userInfo: {},
+            askedQuestions: []
+        };
 
-      const btn = this.querySelector('button[type="submit"]')
-      const btnText = btn.querySelector(".btn-text")
-      const btnLoading = btn.querySelector(".btn-loading")
+        function toggleChatbot() {
+            const chatbotWindow = document.getElementById('chatbot-window');
+            chatbotOpen = !chatbotOpen;
+            
+            if (chatbotOpen) {
+                chatbotWindow.classList.remove('chatbot-hidden');
+            } else {
+                chatbotWindow.classList.add('chatbot-hidden');
+            }
+        }
 
-      // Show loading state
-      btnText.style.display = "none"
-      btnLoading.style.display = "inline-block"
-      btn.disabled = true
-      console.log("Button state set to loading.")
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
 
-      // Collect form data for logging
-      const formData = new FormData(this)
-      const templateParams = {}
-      for (const [key, value] of formData.entries()) {
-        templateParams[key] = value
-      }
-      console.log("Form data collected:", templateParams)
+        function sendMessage() {
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Simulate bot response with realistic delay
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = getIntelligentBotResponse(message);
+                    addMessage(response, 'bot');
+                }, 1500);
+            }
+        }
 
-      // Send form data using EmailJS
-      // Service ID: service_4pe5j8e
-      // Template ID: template_cgtb6f6
-      if (typeof emailjs !== "undefined" && emailjs.sendForm) {
-        emailjs
-          .sendForm("service_4pe5j8e", "template_cgtb6f6", this)
-          .then(
-            (response) => {
-              // On success
-              console.log("EmailJS SUCCESS!", response.status, response.text)
-              alert("Thank you for your message! We will get back to you within 24 hours.")
-              this.reset() // Reset form
-            },
-            (error) => {
-              // On error
-              console.error("EmailJS FAILED...", error)
-              alert("Oops! Something went wrong. Please try again later.")
-            },
-          )
-          .finally(() => {
-            // Always reset button state
-            btnText.style.display = "inline-block"
-            btnLoading.style.display = "none"
-            btn.disabled = false
-            console.log("Button state reset.")
-          })
-      } else {
-        console.error("EmailJS is not available to send form. Check if the library loaded correctly.")
-        alert("Form submission failed: Email service not ready. Please try again.")
-        // Reset button state if EmailJS is not available
-        btnText.style.display = "inline-block"
-        btnLoading.style.display = "none"
-        btn.disabled = false
-      }
-    })
-  } else {
-    console.error("Contact form element with ID 'contactForm' not found.")
-  }
-}
+        function addMessage(message, sender) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
 
-// FAQ functionality
-function toggleFAQ(element) {
-  const faqItem = element.parentElement
-  const answer = faqItem.querySelector(".faq-answer")
-  const isActive = element.classList.contains("active")
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'bot-message typing-indicator';
+            typingDiv.innerHTML = '<p><i class="fas fa-circle"></i> <i class="fas fa-circle"></i> <i class="fas fa-circle"></i></p>';
+            typingDiv.style.opacity = '0.6';
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
 
-  // Close all other FAQs
-  document.querySelectorAll(".faq-question").forEach((q) => {
-    q.classList.remove("active")
-    q.parentElement.querySelector(".faq-answer").classList.remove("active")
-  })
+        function hideTypingIndicator() {
+            const typingIndicator = document.querySelector('.typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
 
-  // Toggle current FAQ
-  if (!isActive) {
-    element.classList.add("active")
-    answer.classList.add("active")
-  }
-}
-// Make toggleFAQ globally accessible
-window.toggleFAQ = toggleFAQ
+        function getIntelligentBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            const words = lowerMessage.split(' ');
+            
+            // Extract user information
+            extractUserInfo(message);
+            
+            // Greeting responses
+            if (lowerMessage.match(/^(hi|hello|hey|good morning|good afternoon|good evening)/)) {
+                conversationContext.lastTopic = 'greeting';
+                const greetings = [
+                    "Hello! Welcome to Fortishield-Matrix. I'm here to help you with any questions about our tech solutions.",
+                    "Hi there! Thanks for reaching out to Fortishield-Matrix. How can I assist you today?",
+                    "Hey! Great to see you're interested in our services. What can I help you with?"
+                ];
+                return greetings[Math.floor(Math.random() * greetings.length)];
+            }
+            
+            // Service-related queries
+            if (lowerMessage.includes('service') || lowerMessage.includes('what do you do') || lowerMessage.includes('offer')) {
+                conversationContext.lastTopic = 'services';
+                return "We offer comprehensive technology solutions including:\n\n🔧 System Development - Custom software and applications\n🖥️ Server Design - Infrastructure and cloud solutions\n🛡️ Cybersecurity - Protection and compliance\n🌐 Network Design - Architecture and optimization\n☁️ Cloud Solutions - Migration and management\n📊 System Analysis - Consulting and optimization\n\nWhich service interests you most?";
+            }
+            
+            // Specific service inquiries
+            if (lowerMessage.includes('cybersecurity') || lowerMessage.includes('security')) {
+                conversationContext.lastTopic = 'cybersecurity';
+                return "Our cybersecurity services are comprehensive and industry-leading:\n\n• Security audits and vulnerability assessments\n• Penetration testing and threat analysis\n• Incident response and recovery\n• Compliance consulting (ISO 27001, SOC 2, GDPR)\n• Employee security training\n• 24/7 monitoring and support\n\nWe've helped over 500 companies secure their digital assets. What specific security challenges are you facing?";
+            }
+            
+            if (lowerMessage.includes('cloud') || lowerMessage.includes('migration')) {
+                conversationContext.lastTopic = 'cloud';
+                return "Our cloud solutions help businesses modernize and scale efficiently:\n\n• Cloud migration strategies (AWS, Azure, Google Cloud)\n• Multi-cloud architecture design\n• Cost optimization and performance tuning\n• Disaster recovery planning\n• Cloud security implementation\n• Ongoing management and support\n\nAre you looking to migrate existing systems or build new cloud infrastructure?";
+            }
+            
+            if (lowerMessage.includes('development') || lowerMessage.includes('software') || lowerMessage.includes('app')) {
+                conversationContext.lastTopic = 'development';
+                return "We specialize in custom software development across various platforms:\n\n• Web applications (React, Node.js, Python)\n• Mobile apps (iOS, Android, React Native)\n• Enterprise systems and ERP solutions\n• API development and integration\n• Database design and optimization\n• E-commerce platforms\n\nWhat type of application or system are you looking to develop?";
+            }
+            
+            // Pricing inquiries
+            if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('budget') || lowerMessage.includes('quote')) {
+                conversationContext.lastTopic = 'pricing';
+                return "Our pricing is tailored to each project's specific requirements and scope. Factors that influence cost include:\n\n• Project complexity and timeline\n• Technology stack and integrations\n• Team size and expertise required\n• Ongoing support and maintenance needs\n\nI'd be happy to connect you with our team for a detailed quote. Could you tell me more about your project requirements?";
+            }
+            
+            // Contact and support
+            if (lowerMessage.includes('contact') || lowerMessage.includes('reach') || lowerMessage.includes('phone') || lowerMessage.includes('email')) {
+                conversationContext.lastTopic = 'contact';
+                return "You can reach our team through multiple channels:\n\n📞 Phone: +1 (555) 123-4567\n📧 Email: info@fortishield-matrix.com\n💬 WhatsApp: Available 24/7\n🏢 Office: 123 Tech Street, Digital City\n\nOur business hours are Monday-Friday, 9 AM-6 PM, with 24/7 emergency support available. Would you prefer to schedule a call or continue chatting here?";
+            }
+            
+            // Timeline and project start
+            if (lowerMessage.includes('how long') || lowerMessage.includes('timeline') || lowerMessage.includes('when') || lowerMessage.includes('start')) {
+                conversationContext.lastTopic = 'timeline';
+                return "Our project timelines vary based on scope and complexity:\n\n• Initial consultation: 24-48 hours\n• Small projects: 2-4 weeks\n• Medium projects: 1-3 months\n• Large enterprise projects: 3-12 months\n\nWe can often accommodate expedited timelines for urgent projects. We also provide detailed project roadmaps with milestones. What's your target timeline?";
+            }
+            
+            // Company information
+            if (lowerMessage.includes('about') || lowerMessage.includes('company') || lowerMessage.includes('team') || lowerMessage.includes('experience')) {
+                conversationContext.lastTopic = 'company';
+                return "Fortishield-Matrix is a leading technology solutions provider with:\n\n• 10+ years of industry experience\n• 500+ successful projects completed\n• Expert team of certified professionals\n• 24/7 support and monitoring\n• Clients across healthcare, finance, e-commerce, and more\n\nWe combine technical expertise with business acumen to deliver solutions that drive real results. What industry are you in?";
+            }
+            
+            // Support and maintenance
+            if (lowerMessage.includes('support') || lowerMessage.includes('maintenance') || lowerMessage.includes('help')) {
+                conversationContext.lastTopic = 'support';
+                return "We provide comprehensive ongoing support:\n\n• 24/7 technical assistance\n• Regular system health checks\n• Performance monitoring and optimization\n• Security updates and patches\n• Backup and disaster recovery\n• User training and documentation\n\nOur support packages are customized to your needs. Are you looking for support on an existing system or planning for a new project?";
+            }
+            
+            // Follow-up based on context
+            if (conversationContext.lastTopic) {
+                return getContextualResponse(lowerMessage, conversationContext.lastTopic);
+            }
+            
+            // Default intelligent response
+            const defaultResponses = [
+                "That's an interesting question! Could you provide more details so I can give you the most helpful information?",
+                "I'd be happy to help you with that. Can you tell me more about your specific needs or requirements?",
+                "Thanks for reaching out! To better assist you, could you share more context about what you're looking for?",
+                "I want to make sure I give you the most relevant information. Could you elaborate on your question?"
+            ];
+            
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)] + 
+                   "\n\nYou can also ask me about our services, pricing, timelines, or how to get in touch with our team.";
+        }
 
-// Enhanced Chatbot functionality with intelligent responses
-let chatbotOpen = false
-const conversationContext = {
-  lastTopic: null,
-  userInfo: {},
-  askedQuestions: [],
-}
+        function getContextualResponse(message, lastTopic) {
+            const lowerMessage = message.toLowerCase();
+            
+            switch(lastTopic) {
+                case 'services':
+                    if (lowerMessage.includes('all') || lowerMessage.includes('everything')) {
+                        return "Great! We can definitely discuss a comprehensive solution that covers multiple services. Many of our clients benefit from integrated approaches. Would you like to schedule a consultation to discuss your complete technology needs?";
+                    }
+                    break;
+                    
+                case 'pricing':
+                    if (lowerMessage.includes('expensive') || lowerMessage.includes('cheap')) {
+                        return "We focus on delivering value and ROI rather than just low cost. Our solutions typically pay for themselves through improved efficiency and reduced operational costs. We also offer flexible payment options. Would you like to discuss your budget range?";
+                    }
+                    break;
+                    
+                case 'timeline':
+                    if (lowerMessage.includes('urgent') || lowerMessage.includes('asap') || lowerMessage.includes('quickly')) {
+                        return "We understand urgent needs and can often fast-track projects. We have dedicated rapid deployment teams for critical situations. Let me connect you with our project manager to discuss your urgent requirements immediately.";
+                    }
+                    break;
+            }
+            
+            return "I'd be happy to provide more specific information about that. What particular aspect would you like to know more about?";
+        }
 
-function toggleChatbot() {
-  const chatbotWindow = document.getElementById("chatbot-window")
-  chatbotOpen = !chatbotOpen
-
-  if (chatbotOpen) {
-    chatbotWindow.classList.remove("chatbot-hidden")
-  } else {
-    chatbotWindow.classList.add("chatbot-hidden")
-  }
-}
-// Make toggleChatbot globally accessible
-window.toggleChatbot = toggleChatbot
-
-function handleChatInput(event) {
-  if (event.key === "Enter") {
-    sendMessage()
-  }
-}
-// Make handleChatInput globally accessible
-window.handleChatInput = handleChatInput
-
-function sendMessage() {
-  const input = document.getElementById("chatbot-input")
-  const message = input.value.trim()
-
-  if (message) {
-    addMessage(message, "user")
-    input.value = ""
-
-    // Show typing indicator
-    showTypingIndicator()
-
-    // Simulate bot response with realistic delay
-    setTimeout(() => {
-      hideTypingIndicator()
-      const response = getIntelligentBotResponse(message)
-      addMessage(response, "bot")
-    }, 1500)
-  }
-}
-// Make sendMessage globally accessible
-window.sendMessage = sendMessage
-
-function addMessage(message, sender) {
-  const messagesContainer = document.getElementById("chatbot-messages")
-  const messageDiv = document.createElement("div")
-  messageDiv.className = sender === "user" ? "user-message" : "bot-message"
-  messageDiv.innerHTML = `<p>${message}</p>`
-  messagesContainer.appendChild(messageDiv)
-  messagesContainer.scrollTop = messagesContainer.scrollHeight
-}
-
-function showTypingIndicator() {
-  const messagesContainer = document.getElementById("chatbot-messages")
-  const typingDiv = document.createElement("div")
-  typingDiv.className = "bot-message typing-indicator"
-  typingDiv.innerHTML =
-    '<p><i class="fas fa-circle"></i> <i class="fas fa-circle"></i> <i class="fas fa-circle"></i></p>'
-  typingDiv.style.opacity = "0.6"
-  messagesContainer.appendChild(typingDiv)
-  messagesContainer.scrollTop = messagesContainer.scrollHeight
-}
-
-function hideTypingIndicator() {
-  const typingIndicator = document.querySelector(".typing-indicator")
-  if (typingIndicator) {
-    typingIndicator.remove()
-  }
-}
-
-function getIntelligentBotResponse(message) {
-  const lowerMessage = message.toLowerCase()
-  const words = lowerMessage.split(" ")
-
-  // Extract user information
-  extractUserInfo(message)
-
-  // Greeting responses
-  if (lowerMessage.match(/^(hi|hello|hey|good morning|good afternoon|good evening)/)) {
-    conversationContext.lastTopic = "greeting"
-    const greetings = [
-      "Hello! Welcome to Fortishield-Matrix. I'm here to help you with any questions about our tech solutions.",
-      "Hi there! Thanks for reaching out to Fortishield-Matrix. How can I assist you today?",
-      "Hey! Great to see you're interested in our services. What can I help you with?",
-    ]
-    return greetings[Math.floor(Math.random() * greetings.length)]
-  }
-
-  // Service-related queries
-  if (lowerMessage.includes("service") || lowerMessage.includes("what do you do") || lowerMessage.includes("offer")) {
-    conversationContext.lastTopic = "services"
-    return "We offer comprehensive technology solutions including:\n\n🔧 System Development - Custom software and applications\n🖥️ Server Design - Infrastructure and cloud solutions\n🛡️ Cybersecurity - Protection and compliance\n🌐 Network Design - Architecture and optimization\n☁️ Cloud Solutions - Migration and management\n📊 System Analysis - Consulting and optimization\n\nWhich service interests you most?"
-  }
-
-  // Specific service inquiries
-  if (lowerMessage.includes("cybersecurity") || lowerMessage.includes("security")) {
-    conversationContext.lastTopic = "cybersecurity"
-    return "Our cybersecurity services are comprehensive and industry-leading:\n\n• Security audits and vulnerability assessments\n• Penetration testing and threat analysis\n• Incident response and recovery\n• Compliance consulting (ISO 27001, SOC 2, GDPR)\n• Employee security training\n• 24/7 monitoring and support\n\nWe've helped over 500 companies secure their digital assets. What specific security challenges are you facing?"
-  }
-
-  if (lowerMessage.includes("cloud") || lowerMessage.includes("migration")) {
-    conversationContext.lastTopic = "cloud"
-    return "Our cloud solutions help businesses modernize and scale efficiently:\n\n• Cloud migration strategies (AWS, Azure, Google Cloud)\n• Multi-cloud architecture design\n• Cost optimization and performance tuning\n• Disaster recovery planning\n• Cloud security implementation\n• Ongoing management and support\n\nAre you looking to migrate existing systems or build new cloud infrastructure?"
-  }
-
-  if (lowerMessage.includes("development") || lowerMessage.includes("software") || lowerMessage.includes("app")) {
-    conversationContext.lastTopic = "development"
-    return "We specialize in custom software development across various platforms:\n\n• Web applications (React, Node.js, Python)\n• Mobile apps (iOS, Android, React Native)\n• Enterprise systems and ERP solutions\n• API development and integration\n• Database design and optimization\n• E-commerce platforms\n\nWhat type of application or system are you looking to develop?"
-  }
-
-  // Pricing inquiries
-  if (
-    lowerMessage.includes("price") ||
-    lowerMessage.includes("cost") ||
-    lowerMessage.includes("budget") ||
-    lowerMessage.includes("quote")
-  ) {
-    conversationContext.lastTopic = "pricing"
-    return "Our pricing is tailored to each project's specific requirements and scope. Factors that influence cost include:\n\n• Project complexity and timeline\n• Technology stack and integrations\n• Team size and expertise required\n• Ongoing support and maintenance needs\n\nI'd be happy to connect you with our team for a detailed quote. Could you tell me more about your project requirements?"
-  }
-
-  // Contact and support
-  if (
-    lowerMessage.includes("contact") ||
-    lowerMessage.includes("reach") ||
-    lowerMessage.includes("phone") ||
-    lowerMessage.includes("email")
-  ) {
-    conversationContext.lastTopic = "contact"
-    return "You can reach our team through multiple channels:\n\n📞 Phone: +1 (555) 123-4567\n📧 Email: info@fortishield-matrix.com\n💬 WhatsApp: Available 24/7\n🏢 Office: 123 Tech Street, Digital City\n\nOur business hours are Monday-Friday, 9 AM-6 PM, with 24/7 emergency support available. Would you prefer to schedule a call or continue chatting here?"
-  }
-
-  // Timeline and project start
-  if (
-    lowerMessage.includes("how long") ||
-    lowerMessage.includes("timeline") ||
-    lowerMessage.includes("when") ||
-    lowerMessage.includes("start")
-  ) {
-    conversationContext.lastTopic = "timeline"
-    return "Our project timelines vary based on scope and complexity:\n\n• Initial consultation: 24-48 hours\n• Small projects: 2-4 weeks\n• Medium projects: 1-3 months\n• Large enterprise projects: 3-12 months\n\nWe can often accommodate expedited timelines for urgent projects. We also provide detailed project roadmaps with milestones. What's your target timeline?"
-  }
-
-  // Company information
-  if (
-    lowerMessage.includes("about") ||
-    lowerMessage.includes("company") ||
-    lowerMessage.includes("team") ||
-    lowerMessage.includes("experience")
-  ) {
-    conversationContext.lastTopic = "company"
-    return "Fortishield-Matrix is a leading technology solutions provider with:\n\n• 10+ years of industry experience\n• 500+ successful projects completed\n• Expert team of certified professionals\n• 24/7 support and monitoring\n• Clients across healthcare, finance, e-commerce, and more\n\nWe combine technical expertise with business acumen to deliver solutions that drive real results. What industry are you in?"
-  }
-
-  // Support and maintenance
-  if (lowerMessage.includes("support") || lowerMessage.includes("maintenance") || lowerMessage.includes("help")) {
-    conversationContext.lastTopic = "support"
-    return "We provide comprehensive ongoing support:\n\n• 24/7 technical assistance\n• Regular system health checks\n• Performance monitoring and optimization\n• Security updates and patches\n• Backup and disaster recovery\n• User training and documentation\n\nOur support packages are customized to your needs. Are you looking for support on an existing system or planning for a new project?"
-  }
-
-  // Follow-up based on context
-  if (conversationContext.lastTopic) {
-    return getContextualResponse(lowerMessage, conversationContext.lastTopic)
-  }
-
-  // Default intelligent response
-  const defaultResponses = [
-    "That's an interesting question! Could you provide more details so I can give you the most helpful information?",
-    "I'd be happy to help you with that. Can you tell me more about your specific needs or requirements?",
-    "Thanks for reaching out! To better assist you, could you share more context about what you're looking for?",
-    "I want to make sure I give you the most relevant information. Could you elaborate on your question?",
-  ]
-
-  return (
-    defaultResponses[Math.floor(Math.random() * defaultResponses.length)] +
-    "\n\nYou can also ask me about our services, pricing, timelines, or how to get in touch with our team."
-  )
-}
-
-function getContextualResponse(message, lastTopic) {
-  const lowerMessage = message.toLowerCase()
-
-  switch (lastTopic) {
-    case "services":
-      if (lowerMessage.includes("all") || lowerMessage.includes("everything")) {
-        return "Great! We can definitely discuss a comprehensive solution that covers multiple services. Many of our clients benefit from integrated approaches. Would you like to schedule a consultation to discuss your complete technology needs?"
-      }
-      break
-
-    case "pricing":
-      if (lowerMessage.includes("expensive") || lowerMessage.includes("cheap")) {
-        return "We focus on delivering value and ROI rather than just low cost. Our solutions typically pay for themselves through improved efficiency and reduced operational costs. We also offer flexible payment options. Would you like to discuss your budget range?"
-      }
-      break
-
-    case "timeline":
-      if (lowerMessage.includes("urgent") || lowerMessage.includes("asap") || lowerMessage.includes("quickly")) {
-        return "We understand urgent needs and can often fast-track projects. We have dedicated rapid deployment teams for critical situations. Let me connect you with our project manager to discuss your urgent requirements immediately."
-      }
-      break
-  }
-
-  return "I'd be happy to provide more specific information about that. What particular aspect would you like to know more about?"
-}
-
-function extractUserInfo(message) {
-  const lowerMessage = message.toLowerCase()
-
-  // Extract potential company name
-  if (lowerMessage.includes("company") || lowerMessage.includes("business")) {
-    const words = message.split(" ")
-    const companyIndex = words.findIndex(
-      (word) => word.toLowerCase().includes("company") || word.toLowerCase().includes("business"),
-    )
-    if (companyIndex > 0) {
-      conversationContext.userInfo.company = words[companyIndex - 1]
-    }
-  }
-
-  // Extract industry mentions
-  const industries = ["healthcare", "finance", "retail", "manufacturing", "education", "government", "startup"]
-  industries.forEach((industry) => {
-    if (lowerMessage.includes(industry)) {
-      conversationContext.userInfo.industry = industry
-    }
-  })
-}
+        function extractUserInfo(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Extract potential company name
+            if (lowerMessage.includes('company') || lowerMessage.includes('business')) {
+                const words = message.split(' ');
+                const companyIndex = words.findIndex(word => 
+                    word.toLowerCase().includes('company') || word.toLowerCase().includes('business')
+                );
+                if (companyIndex > 0) {
+                    conversationContext.userInfo.company = words[companyIndex - 1];
+                }
+            }
+            
+            // Extract industry mentions
+            const industries = ['healthcare', 'finance', 'retail', 'manufacturing', 'education', 'government', 'startup'];
+            industries.forEach(industry => {
+                if (lowerMessage.includes(industry)) {
+                    conversationContext.userInfo.industry = industry;
+                }
+            });
+        }
     </script>
 </body>
 </html>
