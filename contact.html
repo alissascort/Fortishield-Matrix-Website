@@ -1076,7 +1076,7 @@
      <!--Scripts--> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-      // Import AOS and emailjs
+     // Import AOS and emailjs
 const AOS = window.AOS
 const emailjs = window.emailjs
 
@@ -1113,11 +1113,14 @@ backToTopButton.addEventListener("click", () => {
 })
 
 // Initialize EmailJS with your Public Key
+// Public Key: P91QjvyS7Eu43w42Y
 emailjs.init("P91QjvyS7Eu43w42Y")
+console.log("EmailJS initialized with Public Key: P91QjvyS7Eu43w42Y")
 
 // Form submission handling with EmailJS
 document.getElementById("contactForm").addEventListener("submit", function (e) {
   e.preventDefault()
+  console.log("Form submission initiated.")
 
   const btn = this.querySelector('button[type="submit"]')
   const btnText = btn.querySelector(".btn-text")
@@ -1127,25 +1130,40 @@ document.getElementById("contactForm").addEventListener("submit", function (e) {
   btnText.style.display = "none"
   btnLoading.style.display = "inline-block"
   btn.disabled = true
+  console.log("Button state set to loading.")
+
+  // Collect form data for logging (optional, but useful for debugging)
+  const formData = new FormData(this)
+  const templateParams = {}
+  for (const [key, value] of formData.entries()) {
+    templateParams[key] = value
+  }
+  console.log("Form data collected:", templateParams)
 
   // Send form data using EmailJS
+  // Service ID: service_4pe5j8e
+  // Template ID: template_cgtb6f6
   emailjs
     .sendForm("service_4pe5j8e", "template_cgtb6f6", this)
-    .then(() => {
-      // On success
-      alert("Thank you for your message! We will get back to you within 24 hours.")
-      this.reset() // Reset form
-    })
-    .catch((error) => {
-      // On error
-      console.error("EmailJS failed to send the message:", error)
-      alert("Oops! Something went wrong. Please try again later.")
-    })
+    .then(
+      (response) => {
+        // On success
+        console.log("EmailJS SUCCESS!", response.status, response.text)
+        alert("Thank you for your message! We will get back to you within 24 hours.")
+        this.reset() // Reset form
+      },
+      (error) => {
+        // On error
+        console.error("EmailJS FAILED...", error)
+        alert("Oops! Something went wrong. Please try again later.")
+      },
+    )
     .finally(() => {
       // Always reset button state
       btnText.style.display = "inline-block"
       btnLoading.style.display = "none"
       btn.disabled = false
+      console.log("Button state reset.")
     })
 })
 
