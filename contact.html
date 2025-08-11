@@ -1076,97 +1076,127 @@
      <!--Scripts--> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-    // Import AOS (emailjs is now globally available after its script loads)
+  // Import AOS
 const AOS = window.AOS
 const emailjs = window.emailjs // Declare the emailjs variable
 
-// Initialize AOS
-AOS.init({
-  duration: 1000,
-  once: true,
-})
+// Ensure EmailJS is loaded before proceeding
+// The emailjs object should be globally available from the script tag in contact.html
+// We add a small delay and check to ensure it's ready.
+function initializeEmailJS() {
+  if (typeof emailjs !== "undefined" && emailjs.init) {
+    emailjs.init("P91QjvyS7Eu43w42Y")
+    console.log("EmailJS initialized with Public Key: P91QjvyS7Eu43w42Y")
+    attachFormListener() // Attach form listener only after EmailJS is ready
+  } else {
+    console.warn("EmailJS not yet loaded, retrying initialization...")
+    setTimeout(initializeEmailJS, 100) // Retry after 100ms
+  }
+}
+
+// Call the initialization function
+initializeEmailJS()
 
 // Mobile Navigation Toggle
 const mobileMenu = document.getElementById("mobile-menu")
 const navMenu = document.getElementById("nav-menu")
 
-mobileMenu.addEventListener("click", () => {
-  navMenu.classList.toggle("active")
-})
+if (mobileMenu && navMenu) {
+  mobileMenu.addEventListener("click", () => {
+    navMenu.classList.toggle("active")
+  })
+} else {
+  console.warn("Mobile menu elements not found.")
+}
 
 // Back to Top Button
 const backToTopButton = document.getElementById("backToTop")
 
-window.addEventListener("scroll", () => {
-  if (window.pageYOffset > 300) {
-    backToTopButton.classList.add("show")
-  } else {
-    backToTopButton.classList.remove("show")
-  }
-})
-
-backToTopButton.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
+if (backToTopButton) {
+  window.addEventListener("scroll", () => {
+    if (window.pageYOffset > 300) {
+      backToTopButton.classList.add("show")
+    } else {
+      backToTopButton.classList.remove("show")
+    }
   })
-})
 
-// Initialize EmailJS with your Public Key
-// Public Key: P91QjvyS7Eu43w42Y
-// The 'emailjs' object is now globally available because its script was loaded in contact.html
-emailjs.init("P91QjvyS7Eu43w42Y")
-console.log("EmailJS initialized with Public Key: P91QjvyS7Eu43w42Y")
+  backToTopButton.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  })
+} else {
+  console.warn("Back to Top button not found.")
+}
 
 // Form submission handling with EmailJS
-document.getElementById("contactForm").addEventListener("submit", function (e) {
-  e.preventDefault()
-  console.log("Form submission initiated.")
+function attachFormListener() {
+  const contactForm = document.getElementById("contactForm")
+  if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+      console.log("Form submission event triggered.")
+      e.preventDefault() // Prevent default form submission (page refresh)
+      console.log("Default form submission prevented.")
 
-  const btn = this.querySelector('button[type="submit"]')
-  const btnText = btn.querySelector(".btn-text")
-  const btnLoading = btn.querySelector(".btn-loading")
+      const btn = this.querySelector('button[type="submit"]')
+      const btnText = btn.querySelector(".btn-text")
+      const btnLoading = btn.querySelector(".btn-loading")
 
-  // Show loading state
-  btnText.style.display = "none"
-  btnLoading.style.display = "inline-block"
-  btn.disabled = true
-  console.log("Button state set to loading.")
+      // Show loading state
+      btnText.style.display = "none"
+      btnLoading.style.display = "inline-block"
+      btn.disabled = true
+      console.log("Button state set to loading.")
 
-  // Collect form data for logging (optional, but useful for debugging)
-  const formData = new FormData(this)
-  const templateParams = {}
-  for (const [key, value] of formData.entries()) {
-    templateParams[key] = value
-  }
-  console.log("Form data collected:", templateParams)
+      // Collect form data for logging
+      const formData = new FormData(this)
+      const templateParams = {}
+      for (const [key, value] of formData.entries()) {
+        templateParams[key] = value
+      }
+      console.log("Form data collected:", templateParams)
 
-  // Send form data using EmailJS
-  // Service ID: service_4pe5j8e
-  // Template ID: template_cgtb6f6
-  emailjs
-    .sendForm("service_4pe5j8e", "template_cgtb6f6", this)
-    .then(
-      (response) => {
-        // On success
-        console.log("EmailJS SUCCESS!", response.status, response.text)
-        alert("Thank you for your message! We will get back to you within 24 hours.")
-        this.reset() // Reset form
-      },
-      (error) => {
-        // On error
-        console.error("EmailJS FAILED...", error)
-        alert("Oops! Something went wrong. Please try again later.")
-      },
-    )
-    .finally(() => {
-      // Always reset button state
-      btnText.style.display = "inline-block"
-      btnLoading.style.display = "none"
-      btn.disabled = false
-      console.log("Button state reset.")
+      // Send form data using EmailJS
+      // Service ID: service_4pe5j8e
+      // Template ID: template_cgtb6f6
+      if (typeof emailjs !== "undefined" && emailjs.sendForm) {
+        emailjs
+          .sendForm("service_4pe5j8e", "template_cgtb6f6", this)
+          .then(
+            (response) => {
+              // On success
+              console.log("EmailJS SUCCESS!", response.status, response.text)
+              alert("Thank you for your message! We will get back to you within 24 hours.")
+              this.reset() // Reset form
+            },
+            (error) => {
+              // On error
+              console.error("EmailJS FAILED...", error)
+              alert("Oops! Something went wrong. Please try again later.")
+            },
+          )
+          .finally(() => {
+            // Always reset button state
+            btnText.style.display = "inline-block"
+            btnLoading.style.display = "none"
+            btn.disabled = false
+            console.log("Button state reset.")
+          })
+      } else {
+        console.error("EmailJS is not available to send form. Check if the library loaded correctly.")
+        alert("Form submission failed: Email service not ready. Please try again.")
+        // Reset button state if EmailJS is not available
+        btnText.style.display = "inline-block"
+        btnLoading.style.display = "none"
+        btn.disabled = false
+      }
     })
-})
+  } else {
+    console.error("Contact form element with ID 'contactForm' not found.")
+  }
+}
 
 // FAQ functionality
 function toggleFAQ(element) {
@@ -1186,6 +1216,8 @@ function toggleFAQ(element) {
     answer.classList.add("active")
   }
 }
+// Make toggleFAQ globally accessible
+window.toggleFAQ = toggleFAQ
 
 // Enhanced Chatbot functionality with intelligent responses
 let chatbotOpen = false
@@ -1205,12 +1237,16 @@ function toggleChatbot() {
     chatbotWindow.classList.add("chatbot-hidden")
   }
 }
+// Make toggleChatbot globally accessible
+window.toggleChatbot = toggleChatbot
 
 function handleChatInput(event) {
   if (event.key === "Enter") {
     sendMessage()
   }
 }
+// Make handleChatInput globally accessible
+window.handleChatInput = handleChatInput
 
 function sendMessage() {
   const input = document.getElementById("chatbot-input")
@@ -1231,6 +1267,8 @@ function sendMessage() {
     }, 1500)
   }
 }
+// Make sendMessage globally accessible
+window.sendMessage = sendMessage
 
 function addMessage(message, sender) {
   const messagesContainer = document.getElementById("chatbot-messages")
