@@ -1076,9 +1076,9 @@
      <!--Scripts--> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-     // Import AOS and emailjs
+    // Import AOS (emailjs is now globally available after its script loads)
 const AOS = window.AOS
-const emailjs = window.emailjs
+const emailjs = window.emailjs // Declare the emailjs variable
 
 // Initialize AOS
 AOS.init({
@@ -1114,6 +1114,7 @@ backToTopButton.addEventListener("click", () => {
 
 // Initialize EmailJS with your Public Key
 // Public Key: P91QjvyS7Eu43w42Y
+// The 'emailjs' object is now globally available because its script was loaded in contact.html
 emailjs.init("P91QjvyS7Eu43w42Y")
 console.log("EmailJS initialized with Public Key: P91QjvyS7Eu43w42Y")
 
