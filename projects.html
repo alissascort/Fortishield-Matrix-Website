@@ -236,13 +236,17 @@
         .project-image {
             position: relative;
             overflow: hidden;
+            height: 250px;
+            background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .project-image img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            transition: var(--transition);
+        .project-image i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            opacity: 0.7;
         }
 
         .project-overlay {
@@ -349,6 +353,25 @@
 
         .close:hover {
             color: var(--primary-color);
+        }
+
+        .modal-image {
+            height: 300px;
+            background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .modal-image i {
+            font-size: 5rem;
+            color: var(--primary-color);
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 30px;
         }
 
         /* Chatbot Styles */
@@ -657,6 +680,10 @@
                 margin: 10% auto;
             }
 
+            .modal-image {
+                height: 200px;
+            }
+
             #chatbot-window {
                 width: 300px;
                 height: 400px;
@@ -751,7 +778,7 @@
                  <!--Enterprise Security System--> 
                 <div class="project-item" data-category="security" data-aos="fade-up" data-aos-delay="100">
                     <div class="project-image">
-                        <img src="Enterprice.jpg" alt="Enterprise Security System">
+                        <i class="fas fa-shield-alt"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project1')" title="View Project">
@@ -773,7 +800,7 @@
                  <!--Cloud Infrastructure--> 
                 <div class="project-item" data-category="cloud servers" data-aos="fade-up" data-aos-delay="200">
                     <div class="project-image">
-                        <img src="Project.jpg" alt="Multi-Cloud Infrastructure">
+                        <i class="fas fa-cloud"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project2')" title="View Project">
@@ -795,7 +822,7 @@
                  <!--Custom ERP System--> 
                 <div class="project-item" data-category="development" data-aos="fade-up" data-aos-delay="300">
                     <div class="project-image">
-                        <img src="ERP.jpg" alt="Custom ERP System">
+                        <i class="fas fa-cogs"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project3')" title="View Project">
@@ -817,7 +844,7 @@
                  <!--Network Infrastructure--> 
                 <div class="project-item" data-category="networks" data-aos="fade-up" data-aos-delay="400">
                     <div class="project-image">
-                        <img src="Corporate Network Redesign.jpg" alt="Network Infrastructure">
+                        <i class="fas fa-network-wired"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project4')" title="View Project">
@@ -839,7 +866,7 @@
                  <!--E-commerce Platform--> 
                 <div class="project-item" data-category="development" data-aos="fade-up" data-aos-delay="500">
                     <div class="project-image">
-                        <img src="High-Performance E-commerce.jpg" alt="E-commerce Platform">
+                        <i class="fas fa-shopping-cart"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project5')" title="View Project">
@@ -861,7 +888,7 @@
                  <!--Data Center Setup--> 
                 <div class="project-item" data-category="servers" data-aos="fade-up" data-aos-delay="600">
                     <div class="project-image">
-                        <img src="Enterprise Data Center.jpg" alt="Data Center Setup">
+                        <i class="fas fa-server"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project6')" title="View Project">
@@ -883,7 +910,7 @@
                 <!--Mobile Banking App--> 
                 <div class="project-item" data-category="development security" data-aos="fade-up" data-aos-delay="700">
                     <div class="project-image">
-                        <img src="Secure Banking Application.jpg" alt="Mobile Banking App">
+                        <i class="fas fa-mobile-alt"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project7')" title="View Project">
@@ -905,7 +932,7 @@
                  <!--Cloud Migration--> 
                 <div class="project-item" data-category="cloud consulting" data-aos="fade-up" data-aos-delay="800">
                     <div class="project-image">
-                        <img src="Cloud Migration.jpg" alt="Cloud Migration">
+                        <i class="fas fa-exchange-alt"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project8')" title="View Project">
@@ -927,7 +954,7 @@
                  <!--IoT Platform--> 
                 <div class="project-item" data-category="development networks" data-aos="fade-up" data-aos-delay="900">
                     <div class="project-image">
-                        <img src="IoT Development.jpg" alt="IoT Platform">
+                        <i class="fas fa-wifi"></i>
                         <div class="project-overlay">
                             <div class="project-actions">
                                 <button class="project-btn" onclick="openProjectModal('project9')" title="View Project">
@@ -954,7 +981,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeProjectModal()">&times;</span>
             <div id="modalContent">
-                 Dynamic content will be loaded here 
+                 <!-- Dynamic content will be loaded here -->
             </div>
         </div>
     </div>
@@ -1102,7 +1129,7 @@
             project1: {
                 title: "Enterprise Security Overhaul",
                 category: "Cybersecurity",
-                image: "/placeholder.svg?height=400&width=600&text=Enterprise Security System",
+                icon: "fas fa-shield-alt",
                 description: "A comprehensive cybersecurity transformation for a Fortune 500 company, implementing advanced threat detection, SIEM integration, multi-factor authentication, and zero-trust architecture to protect against evolving cyber threats.",
                 technologies: ["Advanced Threat Detection", "SIEM Integration", "Multi-Factor Authentication", "Zero Trust Architecture", "Endpoint Protection", "Security Orchestration"],
                 challenges: "The client faced increasing sophisticated cyber threats, compliance requirements, and needed a scalable security infrastructure that could protect their global operations while maintaining business continuity.",
@@ -1112,7 +1139,7 @@
             project2: {
                 title: "Multi-Cloud Architecture",
                 category: "Cloud & Infrastructure",
-                image: "/placeholder.svg?height=400&width=600&text=Multi-Cloud Infrastructure",
+                icon: "fas fa-cloud",
                 description: "Scalable multi-cloud deployment with auto-scaling capabilities, load balancing, and disaster recovery designed for a rapidly growing tech startup requiring high availability and global reach.",
                 technologies: ["AWS", "Azure", "Google Cloud", "Kubernetes", "Docker", "Terraform", "Ansible", "Prometheus"],
                 challenges: "The startup needed a scalable infrastructure that could handle rapid growth, ensure high availability across multiple regions, while maintaining cost efficiency and performance optimization.",
@@ -1122,7 +1149,7 @@
             project3: {
                 title: "Enterprise ERP Solution",
                 category: "System Development",
-                image: "/placeholder.svg?height=400&width=600&text=Custom ERP System",
+                icon: "fas fa-cogs",
                 description: "A tailored enterprise resource planning solution with advanced analytics, real-time reporting, inventory management, and financial modules designed for a large manufacturing company.",
                 technologies: ["React", "Node.js", "PostgreSQL", "Redis", "Docker", "Microservices", "GraphQL", "Machine Learning"],
                 challenges: "The client needed a custom ERP system that could integrate with their existing processes, provide real-time analytics, handle complex manufacturing workflows, and scale with business growth.",
@@ -1132,7 +1159,7 @@
             project4: {
                 title: "Corporate Network Redesign",
                 category: "Network Design",
-                image: "/placeholder.svg?height=400&width=600&text=Network Infrastructure",
+                icon: "fas fa-network-wired",
                 description: "Complete network infrastructure overhaul with SD-WAN implementation, enhanced security protocols, and 99.9% uptime guarantee for a multinational corporation with 50+ offices.",
                 technologies: ["SD-WAN", "Cisco", "Fortinet", "MPLS", "VPN", "Network Segmentation", "QoS", "Network Monitoring"],
                 challenges: "The client had an outdated network infrastructure causing performance issues, security vulnerabilities, and high operational costs across their global offices.",
@@ -1142,7 +1169,7 @@
             project5: {
                 title: "High-Performance E-commerce",
                 category: "Web Development",
-                image: "/placeholder.svg?height=400&width=600&text=E-commerce Platform",
+                icon: "fas fa-shopping-cart",
                 description: "Scalable e-commerce platform with microservices architecture, handling millions of transactions daily with advanced payment integration, inventory management, and customer analytics.",
                 technologies: ["React", "Node.js", "MongoDB", "Redis", "Elasticsearch", "Docker", "Kubernetes", "Payment APIs"],
                 challenges: "The client needed a high-performance e-commerce platform that could handle massive traffic spikes, process millions of transactions, and provide real-time inventory management.",
@@ -1152,7 +1179,7 @@
             project6: {
                 title: "Enterprise Data Center",
                 category: "Server Infrastructure",
-                image: "/placeholder.svg?height=400&width=600&text=Data Center Setup",
+                icon: "fas fa-server",
                 description: "Complete data center setup with redundancy, disaster recovery, virtualization, and 24/7 monitoring systems for a financial services company requiring maximum uptime and security.",
                 technologies: ["VMware vSphere", "Dell PowerEdge", "NetApp Storage", "Cisco Networking", "Backup Solutions", "Monitoring Tools"],
                 challenges: "The client needed a highly secure and reliable data center infrastructure with redundancy, disaster recovery capabilities, and compliance with financial industry regulations.",
@@ -1162,7 +1189,7 @@
             project7: {
                 title: "Secure Banking Application",
                 category: "Mobile Development",
-                image: "/placeholder.svg?height=400&width=600&text=Mobile Banking App",
+                icon: "fas fa-mobile-alt",
                 description: "Cross-platform mobile banking application with biometric authentication, real-time fraud detection, and PCI DSS compliance for a regional bank serving 500,000+ customers.",
                 technologies: ["React Native", "Node.js", "MongoDB", "Biometric APIs", "Fraud Detection AI", "Encryption", "PCI DSS"],
                 challenges: "The bank needed a secure, user-friendly mobile banking app that could handle high transaction volumes while maintaining strict security standards and regulatory compliance.",
@@ -1172,7 +1199,7 @@
             project8: {
                 title: "Legacy System Modernization",
                 category: "Cloud Migration",
-                image: "/placeholder.svg?height=400&width=600&text=Cloud Migration",
+                icon: "fas fa-exchange-alt",
                 description: "Complete migration of legacy systems to AWS cloud with containerization, microservices architecture, and cost optimization for a healthcare organization.",
                 technologies: ["AWS", "Docker", "Kubernetes", "Microservices", "API Gateway", "Lambda", "RDS", "CloudFormation"],
                 challenges: "The healthcare organization had outdated legacy systems that were expensive to maintain, difficult to scale, and posed security risks while handling sensitive patient data.",
@@ -1182,7 +1209,7 @@
             project9: {
                 title: "Smart Manufacturing Platform",
                 category: "IoT Development",
-                image: "/placeholder.svg?height=400&width=600&text=IoT Platform",
+                icon: "fas fa-wifi",
                 description: "Industrial IoT platform with real-time monitoring, predictive analytics, and automated quality control for manufacturing operations across multiple facilities.",
                 technologies: ["IoT Sensors", "Edge Computing", "Machine Learning", "Real-time Analytics", "Industrial Protocols", "Cloud Integration"],
                 challenges: "The manufacturing company needed to modernize their operations with IoT technology to improve efficiency, reduce downtime, and implement predictive maintenance across their facilities.",
@@ -1198,8 +1225,10 @@
 
             if (project) {
                 modalContent.innerHTML = `
-                    <div style="padding: 30px;">
-                        <img src="${project.image}" alt="${project.title}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
+                    <div class="modal-image">
+                        <i class="${project.icon}"></i>
+                    </div>
+                    <div class="modal-body">
                         <div style="color: var(--secondary-color); font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; text-transform: uppercase;">${project.category}</div>
                         <h2 style="color: var(--primary-color); margin-bottom: 20px; font-size: 2rem;">${project.title}</h2>
                         <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 30px; font-size: 1.1rem;">${project.description}</p>
