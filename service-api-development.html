@@ -1,0 +1,1224 @@
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Development - FortishieldMatrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: var(--dark-bg);
+            margin-top: 70px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Service Content */
+        .service-content {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-card h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .service-features li {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Process Section */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .process-step:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .step-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Capabilities Section */
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .capability-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .capability-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .capability-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .capability-title {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .capability-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Differentiators Section */
+        .differentiators {
+            background: var(--card-bg);
+            padding: 60px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .differentiators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .differentiator {
+            text-align: center;
+        }
+
+        .differentiator-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .differentiator-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .differentiator-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .price-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 5px 40px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .price-card.featured:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .price-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .price-features li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .price-features li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .cta-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        /* Expectations Container */
+        .expectations-container {
+            margin-bottom: 80px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: var(--transition);
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-glow);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .chatbot-header {
+            background: var(--gradient-primary);
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            background: rgba(0, 212, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background: var(--gradient-primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background: var(--primary-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chatbot-input button:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-card.featured {
+                transform: scale(1);
+            }
+
+            .price-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .process-steps, .capabilities-grid, .differentiators-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chatbot-window {
+                width: 300px;
+                right: -20px;
+            }
+        }
+
+        /* Animation Classes */
+        [data-aos] {
+            opacity: 0;
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+
+        [data-aos="fade-up"] {
+            transform: translateY(30px);
+        }
+
+        [data-aos="fade-up"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-down"] {
+            transform: translateY(-30px);
+        }
+
+        [data-aos="fade-down"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-left"] {
+            transform: translateX(30px);
+        }
+
+        [data-aos="fade-left"].aos-animate {
+            transform: translateX(0);
+        }
+
+        [data-aos="fade-right"] {
+            transform: translateX(-30px);
+        }
+
+        [data-aos="fade-right"].aos-animate {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link active">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">API Development Services</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Secure, Scalable, and Developer-Friendly APIs for Modern Enterprises</p>
+        </div>
+    </section>
+
+    <!-- Service Content -->
+    <section class="service-content">
+        <div class="container">
+            <!-- Overview -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>Overview</h3>
+                <p>APIs (Application Programming Interfaces) are the backbone of modern digital ecosystems, enabling seamless communication between different software systems. At FortishieldMatrix, we develop robust, secure, and scalable APIs that empower your business to integrate with partners, serve customers, and streamline internal processes.</p>
+                <p>Our API development services focus on creating interfaces that are not only functional but also secure, well-documented, and easy to integrate, ensuring a positive experience for developers and end-users alike.</p>
+            </div>
+
+            <!-- Process Section -->
+            <h2 class="section-title" data-aos="fade-up">Our API Development Process</h2>
+            <div class="process-steps">
+                <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-icon"><i class="fas fa-search"></i></div>
+                    <div class="step-title">Discovery</div>
+                    <div class="step-description">We analyze your business requirements, target audience, and integration needs to design the perfect API solution.</div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-icon"><i class="fas fa-pencil-ruler"></i></div>
+                    <div class="step-title">Design</div>
+                    <div class="step-description">We create comprehensive API specifications using OpenAPI standards, focusing on usability and consistency.</div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-icon"><i class="fas fa-code"></i></div>
+                    <div class="step-title">Build</div>
+                    <div class="step-description">Our developers implement the API with best practices, ensuring performance, reliability, and security.</div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="400">
+                    <div class="step-icon"><i class="fas fa-vial"></i></div>
+                    <div class="step-title">Test</div>
+                    <div class="step-description">We conduct rigorous testing including unit tests, integration tests, security audits, and performance testing.</div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="500">
+                    <div class="step-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="step-title">Deploy</div>
+                    <div class="step-description">We deploy your API to production environments with proper CI/CD pipelines and monitoring in place.</div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="600">
+                    <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="step-title">Monitor & Support</div>
+                    <div class="step-description">We provide ongoing monitoring, maintenance, and support to ensure your API remains performant and secure.</div>
+                </div>
+            </div>
+
+            <!-- Core Capabilities -->
+            <h2 class="section-title" data-aos="fade-up">Core Capabilities</h2>
+            <div class="capabilities-grid">
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="capability-icon"><i class="fas fa-layer-group"></i></div>
+                    <div class="capability-title">API-First Design</div>
+                    <div class="capability-description">We design APIs with the consumer in mind, ensuring intuitive endpoints, consistent patterns, and comprehensive documentation. Our API-first approach means we consider how developers will use your API from the very beginning of the design process.</div>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="capability-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="capability-title">Secure by Default</div>
+                    <div class="capability-description">We implement OAuth2 for authorization, JWT for secure token-based authentication, and TLS for encrypted communications. Every API we build includes rate limiting, input validation, and protection against common vulnerabilities like SQL injection and XSS attacks.</div>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="capability-icon"><i class="fas fa-user-cog"></i></div>
+                    <div class="capability-title">Developer Experience</div>
+                    <div class="capability-description">We provide comprehensive developer portals with interactive documentation, SDKs in multiple languages, and sandbox environments for testing. FortishieldMatrix ensures that third-party developers can easily understand, implement, and work with your APIs.</div>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="capability-icon"><i class="fas fa-server"></i></div>
+                    <div class="capability-title">API Gateway & Management</div>
+                    <div class="capability-description">We implement API gateways for request routing, composition, and protocol translation. Our management solutions include rate limiting, caching, analytics, and access control to ensure your APIs perform optimally under various load conditions.</div>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="capability-icon"><i class="fas fa-chart-pie"></i></div>
+                    <div class="capability-title">Analytics & Monetization</div>
+                    <div class="capability-description">We implement analytics to track API usage, performance metrics, and business insights. For commercial APIs, we build monetization strategies including tiered pricing, pay-per-use models, and partner revenue sharing.</div>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="capability-icon"><i class="fas fa-file-contract"></i></div>
+                    <div class="capability-title">Compliance-Ready</div>
+                    <div class="capability-description">We build APIs that comply with industry regulations including GDPR for data privacy, PCI-DSS for payment processing, and HIPAA for healthcare information. Our compliance-first approach ensures your APIs meet all necessary legal and regulatory requirements.</div>
+                </div>
+            </div>
+
+            <!-- Differentiators Section -->
+            <div class="differentiators" data-aos="fade-up">
+                <h2 class="section-title">Why Choose FortishieldMatrix for API Development</h2>
+                <div class="differentiators-grid">
+                    <div class="differentiator" data-aos="fade-up" data-aos-delay="100">
+                        <div class="differentiator-icon"><i class="fas fa-check-double"></i></div>
+                        <div class="differentiator-title">Reliability</div>
+                        <div class="differentiator-description">Our APIs boast 99.9% uptime with robust failover mechanisms and comprehensive monitoring.</div>
+                    </div>
+                    <div class="differentiator" data-aos="fade-up" data-aos-delay="200">
+                        <div class="differentiator-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="differentiator-title">Enterprise SLAs</div>
+                        <div class="differentiator-description">We offer service level agreements with guaranteed response times and resolution windows.</div>
+                    </div>
+                    <div class="differentiator" data-aos="fade-up" data-aos-delay="300">
+                        <div class="differentiator-icon"><i class="fas fa-lock"></i></div>
+                        <div class="differentiator-title">Security Focus</div>
+                        <div class="differentiator-description">Security is integrated into every layer of our API development process, not added as an afterthought.</div>
+                    </div>
+                    <div class="differentiator" data-aos="fade-up" data-aos-delay="400">
+                        <div class="differentiator-icon"><i class="fas fa-eye"></i></div>
+                        <div class="differentiator-title">Transparency</div>
+                        <div class="differentiator-description">We provide clear documentation, regular progress updates, and complete visibility into our development process.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <h2 class="section-title" data-aos="fade-up">Packages & Pricing</h2>
+            <div class="pricing-grid">
+                <div class="price-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="price-title">Starter</div>
+                    <div class="price-amount">$4,999+</div>
+                    <div class="price-note">Basic API implementation</div>
+                    <ul class="price-features">
+                        <li>Up to 5 API endpoints</li>
+                        <li>Basic authentication</li>
+                        <li>OpenAPI documentation</li>
+                        <li>Basic rate limiting</li>
+                        <li>3 months support</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="price-card featured" data-aos="fade-up" data-aos-delay="200">
+                    <div class="price-title">Professional</div>
+                    <div class="price-amount">$9,999+</div>
+                    <div class="price-note">Comprehensive API solution</div>
+                    <ul class="price-features">
+                        <li>Up to 20 API endpoints</li>
+                        <li>OAuth2 authentication</li>
+                        <li>Interactive developer portal</li>
+                        <li>Advanced rate limiting</li>
+                        <li>API analytics dashboard</li>
+                        <li>6 months support</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="price-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="price-title">Enterprise</div>
+                    <div class="price-amount">$19,999+</div>
+                    <div class="price-note">Full API ecosystem</div>
+                    <ul class="price-features">
+                        <li>Unlimited API endpoints</li>
+                        <li>Advanced security features</li>
+                        <li>Custom developer portal</li>
+                        <li>API gateway implementation</li>
+                        <li>Compliance with regulations</li>
+                        <li>Monetization capabilities</li>
+                        <li>12 months support</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Expectations -->
+            <div class="expectations-container">
+                <h2 class="section-title" data-aos="fade-up">Our Collaboration Process</h2>
+                
+                <div class="pricing-grid">
+                    <div class="price-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="price-title">What to Expect From Us</div>
+                        <ul class="price-features">
+                            <li>Secure and reliable API solutions</li>
+                            <li>Comprehensive documentation</li>
+                            <li>Ongoing technical support</li>
+                            <li>Compliance with security standards</li>
+                            <li>Regular progress updates</li>
+                            <li>Quality assurance and testing</li>
+                            <li>Scalable architecture</li>
+                        </ul>
+                    </div>
+
+                    <div class="price-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="price-title">What We Expect From You</div>
+                        <ul class="price-features">
+                            <li>Clear business requirements</li>
+                            <li>Dedicated point of contact</li>
+                            <li>Timely feedback during development</li>
+                            <li>Access to necessary systems</li>
+                            <li>Decision-maker availability</li>
+                            <li>Adherence to agreed timelines</li>
+                            <li>Commitment to security practices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="cta-content" data-aos="fade-up">
+                    <h2 class="cta-title">Ready to Build Your API Solution?</h2>
+                    <p class="cta-description">Partner with Fortishield-Matrix for secure, scalable, and developer-friendly API solutions that power your digital transformation.</p>
+                    <a href="contact.html" class="btn btn-primary">Get Started with API Development</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-btn" id="chatbot-btn">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <h3>API Development Assistant</h3>
+                <button class="chatbot-close" id="chatbot-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    Hello! I'm here to help with any questions about our API development services. How can I assist you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message...">
+                <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Chatbot functionality
+        const chatbotBtn = document.getElementById('chatbot-btn');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+
+        chatbotBtn.addEventListener('click', () => {
+            chatbotWindow.style.display = 'flex';
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+        });
+
+        // Chatbot responses for API development
+        const chatbotResponses = {
+            'hello': 'Hello! How can I help you with our API development services today?',
+            'hi': 'Hi there! What would you like to know about our API development services?',
+            'price': 'Our API development packages start at $4,999 for starter APIs, $9,999 for professional solutions, and $19,999+ for enterprise-grade API ecosystems.',
+            'pricing': 'We offer three main packages: Starter ($4,999+), Professional ($9,999+), and Enterprise ($19,999+). Each includes different features based on your API needs.',
+            'how long': 'API development timelines vary based on complexity. Starter APIs: 4-6 weeks, Professional APIs: 8-12 weeks, Enterprise APIs: 12-20+ weeks.',
+            'timeline': 'Project timelines depend on requirements: Starter (4-6 weeks), Professional (8-12 weeks), Enterprise (12-20+ weeks). We provide detailed timelines after requirements analysis.',
+            'technology': 'We work with various API technologies including REST, GraphQL, gRPC, and WebSocket APIs. We use modern frameworks and languages like Node.js, Python, Java, and .NET.',
+            'rest': 'REST APIs follow architectural constraints for building scalable web services. We implement RESTful principles with proper HTTP methods, status codes, and resource design.',
+            'graphql': 'GraphQL APIs provide a query language for your API, allowing clients to request exactly the data they need. We implement GraphQL with proper schema design and optimization.',
+            'security': 'All our APIs include robust security features: OAuth2 authentication, JWT tokens, rate limiting, input validation, and protection against common vulnerabilities.',
+            'documentation': 'We provide comprehensive API documentation including OpenAPI specifications, interactive developer portals, code samples, and SDKs in multiple languages.',
+            'maintenance': 'We offer comprehensive maintenance plans including updates, security monitoring, performance optimization, and 24/7 technical support for your APIs.',
+            'compliance': 'Our APIs are built to comply with industry regulations including GDPR, PCI-DSS, HIPAA, and other relevant standards for your industry.',
+            'contact': 'You can reach us through our contact page, email, or phone. We\'d be happy to discuss your API development needs!',
+            'default': 'I\'m not sure I understand. Could you please rephrase your question? I can help with information about REST APIs, GraphQL, pricing, timelines, technologies, security, and documentation.'
+        };
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageDiv.textContent = message;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function getResponse(message) {
+            message = message.toLowerCase();
+            
+            if (message.includes('hello') || message.includes('hi')) {
+                return chatbotResponses['hello'];
+            } else if (message.includes('price') || message.includes('cost') || message.includes('how much')) {
+                return chatbotResponses['price'];
+            } else if (message.includes('how long') || message.includes('timeline') || message.includes('duration')) {
+                return chatbotResponses['how long'];
+            } else if (message.includes('technology') || message.includes('stack') || message.includes('framework')) {
+                return chatbotResponses['technology'];
+            } else if (message.includes('rest')) {
+                return chatbotResponses['rest'];
+            } else if (message.includes('graphql')) {
+                return chatbotResponses['graphql'];
+            } else if (message.includes('security') || message.includes('secure')) {
+                return chatbotResponses['security'];
+            } else if (message.includes('documentation') || message.includes('docs')) {
+                return chatbotResponses['documentation'];
+            } else if (message.includes('maintenance') || message.includes('support')) {
+                return chatbotResponses['maintenance'];
+            } else if (message.includes('compliance') || message.includes('gdpr') || message.includes('hipaa')) {
+                return chatbotResponses['compliance'];
+            } else if (message.includes('contact') || message.includes('email') || message.includes('phone')) {
+                return chatbotResponses['contact'];
+            } else {
+                return chatbotResponses['default'];
+            }
+        }
+
+        chatbotSend.addEventListener('click', () => {
+            const message = chatbotInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatbotInput.value = '';
+                
+                // Simulate thinking delay
+                setTimeout(() => {
+                    const response = getResponse(message);
+                    addMessage(response);
+                }, 500);
+            }
+        });
+
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+    </script>
+</body>
+</html>

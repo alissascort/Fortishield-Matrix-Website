@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Applications - FortishieldMatrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: var(--dark-bg);
+            margin-top: 70px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Service Content */
+        .service-content {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-card h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .service-features li {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .price-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 5px 40px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .price-card.featured:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .price-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .price-features li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .price-features li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Pricing Breakdown */
+        .pricing-breakdown {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .breakdown-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .breakdown-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .breakdown-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .breakdown-step {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .step-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Quality Assurance */
+        .quality-assurance {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .quality-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .quality-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .quality-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .quality-feature {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .quality-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .quality-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .quality-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Expectations Container */
+        .expectations-container {
+            margin-bottom: 80px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin-top: 60px;
+            padding: 40px 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: var(--transition);
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-glow);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .chatbot-header {
+            background: var(--gradient-primary);
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            background: rgba(0, 212, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background: var(--gradient-primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background: var(--primary-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chatbot-input button:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-card.featured {
+                transform: scale(1);
+            }
+
+            .price-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .chatbot-window {
+                width: 300px;
+                right: -20px;
+            }
+        }
+
+        /* Animation Classes */
+        [data-aos] {
+            opacity: 0;
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+
+        [data-aos="fade-up"] {
+            transform: translateY(30px);
+        }
+
+        [data-aos="fade-up"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-down"] {
+            transform: translateY(-30px);
+        }
+
+        [data-aos="fade-down"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-left"] {
+            transform: translateX(30px);
+        }
+
+        [data-aos="fade-left"].aos-animate {
+            transform: translateX(0);
+        }
+
+        [data-aos="fade-right"] {
+            transform: translateX(-30px);
+        }
+
+        [data-aos="fade-right"].aos-animate {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link active">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Mobile Applications</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Secure, scalable, and user-friendly mobile app solutions for every industry</p>
+        </div>
+    </section>
+
+    <!-- Service Content -->
+    <section class="service-content">
+        <div class="container">
+            <!-- Overview -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>Overview</h3>
+                <p>FortishieldMatrix builds mobile applications that combine performance, security, and usability. From small business apps to enterprise-grade systems, we design, develop, and deploy mobile solutions that support your workflows and deliver value to your users.</p>
+                <p>Our mobile apps are built with cybersecurity-first principles, ensuring your data remains protected while providing an exceptional user experience across all devices and platforms.</p>
+            </div>
+
+            <!-- Types of Mobile Apps -->
+            <h2 class="section-title" data-aos="fade-up">Types of Mobile Applications</h2>
+
+            <div class="service-card" data-aos="fade-up">
+                <h3>Native Apps</h3>
+                <p>Built specifically for Android and iOS for top performance and full access to device features.</p>
+                <ul class="service-features">
+                    <li>Swift & Objective-C for iOS</li>
+                    <li>Kotlin & Java for Android</li>
+                    <li>Access to sensors, GPS, camera</li>
+                    <li>Best user experience, but higher cost</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up">
+                <h3>Hybrid Apps</h3>
+                <p>One codebase across platforms using web technologies inside a native shell.</p>
+                <ul class="service-features">
+                    <li>HTML, CSS, JavaScript</li>
+                    <li>Quick deployment on iOS & Android</li>
+                    <li>Lower cost, moderate performance</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up">
+                <h3>Progressive Web Apps (PWA)</h3>
+                <p>Installable browser apps that behave like native apps without requiring App Store distribution.</p>
+                <ul class="service-features">
+                    <li>Responsive design</li>
+                    <li>Offline access</li>
+                    <li>Push notifications</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up">
+                <h3>Cross-Platform Apps</h3>
+                <p>Single codebase solutions with near-native performance.</p>
+                <ul class="service-features">
+                    <li>React Native, Flutter, Xamarin</li>
+                    <li>Faster builds and easy updates</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up">
+                <h3>Enterprise Apps</h3>
+                <p>Custom apps for HR, finance, logistics, and operations with focus on scalability and security.</p>
+                <ul class="service-features">
+                    <li>Role-based access control</li>
+                    <li>Integration with ERP/CRM</li>
+                    <li>Secure communication channels</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up">
+                <h3>Gaming Apps</h3>
+                <p>High-performance mobile games with engaging graphics and real-time interactions.</p>
+                <ul class="service-features">
+                    <li>Unity & Unreal engines</li>
+                    <li>3D/AR/VR experiences</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up">
+                <h3>IoT & Connected Device Apps</h3>
+                <p>Applications to control and monitor smart devices, wearables, and connected systems.</p>
+                <ul class="service-features">
+                    <li>Bluetooth & Wi-Fi connectivity</li>
+                    <li>Cloud-based monitoring</li>
+                </ul>
+            </div>
+
+            <!-- How FortishieldMatrix Develops Apps -->
+            <h2 class="section-title" data-aos="fade-up">How We Develop Mobile Applications</h2>
+            <div class="service-card" data-aos="fade-up">
+                <ul class="service-features">
+                    <li><strong>Research & Planning:</strong> Understand client workflows, industry, and goals.</li>
+                    <li><strong>Agile Development:</strong> Iterative sprints with continuous feedback.</li>
+                    <li><strong>Secure Architecture:</strong> End-to-end encryption, secure APIs, compliance checks.</li>
+                    <li><strong>Testing & QA:</strong> Manual and automated testing for performance and security.</li>
+                    <li><strong>Deployment:</strong> Publishing on App Store, Google Play, or internal enterprise stores.</li>
+                    <li><strong>Maintenance:</strong> Updates, patches, monitoring, and scaling.</li>
+                </ul>
+            </div>
+
+            <!-- Reliability -->
+            <h2 class="section-title" data-aos="fade-up">Reliability of Our Apps</h2>
+            <div class="service-card" data-aos="fade-up">
+                <p>Apps developed by FortishieldMatrix are built to be:</p>
+                <ul class="service-features">
+                    <li>Scalable – grow with your business without rewrites</li>
+                    <li>Secure – built with cybersecurity-first principles</li>
+                    <li>High-Performance – fast load times and smooth UX</li>
+                    <li>Compliant – aligned with industry standards (GDPR, ISO, PCI-DSS)</li>
+                    <li>Supported – continuous monitoring and updates</li>
+                </ul>
+            </div>
+
+            <!-- Pricing -->
+            <h2 class="section-title" data-aos="fade-up">Packages & Pricing</h2>
+            <div class="pricing-grid">
+                <div class="price-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="price-title">Basic</div>
+                    <div class="price-amount">$2,999+</div>
+                    <div class="price-note">Single platform app</div>
+                    <ul class="price-features">
+                        <li>Native or Hybrid app</li>
+                        <li>Up to 5 screens</li>
+                        <li>Basic backend integration</li>
+                        <li>2 months support</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="price-card featured" data-aos="fade-up" data-aos-delay="200">
+                    <div class="price-title">Professional</div>
+                    <div class="price-amount">$5,999+</div>
+                    <div class="price-note">Cross-platform solution</div>
+                    <ul class="price-features">
+                        <li>Cross-platform app</li>
+                        <li>Up to 10 screens</li>
+                        <li>Advanced backend integration</li>
+                        <li>Push notifications</li>
+                        <li>4 months support</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="price-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="price-title">Enterprise</div>
+                    <div class="price-amount">$12,999+</div>
+                    <div class="price-note">Custom enterprise-grade solution</div>
+                    <ul class="price-features">
+                        <li>Custom enterprise-grade app</li>
+                        <li>Unlimited screens</li>
+                        <li>Advanced security & compliance</li>
+                        <li>12 months support</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Pricing Breakdown -->
+            <div class="pricing-breakdown" data-aos="fade-up">
+                <div class="breakdown-header">
+                    <h3>How Our Pricing is Structured</h3>
+                    <p>We believe in transparent pricing that directly correlates with the quality of the final product</p>
+                </div>
+                <div class="breakdown-steps">
+                    <div class="breakdown-step">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Requirement Analysis</div>
+                        <div class="step-description">10-15% of total project cost dedicated to thorough planning and analysis</div>
+                    </div>
+                    <div class="breakdown-step">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Design & Architecture</div>
+                        <div class="step-description">15-20% invested in creating intuitive UI/UX and robust architecture</div>
+                    </div>
+                    <div class="breakdown-step">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Development</div>
+                        <div class="step-description">40-50% allocated to actual coding and implementation</div>
+                    </div>
+                    <div class="breakdown-step">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Testing & Quality Assurance</div>
+                        <div class="step-description">15-20% dedicated to rigorous testing and quality control</div>
+                    </div>
+                    <div class="breakdown-step">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Deployment & Training</div>
+                        <div class="step-description">5-10% for app store deployment and comprehensive user training</div>
+                    </div>
+                    <div class="breakdown-step">
+                        <div class="step-number">6</div>
+                        <div class="step-title">Maintenance & Support</div>
+                        <div class="step-description">10-15% allocated for continuous monitoring, updates, bug fixes, and security patches to keep systems running reliably</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quality Assurance -->
+            <div class="quality-assurance" data-aos="fade-up">
+                <div class="quality-header">
+                    <h3>Our Quality Assurance Process</h3>
+                    <p>We follow a rigorous process to ensure consistent, high-quality mobile applications</p>
+                </div>
+                <div class="quality-features">
+                    <div class="quality-feature">
+                        <div class="quality-icon"><i class="fas fa-code"></i></div>
+                        <div class="quality-title">Code Review</div>
+                        <div class="quality-description">Every line of code is reviewed by senior developers to ensure quality and adherence to standards</div>
+                    </div>
+                    <div class="quality-feature">
+                        <div class="quality-icon"><i class="fas fa-bug"></i></div>
+                        <div class="quality-title">Testing</div>
+                        <div class="quality-description">Comprehensive testing including unit, integration, and user acceptance testing</div>
+                    </div>
+                    <div class="quality-feature">
+                        <div class="quality-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="quality-title">Security Audit</div>
+                        <div class="quality-description">Thorough security testing to identify and fix vulnerabilities before deployment</div>
+                    </div>
+                    <div class="quality-feature">
+                        <div class="quality-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="quality-title">Performance Testing</div>
+                        <div class="quality-description">Rigorous performance testing to ensure app responsiveness under various conditions</div>
+                    </div>
+                    <div class="quality-feature">
+                        <div class="quality-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="quality-title">Device Compatibility</div>
+                        <div class="quality-description">Testing across multiple devices and screen sizes to ensure consistent experience</div>
+                    </div>
+                    <div class="quality-feature">
+                        <div class="quality-icon"><i class="fas fa-file-alt"></i></div>
+                        <div class="quality-title">Documentation</div>
+                        <div class="quality-description">Comprehensive documentation for maintenance, troubleshooting, and future enhancements</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expectations -->
+            <div class="expectations-container">
+                <h2 class="section-title" data-aos="fade-up">Our Collaboration Process</h2>
+                
+                <div class="pricing-grid">
+                    <div class="price-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="price-title">What to Expect From Us</div>
+                        <ul class="price-features">
+                            <li>Secure and reliable mobile applications</li>
+                            <li>Tailored solutions based on your workflows</li>
+                            <li>Ongoing technical support and updates</li>
+                            <li>Compliance with security and data regulations</li>
+                            <li>Clear documentation and training</li>
+                            <li>Regular progress updates</li>
+                            <li>Quality assurance and testing</li>
+                        </ul>
+                    </div>
+
+                    <div class="price-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="price-title">What We Expect From You</div>
+                        <ul class="price-features">
+                            <li>Clear business requirements and goals</li>
+                            <li>Dedicated point of contact for communication</li>
+                            <li>Timely feedback during development stages</li>
+                            <li>Commitment to security best practices internally</li>
+                            <li>Access to necessary systems and data</li>
+                            <li>Decision-maker availability for key choices</li>
+                            <li>Adherence to agreed timelines</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="service-card text-center" data-aos="fade-up">
+                    <h3>Ready to Build Your Mobile Application?</h3>
+                    <p>Partner with Fortishield-Matrix for secure, scalable, and user-friendly mobile app solutions.</p>
+                    <a href="contact.html" class="btn btn-primary">Contact Us Today</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-btn" id="chatbot-btn">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <h3>Mobile Applications Assistant</h3>
+                <button class="chatbot-close" id="chatbot-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    Hello! I'm here to help with any questions about our mobile application development services. How can I assist you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message...">
+                <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Chatbot functionality
+        const chatbotBtn = document.getElementById('chatbot-btn');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+
+        chatbotBtn.addEventListener('click', () => {
+            chatbotWindow.style.display = 'flex';
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+        });
+
+        // Chatbot responses for mobile applications
+        const chatbotResponses = {
+            'hello': 'Hello! How can I help you with our mobile application development services today?',
+            'hi': 'Hi there! What would you like to know about our mobile app development services?',
+            'price': 'Our mobile app development packages start at $2,999 for basic apps, $5,999 for professional cross-platform solutions, and $12,999+ for enterprise-grade applications.',
+            'pricing': 'Our pricing is transparently broken down into: Requirement Analysis (10-15%), Design & Architecture (15-20%), Development (40-50%), Testing & QA (15-20%), and Deployment & Training (5-10%).',
+            'how long': 'Mobile app development timelines vary based on complexity. Basic apps: 4-6 weeks, Professional apps: 8-12 weeks, Enterprise apps: 12-20+ weeks.',
+            'timeline': 'Project timelines depend on requirements: Basic (4-6 weeks), Professional (8-12 weeks), Enterprise (12-20+ weeks). We provide detailed timelines after requirements analysis.',
+            'technology': 'We use various technologies including native (Swift, Kotlin, Java), cross-platform (React Native, Flutter), and web technologies (PWA).',
+            'native': 'Native apps are built specifically for each platform (iOS and Android) using Swift/Objective-C for iOS and Kotlin/Java for Android.',
+            'cross platform': 'Cross-platform apps use frameworks like React Native or Flutter to create apps that work on both iOS and Android from a single codebase.',
+            'pwa': 'Progressive Web Apps are web applications that behave like native apps and can be installed on devices without app store distribution.',
+            'security': 'All our mobile applications include robust security features: data encryption, secure APIs, authentication systems, and compliance with security standards.',
+            'maintenance': 'We offer comprehensive maintenance plans including updates, security monitoring, performance optimization, and 24/7 technical support.',
+            'quality': 'Our quality assurance process includes code reviews, comprehensive testing, security audits, performance testing, device compatibility testing, and thorough documentation.',
+            'contact': 'You can reach us through our contact page, email, or phone. We\'d be happy to discuss your mobile application needs!',
+            'default': 'I\'m not sure I understand. Could you please rephrase your question? I can help with information about native apps, cross-platform development, pricing, timelines, technologies, security, and maintenance.'
+        };
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageDiv.textContent = message;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function getResponse(message) {
+            message = message.toLowerCase();
+            
+            if (message.includes('hello') || message.includes('hi')) {
+                return chatbotResponses['hello'];
+            } else if (message.includes('price') || message.includes('cost') || message.includes('how much')) {
+                return chatbotResponses['price'];
+            } else if (message.includes('how long') || message.includes('timeline') || message.includes('duration')) {
+                return chatbotResponses['how long'];
+            } else if (message.includes('technology') || message.includes('stack') || message.includes('framework')) {
+                return chatbotResponses['technology'];
+            } else if (message.includes('native')) {
+                return chatbotResponses['native'];
+            } else if (message.includes('cross platform') || message.includes('cross-platform')) {
+                return chatbotResponses['cross platform'];
+            } else if (message.includes('pwa') || message.includes('progressive web')) {
+                return chatbotResponses['pwa'];
+            } else if (message.includes('security') || message.includes('secure')) {
+                return chatbotResponses['security'];
+            } else if (message.includes('maintenance') || message.includes('support')) {
+                return chatbotResponses['maintenance'];
+            } else if (message.includes('quality') || message.includes('assurance')) {
+                return chatbotResponses['quality'];
+            } else if (message.includes('contact') || message.includes('email') || message.includes('phone')) {
+                return chatbotResponses['contact'];
+            } else {
+                return chatbotResponses['default'];
+            }
+        }
+
+        chatbotSend.addEventListener('click', () => {
+            const message = chatbotInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatbotInput.value = '';
+                
+                // Simulate thinking delay
+                setTimeout(() => {
+                    const response = getResponse(message);
+                    addMessage(response);
+                }, 500);
+            }
+        });
+
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+    </script>
+</body>
+</html>
