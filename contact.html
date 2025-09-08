@@ -1215,6 +1215,8 @@
 
         emailjs.send("service_4pe5j8e", "template_cgtb6f6", templateParams)
             .then(() => {
+                // Send auto-reply to client
+                emailjs.send("service_4pe5j8e", "template_58ddxnn", templateParams);
                 // Show success message
                 successMessage.style.display = 'block';
                 
