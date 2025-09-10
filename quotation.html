@@ -843,6 +843,7 @@
             details: form.details.value,
             quotation_id: quotationId,
             date: new Date().toLocaleDateString()
+            subject: `Your Quotation [${quotationId}] from Fortishield-Matrix`
         };
 
         const estimatedCost = estimateCost(formData.service, formData.budget);
