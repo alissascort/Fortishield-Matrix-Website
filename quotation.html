@@ -716,233 +716,173 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
+   <script>
+    // Initialize AOS
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+    });
+
+    // Mobile Navigation
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navMenu = document.getElementById('nav-menu');
+
+    mobileMenu.addEventListener('click', function() {
+        mobileMenu.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            navMenu.classList.remove('active');
         });
+    });
 
-        // Mobile Navigation
-        const mobileMenu = document.getElementById('mobile-menu');
-        const navMenu = document.getElementById('nav-menu');
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
 
-        mobileMenu.addEventListener('click', function() {
-            mobileMenu.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
+    // Form validation and submission
+    const form = document.getElementById('quotationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
 
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
+    //Initialize EmailJS with your Public Key
+    emailjs.init('P91QjvyS7Eu43w42Y'); 
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
+    // Generate Quotation ID
+    function generateQuotationId() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `QTN-${year}${month}${day}-${randomNum}`;
+    }
 
-        // Form validation and submission
-        const form = document.getElementById('quotationForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const successMessage = document.getElementById('successMessage');
-        
-        // Initialize EmailJS
-        emailjs.init('P91QjvyS7Eu43w42Y');
-        
-        // Generate Quotation ID
-        function generateQuotationId() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-            return `QTN-${year}${month}${day}-${randomNum}`;
-        }
-        
-        // Estimate cost based on service and budget
-        function estimateCost(service, budget) {
-            // Default range if no budget is selected
-            if (!budget) return "$1,500 - $5,000";
-            
-            // Map budget ranges to estimated costs
-           const budgetRanges = {
-               "$100": "$100 - $400",
-               "$500": "$500 - $900",
-               "$1,000": "$1,000 - $4,000",
-               "$5,000": "$5,000 (fixed range)",
-               "$5,000 - $10,000": "$5,000 - $10,000",
-               "$10,000 - $25,000": "$10,000 - $25,000",
-               "$25,000 - $50,000": "$25,000 - $50,000",
-               "$50,000+": "$50,000+",
-               "Not sure": "$100 - $5,000"
-           };
-            
-           return budgetRanges[budget] || "$100 - $5,000";
-        }
-        
-        // Validate email format
-        function isValidEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-        
-        // Show error message
-        function showError(inputId, message) {
-            const errorElement = document.getElementById(`${inputId}-error`);
-            const inputElement = document.getElementById(inputId);
-            
-            errorElement.textContent = message;
-            errorElement.classList.add('show');
-            inputElement.classList.add('error');
-        }
-        
-        // Hide error message
-        function hideError(inputId) {
-            const errorElement = document.getElementById(`${inputId}-error`);
-            const inputElement = document.getElementById(inputId);
-            
-            errorElement.classList.remove('show');
-            inputElement.classList.remove('error');
-        }
-        
-        // Validate form
-        function validateForm() {
-            let isValid = true;
-            
-            // Validate name
-            const name = document.getElementById('name').value.trim();
-            if (name === '') {
-                showError('name', 'Please enter your full name');
-                isValid = false;
-            } else {
-                hideError('name');
-            }
-            
-            // Validate email
-            const email = document.getElementById('email').value.trim();
-            if (email === '') {
-                showError('email', 'Please enter your email address');
-                isValid = false;
-            } else if (!isValidEmail(email)) {
-                showError('email', 'Please enter a valid email address');
-                isValid = false;
-            } else {
-                hideError('email');
-            }
-            
-            // Validate service
-            const service = document.getElementById('service').value;
-            if (service === '') {
-                showError('service', 'Please select a service');
-                isValid = false;
-            } else {
-                hideError('service');
-            }
-            
-            // Validate details
-            const details = document.getElementById('details').value.trim();
-            if (details === '') {
-                showError('details', 'Please provide project details');
-                isValid = false;
-            } else {
-                hideError('details');
-            }
-            
-            return isValid;
-        }
-        
-        // Form submission
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (!validateForm()) return;
-            
-            // Show loading state
-            submitBtn.classList.add('loading');
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Processing...';
-            
-            // Generate quotation ID
-            const quotationId = generateQuotationId();
-            
-            // Get form values
-            const formData = {
-                name: form.name.value,
-                email: form.email.value,
-                phone: form.phone.value,
-                company: form.company.value,
-                service: form.service.value,
-                budget: form.budget.value,
-                timeline: form.timeline.value,
-                details: form.details.value,
-                quotation_id: quotationId,
-                date: new Date().toLocaleDateString()
-            };
-            
-            // Estimate cost
-            const estimatedCost = estimateCost(formData.service, formData.budget);
-            
-            // Send email to FortishieldMatrix (original template)
-            emailjs.send('service_4pe5j8e', 'template_cgtb6f6', formData)
-                .then(function() {
-                    // Send auto-reply to client with new template
-                    return emailjs.send('service_4pe5j8e', ' template_58ddxnn', {
-                        to_email: formData.email,
-                        to_name: formData.name,
-                        quotation_id: quotationId,
-                        service: formData.service,
-                        budget: formData.budget || 'Not specified',
-                        timeline: formData.timeline || 'Not specified',
-                        details: formData.details,
-                        estimated_cost: estimatedCost,
-                        date: formData.date
-                    });
-                })
-                .then(function() {
-                    // Success
-                    form.reset();
-                    successMessage.classList.add('show');
-                    submitBtn.classList.remove('loading');
-                    submitBtn.innerHTML = 'Request Professional Quotation';
-                    
-                    // Hide success message after 8 seconds
-                    setTimeout(() => {
-                        successMessage.classList.remove('show');
-                    }, 8000);
-                }, function(error) {
-                    // Error
-                    alert('Sorry, there was an error sending your request. Please try again later or contact us directly.');
-                    submitBtn.classList.remove('loading');
-                    submitBtn.innerHTML = 'Request Professional Quotation';
-                    console.error('EmailJS Error:', error);
+    // Estimate cost based on budget
+    function estimateCost(service, budget) {
+        const budgetRanges = {
+            "$100": "$100 - $400",
+            "$500": "$500 - $900",
+            "$1,000": "$1,000 - $4,000",
+            "$5,000": "$5,000 (fixed range)",
+            "$5,000 - $10,000": "$5,000 - $10,000",
+            "$10,000 - $25,000": "$10,000 - $25,000",
+            "$25,000 - $50,000": "$25,000 - $50,000",
+            "$50,000+": "$50,000+",
+            "Not sure": "$100 - $5,000"
+        };
+
+        return budgetRanges[budget] || "$100 - $5,000";
+    }
+
+    function isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function showError(inputId, message) {
+        const errorElement = document.getElementById(`${inputId}-error`);
+        const inputElement = document.getElementById(inputId);
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+        inputElement.classList.add('error');
+    }
+
+    function hideError(inputId) {
+        const errorElement = document.getElementById(`${inputId}-error`);
+        const inputElement = document.getElementById(inputId);
+        errorElement.classList.remove('show');
+        inputElement.classList.remove('error');
+    }
+
+    function validateForm() {
+        let isValid = true;
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const service = document.getElementById('service').value;
+        const details = document.getElementById('details').value.trim();
+
+        if (name === '') { showError('name', 'Please enter your full name'); isValid = false; } else { hideError('name'); }
+        if (email === '') { showError('email', 'Please enter your email address'); isValid = false; } 
+        else if (!isValidEmail(email)) { showError('email', 'Please enter a valid email address'); isValid = false; } 
+        else { hideError('email'); }
+        if (service === '') { showError('service', 'Please select a service'); isValid = false; } else { hideError('service'); }
+        if (details === '') { showError('details', 'Please provide project details'); isValid = false; } else { hideError('details'); }
+
+        return isValid;
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<span class="loading-spinner"></span> Processing...';
+
+        const quotationId = generateQuotationId();
+
+        const formData = {
+            name: form.name.value,
+            email: form.email.value,
+            phone: form.phone.value,
+            company: form.company.value,
+            service: form.service.value,
+            budget: form.budget.value,
+            timeline: form.timeline.value,
+            details: form.details.value,
+            quotation_id: quotationId,
+            date: new Date().toLocaleDateString()
+        };
+
+        const estimatedCost = estimateCost(formData.service, formData.budget);
+
+        // ✅ Send to your email first
+        emailjs.send('service_4pe5j8e', 'template_cgtb6f6', formData)
+            .then(function() {
+                // ✅ Auto-reply to client
+                return emailjs.send('service_4pe5j8e', 'template_58ddxnn', {
+                    to_email: formData.email,
+                    to_name: formData.name,
+                    quotation_id: quotationId,
+                    service: formData.service,
+                    budget: formData.budget || 'Not specified',
+                    timeline: formData.timeline || 'Not specified',
+                    details: formData.details,
+                    estimated_cost: estimatedCost,
+                    date: formData.date
                 });
-        });
-        
-        // Real-time validation
-        document.getElementById('name').addEventListener('input', function() {
-            if (this.value.trim() !== '') hideError('name');
-        });
-        
-        document.getElementById('email').addEventListener('input', function() {
-            if (this.value.trim() !== '' && isValidEmail(this.value)) hideError('email');
-        });
-        
-        document.getElementById('service').addEventListener('change', function() {
-            if (this.value !== '') hideError('service');
-        });
-        
-        document.getElementById('details').addEventListener('input', function() {
-            if (this.value.trim() !== '') hideError('details');
-        });
-    </script>
+            })
+            .then(function() {
+                form.reset();
+                successMessage.classList.add('show');
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = 'Request Professional Quotation';
+
+                setTimeout(() => { successMessage.classList.remove('show'); }, 8000);
+            }, function(error) {
+                alert('Sorry, there was an error sending your request. Please try again later or contact us directly.');
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = 'Request Professional Quotation';
+                console.error('EmailJS Error:', error);
+            });
+    });
+
+    // Real-time validation
+    document.getElementById('name').addEventListener('input', function() { if (this.value.trim() !== '') hideError('name'); });
+    document.getElementById('email').addEventListener('input', function() { if (this.value.trim() !== '' && isValidEmail(this.value)) hideError('email'); });
+    document.getElementById('service').addEventListener('change', function() { if (this.value !== '') hideError('service'); });
+    document.getElementById('details').addEventListener('input', function() { if (this.value.trim() !== '') hideError('details'); });
+</script>
 </body>
 </html>
