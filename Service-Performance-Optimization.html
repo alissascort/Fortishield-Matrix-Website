@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Optimization - FortishieldMatrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: var(--dark-bg);
+            margin-top: 70px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Service Content */
+        .service-content {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-card h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .service-features li {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .stack-list {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .stack-item {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .stack-item:hover {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .price-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 5px 40px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .price-card.featured:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .price-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .price-features li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .price-features li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Performance Metrics */
+        .metrics-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .metrics-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .metrics-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--dark-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .metric-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .metric-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Unique Features Section */
+        .unique-features {
+            background: var(--card-bg);
+            padding: 60px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .features-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--dark-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Client Benefits Section */
+        .client-benefits {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .benefits-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .benefits-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 20px;
+            background: var(--dark-bg);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .benefit-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* Optimization Process */
+        .process-container {
+            margin: 60px 0;
+        }
+
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Expectations Container */
+        .expectations-container {
+            margin-bottom: 80px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin-top: 60px;
+            padding: 40px 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: var(--transition);
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-glow);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .chatbot-header {
+            background: var(--gradient-primary);
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            background: rgba(0, 212, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background: var(--gradient-primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background: var(--primary-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chatbot-input button:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-card.featured {
+                transform: scale(1);
+            }
+
+            .price-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .unique-features {
+                padding: 30px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .client-benefits {
+                padding: 30px 20px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .chatbot-window {
+                width: 300px;
+                right: -20px;
+            }
+        }
+
+        /* Animation Classes */
+        [data-aos] {
+            opacity: 0;
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+
+        [data-aos="fade-up"] {
+            transform: translateY(30px);
+        }
+
+        [data-aos="fade-up"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-down"] {
+            transform: translateY(-30px);
+        }
+
+        [data-aos="fade-down"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-left"] {
+            transform: translateX(30px);
+        }
+
+        [data-aos="fade-left"].aos-animate {
+            transform: translateX(0);
+        }
+
+        [data-aos="fade-right"] {
+            transform: translateX(-30px);
+        }
+
+        [data-aos="fade-right"].aos-animate {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link active">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Performance Optimization</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Fine-tuned server configurations and monitoring systems to maximize performance and minimize response times for optimal user experience</p>
+        </div>
+    </section>
+
+    <!-- Service Content -->
+    <section class="service-content">
+        <div class="container">
+            <!-- Overview -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>Overview</h3>
+                <p>Performance optimization transforms sluggish systems into high-performance engines that deliver exceptional user experiences. Through meticulous configuration tuning, advanced monitoring, and strategic infrastructure adjustments, we eliminate bottlenecks and maximize efficiency.</p>
+                <p>At FortishieldMatrix, we take a holistic approach to performance optimization, addressing everything from server configurations and database queries to application code and network latency.</p>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="metrics-container" data-aos="fade-up">
+                <div class="metrics-header">
+                    <h3>Typical Performance Improvements</h3>
+                    <p>Our optimization efforts consistently deliver measurable results across key performance indicators</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="metric-value">60-80%</div>
+                        <div class="metric-title">Faster Response Times</div>
+                        <div class="metric-description">Reduced server response times and page load speeds</div>
+                    </div>
+                    <div class="metric-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="metric-value">40-70%</div>
+                        <div class="metric-title">Reduced Resource Usage</div>
+                        <div class="metric-description">Lower CPU, memory, and bandwidth consumption</div>
+                    </div>
+                    <div class="metric-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="metric-value">3-5x</div>
+                        <div class="metric-title">Increased Throughput</div>
+                        <div class="metric-description">Higher concurrent user capacity and request handling</div>
+                    </div>
+                    <div class="metric-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="metric-value">99.9%</div>
+                        <div class="metric-title">Uptime Reliability</div>
+                        <div class="metric-description">Enhanced stability and reduced system crashes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What We Offer -->
+            <h2 class="section-title" data-aos="fade-up">What We Offer</h2>
+            
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <h3>Server Configuration Optimization</h3>
+                <p>Fine-tuned server settings and operating system parameters for maximum performance and efficiency.</p>
+                <ul class="service-features">
+                    <li>Kernel parameter tuning and optimization</li>
+                    <li>Web server configuration (Nginx, Apache, IIS)</li>
+                    <li>Database server optimization (MySQL, PostgreSQL, MongoDB)</li>
+                    <li>Application server tuning (Tomcat, Node.js, PHP-FPM)</li>
+                    <li>Operating system-level performance enhancements</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                <h3>Database Performance Tuning</h3>
+                <p>Optimize database queries, indexes, and configurations for lightning-fast data access.</p>
+                <ul class="service-features">
+                    <li>Query optimization and execution plan analysis</li>
+                    <li>Index strategy development and implementation</li>
+                    <li>Database schema optimization</li>
+                    <li>Connection pooling and resource management</li>
+                    <li>Replication and caching strategies</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <h3>Application Performance Optimization</h3>
+                <p>Code-level optimizations and architectural improvements for faster application execution.</p>
+                <ul class="service-features">
+                    <li>Code profiling and bottleneck identification</li>
+                    <li>Memory management and garbage collection optimization</li>
+                    <li>API response time optimization</li>
+                    <li>Caching strategy implementation</li>
+                    <li>Asynchronous processing and background job optimization</li>
+                </ul>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                <h3>Advanced Monitoring & Analytics</h3>
+                <p>Comprehensive performance monitoring with real-time analytics and proactive alerting.</p>
+                <ul class="service-features">
+                    <li>Real-time performance monitoring and dashboards</li>
+                    <li>Application Performance Monitoring (APM) implementation</li>
+                    <li>Infrastructure monitoring and alerting</li>
+                    <li>User experience monitoring (RUM)</li>
+                    <li>Performance analytics and reporting</li>
+                </ul>
+            </div>
+
+            <!-- Optimization Process -->
+            <div class="process-container" data-aos="fade-up">
+                <h2 class="section-title">Our Optimization Process</h2>
+                <div class="process-steps">
+                    <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Comprehensive Assessment</h4>
+                            <p>We conduct thorough performance analysis using advanced monitoring tools to identify bottlenecks, resource constraints, and optimization opportunities across your entire infrastructure stack.</p>
+                        </div>
+                    </div>
+                    <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Strategic Planning</h4>
+                            <p>Based on assessment findings, we develop a prioritized optimization roadmap with clear performance targets, implementation timelines, and expected ROI calculations.</p>
+                        </div>
+                    </div>
+                    <div class="process-step" data-aos="fade-up" data-aos-delay="300">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Implementation & Tuning</h4>
+                            <p>Our experts implement optimization strategies including server configuration changes, database tuning, code optimizations, and infrastructure improvements with minimal disruption.</p>
+                        </div>
+                    </div>
+                    <div class="process-step" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Validation & Monitoring</h4>
+                            <p>We rigorously test optimization results, validate performance improvements against established benchmarks, and implement ongoing monitoring to maintain optimal performance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unique Features -->
+            <div class="unique-features" data-aos="fade-up">
+                <div class="features-header">
+                    <h3>What Makes FortishieldMatrix Performance Optimization Unique</h3>
+                    <p>Our differentiated approach to performance optimization delivers unmatched speed, efficiency, and reliability</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-icon"><i class="fas fa-microchip"></i></div>
+                        <div class="feature-title">Hardware-Aware Optimization</div>
+                        <div class="feature-description">Unlike generic optimizations, we tailor configurations specifically to your hardware architecture for maximum performance gains.</div>
+                    </div>
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                        <div class="feature-title">AI-Powered Tuning</div>
+                        <div class="feature-description">Machine learning algorithms analyze performance patterns and automatically suggest optimal configuration adjustments.</div>
+                    </div>
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="feature-title">Security-Integrated Performance</div>
+                        <div class="feature-description">Performance optimizations that maintain or enhance security posture, rather than compromising it for speed.</div>
+                    </div>
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="feature-icon"><i class="fas fa-globe-africa"></i></div>
+                        <div class="feature-title">Regional Performance Optimization</div>
+                        <div class="feature-description">Local optimizations for Tanzania/East Africa combined with global CDN strategies for international performance.</div>
+                    </div>
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="feature-icon"><i class="fas fa-clipboard-check"></i></div>
+                        <div class="feature-title">Compliance-Aware Tuning</div>
+                        <div class="feature-description">Performance improvements that respect regulatory requirements and industry compliance standards.</div>
+                    </div>
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="600">
+                        <div class="feature-icon"><i class="fas fa-hands-helping"></i></div>
+                        <div class="feature-title">Continuous Optimization Service</div>
+                        <div class="feature-description">Ongoing performance monitoring and optimization instead of one-time fixes, with regular health checks and adjustments.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Benefits -->
+            <div class="client-benefits" data-aos="fade-up">
+                <div class="benefits-header">
+                    <h3>Client Benefits</h3>
+                    <p>How our performance optimization solutions deliver value to your business</p>
+                </div>
+                <div class="benefits-grid">
+                    <div class="benefit-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="benefit-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="benefit-title">Lightning-Fast Applications</div>
+                        <div class="feature-description">Dramatically reduced load times and instant response to user interactions.</div>
+                    </div>
+                    <div class="benefit-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                        <div class="benefit-title">Higher User Capacity</div>
+                        <div class="feature-description">Support more concurrent users without performance degradation or additional hardware.</div>
+                    </div>
+                    <div class="benefit-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="benefit-icon"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="benefit-title">Reduced Infrastructure Costs</div>
+                        <div class="feature-description">Lower server and hosting costs through improved efficiency and resource utilization.</div>
+                    </div>
+                    <div class="benefit-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="benefit-title">Improved Conversion Rates</div>
+                        <div class="feature-description">Faster websites and applications lead to higher user engagement and conversion rates.</div>
+                    </div>
+                    <div class="benefit-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="benefit-title">Enhanced Reliability</div>
+                        <div class="feature-description">Reduced system crashes, timeouts, and performance-related outages.</div>
+                    </div>
+                    <div class="benefit-item" data-aos="fade-up" data-aos-delay="600">
+                        <div class="benefit-icon"><i class="fas fa-user-check"></i></div>
+                        <div class="benefit-title">Better User Experience</div>
+                        <div class="feature-description">Smooth, responsive interfaces that keep users engaged and satisfied.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technology Stack -->
+            <h2 class="section-title" data-aos="fade-up">Technology Stack</h2>
+            <div class="service-card" data-aos="fade-up">
+                <div class="stack-list">
+                    <div class="stack-item">New Relic</div>
+                    <div class="stack-item">Dynatrace</div>
+                    <div class="stack-item">Datadog</div>
+                    <div class="stack-item">Prometheus</div>
+                    <div class="stack-item">Grafana</div>
+                    <div class="stack-item">Elastic Stack</div>
+                    <div class="stack-item">Nginx</div>
+                    <div class="stack-item">Apache</div>
+                    <div class="stack-item">MySQL</div>
+                    <div class="stack-item">PostgreSQL</div>
+                    <div class="stack-item">MongoDB</div>
+                    <div class="stack-item">Redis</div>
+                    <div class="stack-item">Memcached</div>
+                    <div class="stack-item">Varnish</div>
+                    <div class="stack-item">Cloudflare</div>
+                </div>
+            </div>
+
+            <!-- Performance SLAs -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>Performance Guarantees</h3>
+                <p>We stand behind our optimization solutions with clear performance improvement guarantees and service level agreements.</p>
+                <ul class="service-features">
+                    <li><strong>50%+ performance improvement</strong> guaranteed for identified bottlenecks</li>
+                    <li><strong>Sub-second response times</strong> for optimized applications</li>
+                    <li><strong>99.9% uptime</strong> for optimized infrastructure</li>
+                    <li><strong>24/7 performance monitoring</strong> and alerting</li>
+                    <li><strong>Regular optimization reviews</strong> and continuous improvement</li>
+                    <li><strong>Performance benchmarking</strong> against industry standards</li>
+                </ul>
+            </div>
+
+            <!-- Pricing -->
+            <h2 class="section-title" data-aos="fade-up">Packages & Pricing</h2>
+            <div class="pricing-grid">
+                <div class="price-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="price-title">Performance Audit</div>
+                    <div class="price-amount">$2,499</div>
+                    <div class="price-note">One-time comprehensive assessment</div>
+                    <ul class="price-features">
+                        <li>Comprehensive performance assessment</li>
+                        <li>Bottleneck identification report</li>
+                        <li>Optimization recommendations</li>
+                        <li>Performance baseline establishment</li>
+                        <li>30-day support for implementation</li>
+                        <li>Detailed optimization roadmap</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="price-card featured" data-aos="fade-up" data-aos-delay="200">
+                    <div class="price-title">Optimization Package</div>
+                    <div class="price-amount">$4,999+/mo</div>
+                    <div class="price-note">Full optimization service</div>
+                    <ul class="price-features">
+                        <li>Comprehensive performance audit</li>
+                        <li>Implementation of optimization strategies</li>
+                        <li>Continuous performance monitoring</li>
+                        <li>Regular optimization adjustments</li>
+                        <li>24/7 performance alerting</li>
+                        <li>Monthly performance reports</li>
+                        <li>Performance SLA guarantees</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="price-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="price-title">Enterprise Optimization</div>
+                    <div class="price-amount">$9,999+/mo</div>
+                    <div class="price-note">Full-scale optimization program</div>
+                    <ul class="price-features">
+                        <li>Enterprise-wide performance optimization</li>
+                        <li>AI-powered performance tuning</li>
+                        <li>Custom performance SLAs</li>
+                        <li>Dedicated optimization team</li>
+                        <li>Real-time performance analytics</li>
+                        <li>Capacity planning and forecasting</li>
+                        <li>Performance training for your team</li>
+                        <li>Quarterly optimization reviews</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Expectations -->
+            <div class="expectations-container">
+                <h2 class="section-title" data-aos="fade-up">Our Collaboration Process</h2>
+                
+                <div class="pricing-grid">
+                    <div class="price-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="price-title">What to Expect From Us</div>
+                        <ul class="price-features">
+                            <li>Comprehensive performance assessment and documentation</li>
+                            <li>Clear optimization roadmap with measurable targets</li>
+                            <li>Transparent implementation process with minimal disruption</li>
+                            <li>24/7 performance monitoring and proactive optimization</li>
+                            <li>Regular performance reporting and improvement validation</li>
+                            <li>Knowledge transfer and performance best practices training</li>
+                            <li>Ongoing optimization support and strategy adjustments</li>
+                        </ul>
+                    </div>
+
+                    <div class="price-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="price-title">What We Expect From You</div>
+                        <ul class="price-features">
+                            <li>Clear performance goals and business objectives</li>
+                            <li>Access to systems, logs, and performance data</li>
+                            <li>Designated technical contacts for implementation</li>
+                            <li>Timely feedback on optimization proposals</li>
+                            <li>Cooperation during testing and validation phases</li>
+                            <li>Communication of changing performance requirements</li>
+                            <li>Commitment to ongoing performance maintenance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="service-card text-center" data-aos="fade-up">
+                    <h3>Ready to Transform Your Application Performance?</h3>
+                    <p>Partner with Fortishield-Matrix for comprehensive performance optimization that delivers faster response times, higher efficiency, and superior user experiences.</p>
+                    <a href="contact.html" class="btn btn-primary">Contact Us Today</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-btn" id="chatbot-btn">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <h3>Performance Optimization Assistant</h3>
+                <button class="chatbot-close" id="chatbot-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    Hello! I'm here to help with any questions about our performance optimization services. How can I assist you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message...">
+                <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Chatbot functionality
+        const chatbotBtn = document.getElementById('chatbot-btn');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+
+        chatbotBtn.addEventListener('click', () => {
+            chatbotWindow.style.display = 'flex';
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+        });
+
+        // Chatbot responses for performance optimization
+        const chatbotResponses = {
+            'hello': 'Hello! How can I help you with our performance optimization services today?',
+            'hi': 'Hi there! What would you like to know about our performance optimization solutions?',
+            'price': 'Our performance optimization packages start with a $2,499 audit, $4,999+/month for full optimization service, and $9,999+/month for enterprise solutions.',
+            'pricing': 'We offer three main approaches: Performance Audit ($2,499 one-time), Optimization Package ($4,999+/mo), and Enterprise Optimization ($9,999+/mo).',
+            'how long': 'Performance optimization timelines vary: Audit (1-2 weeks), Implementation (2-4 weeks), Full optimization program (ongoing monthly service).',
+            'timeline': 'Typical timelines: Performance Audit (1-2 weeks), Optimization Implementation (2-4 weeks), Continuous Optimization (ongoing).',
+            'improvement': 'We typically achieve 60-80% faster response times, 40-70% reduced resource usage, and 3-5x increased throughput for optimized systems.',
+            'guarantee': 'We guarantee 50%+ performance improvement for identified bottlenecks, sub-second response times, and 99.9% uptime for optimized infrastructure.',
+            'process': 'Our 4-step process includes: Comprehensive Assessment, Strategic Planning, Implementation & Tuning, and Validation & Monitoring.',
+            'monitoring': 'We implement comprehensive monitoring with tools like New Relic, Dynatrace, Datadog, Prometheus, and Grafana for real-time performance insights.',
+            'benefits': 'Our optimization delivers faster applications, higher user capacity, reduced infrastructure costs, improved conversions, and better user experience.',
+            'contact': 'You can reach us through our contact page, email, or phone. We\'d be happy to discuss your performance optimization needs!',
+            'default': 'I\'m not sure I understand. Could you please rephrase your question? I can help with information about pricing, improvements, process, monitoring, and more.'
+        };
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageDiv.textContent = message;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function getResponse(message) {
+            message = message.toLowerCase();
+            
+            if (message.includes('hello') || message.includes('hi')) {
+                return chatbotResponses['hello'];
+            } else if (message.includes('price') || message.includes('cost') || message.includes('how much')) {
+                return chatbotResponses['price'];
+            } else if (message.includes('how long') || message.includes('timeline') || message.includes('duration')) {
+                return chatbotResponses['how long'];
+            } else if (message.includes('improvement') || message.includes('faster') || message.includes('speed')) {
+                return chatbotResponses['improvement'];
+            } else if (message.includes('guarantee') || message.includes('sla')) {
+                return chatbotResponses['guarantee'];
+            } else if (message.includes('process') || message.includes('method') || message.includes('approach')) {
+                return chatbotResponses['process'];
+            } else if (message.includes('monitoring') || message.includes('monitor') || message.includes('analytics')) {
+                return chatbotResponses['monitoring'];
+            } else if (message.includes('benefit') || message.includes('advantage') || message.includes('value')) {
+                return chatbotResponses['benefits'];
+            } else if (message.includes('contact') || message.includes('email') || message.includes('phone')) {
+                return chatbotResponses['contact'];
+            } else {
+                return chatbotResponses['default'];
+            }
+        }
+
+        chatbotSend.addEventListener('click', () => {
+            const message = chatbotInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatbotInput.value = '';
+                
+                // Simulate thinking delay
+                setTimeout(() => {
+                    const response = getResponse(message);
+                    addMessage(response);
+                }, 500);
+            }
+        });
+
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+    </script>
+</body>
+</html>
