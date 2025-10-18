@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penetration Testing - FortishieldMatrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --critical-color: #ff4444;
+            --high-color: #ff6b35;
+            --medium-color: #f59e0b;
+            --low-color: #00d4ff;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: var(--dark-bg);
+            margin-top: 70px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Service Content */
+        .service-content {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-card h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .service-features li {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .stack-list {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .stack-item {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .stack-item:hover {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .price-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 5px 40px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .price-card.featured:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .price-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .price-features li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .price-features li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Service Tiers */
+        .tiers-container {
+            margin: 60px 0;
+        }
+
+        .tier-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .tier-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .tier-card.featured {
+            border: 2px solid var(--primary-color);
+        }
+
+        .tier-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .tier-name {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .tier-price {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .tier-duration {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Methodology */
+        .methodology-container {
+            margin: 60px 0;
+        }
+
+        .methodology-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .methodology-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Test Types */
+        .test-types {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .types-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .types-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .type-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--dark-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .type-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .type-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .type-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Legal & Compliance */
+        .legal-container {
+            margin: 60px 0;
+        }
+
+        .legal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .legal-item {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .legal-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .legal-title {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+            text-align: center;
+        }
+
+        /* Deliverables */
+        .deliverables-container {
+            margin: 60px 0;
+        }
+
+        .deliverables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .deliverable-item {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .deliverable-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .deliverable-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .deliverable-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Risk Matrix */
+        .risk-matrix {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .matrix-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .matrix-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .matrix-item {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .matrix-critical {
+            background: var(--critical-color);
+            color: white;
+        }
+
+        .matrix-high {
+            background: var(--high-color);
+            color: white;
+        }
+
+        .matrix-medium {
+            background: var(--medium-color);
+            color: var(--dark-bg);
+        }
+
+        .matrix-low {
+            background: var(--low-color);
+            color: var(--dark-bg);
+        }
+
+        .matrix-description {
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Tooling & Team */
+        .tooling-container {
+            margin: 60px 0;
+        }
+
+        .tooling-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .tooling-item {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .tooling-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .tooling-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin-top: 60px;
+            padding: 40px 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: var(--transition);
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-glow);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .chatbot-header {
+            background: var(--gradient-primary);
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            background: rgba(0, 212, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background: var(--gradient-primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background: var(--primary-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chatbot-input button:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-card.featured {
+                transform: scale(1);
+            }
+
+            .price-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .tier-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .methodology-step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .types-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .deliverables-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .matrix-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tooling-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chatbot-window {
+                width: 300px;
+                right: -20px;
+            }
+        }
+
+        /* Animation Classes */
+        [data-aos] {
+            opacity: 0;
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+
+        [data-aos="fade-up"] {
+            transform: translateY(30px);
+        }
+
+        [data-aos="fade-up"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-down"] {
+            transform: translateY(-30px);
+        }
+
+        [data-aos="fade-down"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-left"] {
+            transform: translateX(30px);
+        }
+
+        [data-aos="fade-left"].aos-animate {
+            transform: translateX(0);
+        }
+
+        [data-aos="fade-right"] {
+            transform: translateX(-30px);
+        }
+
+        [data-aos="fade-right"].aos-animate {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link active">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Penetration Testing</h1>
+            <p data-aos="fade-up" data-aos-delay="200">A measured, repeatable test that simulates real attackers to find exploitable weaknesses and produce prioritized fixes with proof-of-remediation</p>
+        </div>
+    </section>
+
+    <!-- Service Content -->
+    <section class="service-content">
+        <div class="container">
+            <!-- Service Summary -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>Service Summary</h3>
+                <p>Fortishield-Matrix offers professional penetration testing as a service that proves risk, fixes gaps, and reduces attack surface. Our ethical hacking approach delivers validated lists of exploitable vulnerabilities with proof-of-concept demonstrations, risk ratings, and actionable remediation steps.</p>
+                <p><strong>Outcome:</strong> Validated exploitable vulnerabilities, PoC where safe, risk rating, remediation steps, and retest validation.</p>
+            </div>
+
+            <!-- Service Tiers -->
+            <div class="tiers-container" data-aos="fade-up">
+                <h2 class="section-title">Service Tiers</h2>
+                <div class="tier-comparison">
+                    <div class="tier-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="tier-header">
+                            <div class="tier-name">Discovery</div>
+                            <div class="tier-price">$2,499+</div>
+                            <div class="tier-duration">5-7 days delivery</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>1-2 hosts or single web application</li>
+                            <li>Surface scan + authenticated testing</li>
+                            <li>Basic vulnerability assessment</li>
+                            <li>Executive summary report</li>
+                            <li>30-day remediation support</li>
+                            <li>Ideal for small businesses</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-primary">Get Started</a>
+                    </div>
+
+                    <div class="tier-card featured" data-aos="fade-up" data-aos-delay="200">
+                        <div class="tier-header">
+                            <div class="tier-name">Standard</div>
+                            <div class="tier-price">$7,999+</div>
+                            <div class="tier-duration">2-3 week engagement</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>Up to 20 assets</li>
+                            <li>Full black/grey box testing</li>
+                            <li>Application + network testing</li>
+                            <li>Basic social engineering</li>
+                            <li>Comprehensive reporting</li>
+                            <li>90-day remediation support</li>
+                            <li>Free retest within 30 days</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-primary">Get Started</a>
+                    </div>
+
+                    <div class="tier-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="tier-header">
+                            <div class="tier-name">Enterprise</div>
+                            <div class="tier-price">$19,999+</div>
+                            <div class="tier-duration">4+ week engagement</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>Full internal + external testing</li>
+                            <li>Cloud + OT/IoT + physical options</li>
+                            <li>Threat emulation scenarios</li>
+                            <li>Advanced social engineering</li>
+                            <li>Custom compliance reporting</li>
+                            <li>180-day remediation support</li>
+                            <li>Quarterly review sessions</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-primary">Get Started</a>
+                    </div>
+                </div>
+
+                <!-- Continuous Testing Option -->
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                    <h3>Continuous / Managed Penetration Testing</h3>
+                    <p>For organizations requiring ongoing security validation, we offer managed penetration testing services with scheduled rolling tests, monthly/quarterly scans, annual comprehensive testing, and automated regression checks.</p>
+                    <ul class="service-features">
+                        <li>Monthly vulnerability scanning</li>
+                        <li>Quarterly penetration testing</li>
+                        <li>Annual comprehensive assessment</li>
+                        <li>Automated regression testing</li>
+                        <li>Dedicated security consultant</li>
+                        <li>Real-time threat intelligence</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-primary">Request Managed Service Quote</a>
+                </div>
+            </div>
+
+            <!-- Test Types -->
+            <div class="test-types" data-aos="fade-up">
+                <div class="types-header">
+                    <h3>Scope & Types of Tests</h3>
+                    <p>Comprehensive testing methodologies tailored to your specific environment and requirements</p>
+                </div>
+                <div class="types-grid">
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="type-icon"><i class="fas fa-network-wired"></i></div>
+                        <div class="type-title">External Network</div>
+                        <div class="type-description">Perimeter hosts, firewall configurations, exposed services, and internet-facing infrastructure testing.</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="type-icon"><i class="fas fa-server"></i></div>
+                        <div class="type-title">Internal Network</div>
+                        <div class="type-description">Lateral movement, internal misconfigurations, protocol weaknesses, and privilege escalation testing.</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="type-icon"><i class="fas fa-globe"></i></div>
+                        <div class="type-title">Web Application</div>
+                        <div class="type-description">OWASP Top 10 checks, business logic flaws, authentication bypass, and chained vulnerability testing.</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="type-icon"><i class="fas fa-code"></i></div>
+                        <div class="type-title">API Testing</div>
+                        <div class="type-description">Authentication mechanisms, rate limiting, injection vulnerabilities, and improper access control testing.</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="type-icon"><i class="fas fa-cloud"></i></div>
+                        <div class="type-title">Cloud Infrastructure</div>
+                        <div class="type-description">IAM misconfigurations, storage permissions, metadata service abuse, and cloud-specific vulnerabilities.</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="600">
+                        <div class="type-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="type-title">Mobile Applications</div>
+                        <div class="type-description">Local storage security, API authentication, reverse engineering, and mobile-specific vulnerability testing.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Methodology -->
+            <div class="methodology-container" data-aos="fade-up">
+                <h2 class="section-title">Testing Methodology</h2>
+                <div class="methodology-steps">
+                    <div class="methodology-step" data-aos="fade-up" data-aos-delay="100">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Pre-Engagement</h4>
+                            <p>Statement of Work (SOW), Rules of Engagement (RoE), scope definition, exclusions, contact windows, and safe-words establishment. Legal documentation and authorization collection.</p>
+                        </div>
+                    </div>
+                    <div class="methodology-step" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Reconnaissance & Intelligence</h4>
+                            <p>Passive OSINT gathering, footprinting, service enumeration, and information discovery using both automated tools and manual techniques.</p>
+                        </div>
+                    </div>
+                    <div class="methodology-step" data-aos="fade-up" data-aos-delay="300">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Threat Modeling & Scoping</h4>
+                            <p>Mapping crown jewels, identifying attack paths, assessing maximum impact scenarios, and prioritizing testing based on business criticality.</p>
+                        </div>
+                    </div>
+                    <div class="methodology-step" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Vulnerability Analysis</h4>
+                            <p>Authenticated and unauthenticated scanning, manual verification of findings, false positive elimination, and vulnerability correlation.</p>
+                        </div>
+                    </div>
+                    <div class="methodology-step" data-aos="fade-up" data-aos-delay="500">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4>Exploitation</h4>
+                            <p>Controlled exploit execution to confirm impact, stopping where risk is unacceptable. Proof-of-concept development and business impact validation.</p>
+                        </div>
+                    </div>
+                    <div class="methodology-step" data-aos="fade-up" data-aos-delay="600">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h4>Post-Exploitation Analysis</h4>
+                            <p>Data access analysis, persistence possibilities, lateral movement proof, and privilege escalation path documentation.</p>
+                        </div>
+                    </div>
+                    <div class="methodology-step" data-aos="fade-up" data-aos-delay="700">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <h4>Reporting & Remediation</h4>
+                            <p>Prioritized findings list, proof-of-concept evidence, suggested fixes, risk ratings, and actionable remediation guidance.</p>
+                        </div>
+                    </div>
+                    <div class="methodology-step" data-aos="fade-up" data-aos-delay="800">
+                        <div class="step-number">8</div>
+                        <div class="step-content">
+                            <h4>Retest & Validation</h4>
+                            <p>Verification of implemented fixes, closure confirmation, residual risk assessment, and final validation reporting.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legal & Compliance -->
+            <div class="legal-container" data-aos="fade-up">
+                <h2 class="section-title">Rules of Engagement & Legal Controls</h2>
+                <div class="legal-grid">
+                    <div class="legal-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="legal-icon"><i class="fas fa-file-signature"></i></div>
+                        <div class="legal-title">Legal Documentation</div>
+                        <div class="feature-description">
+                            <p>Signed SOW + Test Authorization from client with permitted IPs, business hours, blackout windows, and explicit testing boundaries.</p>
+                        </div>
+                    </div>
+                    <div class="legal-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="legal-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="legal-title">Safe-Stop Rules</div>
+                        <div class="feature-description">
+                            <p>Clear escalation procedures for destructive vulnerabilities, production system protection, and risk mitigation protocols.</p>
+                        </div>
+                    </div>
+                    <div class="legal-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="legal-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="legal-title">Notification Protocols</div>
+                        <div class="feature-description">
+                            <p>24/7 emergency contact numbers, critical finding escalation paths, and immediate communication for high-risk discoveries.</p>
+                        </div>
+                    </div>
+                    <div class="legal-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="legal-icon"><i class="fas fa-lock"></i></div>
+                        <div class="legal-title">Data Handling</div>
+                        <div class="feature-description">
+                            <p>Encrypted storage of evidence, defined retention periods, secure destruction protocols, and confidentiality guarantees.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deliverables -->
+            <div class="deliverables-container" data-aos="fade-up">
+                <h2 class="section-title">Comprehensive Deliverables</h2>
+                <div class="deliverables-grid">
+                    <div class="deliverable-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="deliverable-icon"><i class="fas fa-file-alt"></i></div>
+                        <div class="deliverable-title">Executive Summary</div>
+                        <div class="feature-description">Non-technical risk posture, business impact analysis, and priority fix recommendations for leadership.</div>
+                    </div>
+                    <div class="deliverable-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="deliverable-icon"><i class="fas fa-search"></i></div>
+                        <div class="deliverable-title">Technical Report</div>
+                        <div class="feature-description">Detailed findings with evidence, PoC demonstrations, impact analysis, and remediation steps.</div>
+                    </div>
+                    <div class="deliverable-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="deliverable-icon"><i class="fas fa-chart-bar"></i></div>
+                        <div class="deliverable-title">Risk Matrix & Heatmap</div>
+                        <div class="feature-description">Visual representation of risks by severity and likelihood for executive decision-making.</div>
+                    </div>
+                    <div class="deliverable-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="deliverable-icon"><i class="fas fa-tasks"></i></div>
+                        <div class="deliverable-title">Remediation Playbooks</div>
+                        <div class="feature-description">Step-by-step fix instructions for operations and development teams with implementation guidance.</div>
+                    </div>
+                    <div class="deliverable-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="deliverable-icon"><i class="fas fa-file-csv"></i></div>
+                        <div class="deliverable-title">Vulnerability Tracker</div>
+                        <div class="feature-description">CSV/JSON import packages for JIRA, ServiceNow, or other issue tracking systems.</div>
+                    </div>
+                    <div class="deliverable-item" data-aos="fade-up" data-aos-delay="600">
+                        <div class="deliverable-icon"><i class="fas fa-check-double"></i></div>
+                        <div class="deliverable-title">Retest Confirmation</div>
+                        <div class="feature-description">Proof that identified issues have been fixed or residual risk documentation.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Matrix -->
+            <div class="risk-matrix" data-aos="fade-up">
+                <div class="matrix-header">
+                    <h3>Risk Severity Classification</h3>
+                    <p>Two-axis scoring: Impact × Likelihood mapped to actionable priority levels</p>
+                </div>
+                <div class="matrix-grid">
+                    <div class="matrix-item matrix-critical" data-aos="fade-up" data-aos-delay="100">
+                        <h4>Critical</h4>
+                        <p>Immediate Action Required</p>
+                    </div>
+                    <div class="matrix-item matrix-high" data-aos="fade-up" data-aos-delay="200">
+                        <h4>High</h4>
+                        <p>Address Within 24 Hours</p>
+                    </div>
+                    <div class="matrix-item matrix-medium" data-aos="fade-up" data-aos-delay="300">
+                        <h4>Medium</h4>
+                        <p>Address Within 7 Days</p>
+                    </div>
+                    <div class="matrix-item matrix-low" data-aos="fade-up" data-aos-delay="400">
+                        <h4>Low</h4>
+                        <p>Address in Next Planning Cycle</p>
+                    </div>
+                </div>
+                <p class="matrix-description">Our risk classification includes CVSS scoring with business context translation for accurate prioritization.</p>
+            </div>
+
+            <!-- Tooling & Team -->
+            <div class="tooling-container" data-aos="fade-up">
+                <h2 class="section-title">Tooling & Team Composition</h2>
+                <div class="tooling-grid">
+                    <div class="tooling-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="tooling-icon"><i class="fas fa-tools"></i></div>
+                        <div class="tooling-title">Professional Tooling</div>
+                        <div class="feature-description">Burp Suite Professional, Nessus, Metasploit, Nmap, custom scripts, and specialized testing frameworks.</div>
+                    </div>
+                    <div class="tooling-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="tooling-icon"><i class="fas fa-users"></i></div>
+                        <div class="tooling-title">Expert Team</div>
+                        <div class="feature-description">Senior penetration testers, junior analysts, test leads, and quality assurance reviewers per engagement.</div>
+                    </div>
+                    <div class="tooling-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="tooling-icon"><i class="fas fa-clipboard-check"></i></div>
+                        <div class="tooling-title">Quality Assurance</div>
+                        <div class="feature-description">Peer review of findings, repeatability checks, and signed validation by engagement leads.</div>
+                    </div>
+                    <div class="tooling-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="tooling-icon"><i class="fas fa-database"></i></div>
+                        <div class="tooling-title">Knowledge Base</div>
+                        <div class="feature-description">Maintained repository of PoC scripts, remediation patterns, and testing methodologies.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLA & Guarantees -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>SLA & Post-Engagement Guarantees</h3>
+                <ul class="service-features">
+                    <li><strong>One free retest</strong> for verified fixes within 30 days of report delivery</li>
+                    <li><strong>4-hour response time</strong> for critical findings during testing</li>
+                    <li><strong>Remediation advisory window</strong> with direct consultant access</li>
+                    <li><strong>Optional remediation assistance</strong> as billable add-on service</li>
+                    <li><strong>Compliance evidence packages</strong> for audit requirements</li>
+                    <li><strong>Knowledge transfer sessions</strong> for internal team capability building</li>
+                </ul>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="service-card text-center" data-aos="fade-up">
+                    <h3>Ready to Validate Your Security Posture?</h3>
+                    <p>Partner with Fortishield-Matrix for professional penetration testing that delivers actionable insights, proven risk reduction, and measurable security improvements.</p>
+                    <a href="contact.html" class="btn btn-primary">Schedule Your Penetration Test</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-btn" id="chatbot-btn">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <h3>Penetration Testing Assistant</h3>
+                <button class="chatbot-close" id="chatbot-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    Hello! I'm here to help with any questions about our penetration testing services. How can I assist you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message...">
+                <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Chatbot functionality
+        const chatbotBtn = document.getElementById('chatbot-btn');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+
+        chatbotBtn.addEventListener('click', () => {
+            chatbotWindow.style.display = 'flex';
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+        });
+
+        // Chatbot responses for penetration testing
+        const chatbotResponses = {
+            'hello': 'Hello! How can I help you with our penetration testing services today?',
+            'hi': 'Hi there! What would you like to know about our ethical hacking solutions?',
+            'price': 'Our penetration testing packages start at $2,499 for Discovery, $7,999 for Standard, and $19,999+ for Enterprise engagements.',
+            'pricing': 'We offer three main tiers: Discovery ($2,499+), Standard ($7,999+), and Enterprise ($19,999+). Continuous testing options available.',
+            'how long': 'Testing timelines: Discovery (5-7 days), Standard (2-3 weeks), Enterprise (4+ weeks). Continuous testing available monthly/quarterly.',
+            'timeline': 'Typical engagement durations: Discovery (1 week), Standard (2-3 weeks), Enterprise (4+ weeks).',
+            'process': 'Our 8-step methodology includes: Pre-Engagement, Reconnaissance, Threat Modeling, Vulnerability Analysis, Exploitation, Post-Exploitation, Reporting, and Retest.',
+            'deliverables': 'We provide executive summaries, technical reports, risk matrices, remediation playbooks, vulnerability trackers, and retest confirmation.',
+            'compliance': 'Our testing aligns with OWASP, PTES, NIST SP 800-115, PCI DSS requirements, and other industry standards.',
+            'methodology': 'We follow established standards including OWASP Testing Guide, PTES, and NIST methodologies with manual validation.',
+            'benefits': 'Our testing provides validated risk proof, reduced attack surface, compliance evidence, and actionable remediation guidance.',
+            'contact': 'You can reach us through our contact page, email, or phone. We\'d be happy to discuss your penetration testing needs!',
+            'default': 'I\'m not sure I understand. Could you please rephrase your question? I can help with information about pricing, process, deliverables, compliance, and more.'
+        };
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageDiv.textContent = message;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function getResponse(message) {
+            message = message.toLowerCase();
+            
+            if (message.includes('hello') || message.includes('hi')) {
+                return chatbotResponses['hello'];
+            } else if (message.includes('price') || message.includes('cost') || message.includes('how much')) {
+                return chatbotResponses['price'];
+            } else if (message.includes('how long') || message.includes('timeline') || message.includes('duration')) {
+                return chatbotResponses['how long'];
+            } else if (message.includes('process') || message.includes('method') || message.includes('approach')) {
+                return chatbotResponses['process'];
+            } else if (message.includes('deliverable') || message.includes('report') || message.includes('document')) {
+                return chatbotResponses['deliverables'];
+            } else if (message.includes('compliance') || message.includes('standard') || message.includes('regulation')) {
+                return chatbotResponses['compliance'];
+            } else if (message.includes('methodology') || message.includes('framework') || message.includes('standard')) {
+                return chatbotResponses['methodology'];
+            } else if (message.includes('benefit') || message.includes('advantage') || message.includes('value')) {
+                return chatbotResponses['benefits'];
+            } else if (message.includes('contact') || message.includes('email') || message.includes('phone')) {
+                return chatbotResponses['contact'];
+            } else {
+                return chatbotResponses['default'];
+            }
+        }
+
+        chatbotSend.addEventListener('click', () => {
+            const message = chatbotInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatbotInput.value = '';
+                
+                // Simulate thinking delay
+                setTimeout(() => {
+                    const response = getResponse(message);
+                    addMessage(response);
+                }, 500);
+            }
+        });
+
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+    </script>
+</body>
+</html>
