@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN Solutions - FortishieldMatrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: var(--dark-bg);
+            margin-top: 70px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Service Content */
+        .service-content {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-card h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .service-features li {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Technical Model */
+        .technical-container {
+            margin: 60px 0;
+        }
+
+        .technical-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .technical-item {
+            text-align: center;
+            padding: 40px 30px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .technical-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .technical-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+
+        .technical-title {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .technical-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Business Model */
+        .business-container {
+            background: var(--card-bg);
+            padding: 60px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .business-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .business-header h3 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .pricing-table th {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .pricing-table tr:hover {
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .tier-badge {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Operational Excellence */
+        .operational-container {
+            margin: 60px 0;
+        }
+
+        .operational-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .operational-item {
+            text-align: center;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .operational-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .operational-title {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .operational-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Metrics Dashboard */
+        .metrics-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .metrics-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .metrics-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 25px;
+            background: var(--dark-bg);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .metric-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .metric-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin-top: 60px;
+            padding: 40px 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .technical-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .operational-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation Classes */
+        [data-aos] {
+            opacity: 0;
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+
+        [data-aos="fade-up"] {
+            transform: translateY(30px);
+        }
+
+        [data-aos="fade-up"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-down"] {
+            transform: translateY(-30px);
+        }
+
+        [data-aos="fade-down"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-left"] {
+            transform: translateX(30px);
+        }
+
+        [data-aos="fade-left"].aos-animate {
+            transform: translateX(0);
+        }
+
+        [data-aos="fade-right"] {
+            transform: translateX(-30px);
+        }
+
+        [data-aos="fade-right"].aos-animate {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link active">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">VPN Solutions</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Managed secure connectivity with uptime guarantees. Part of the Fortishield-Matrix Secure Connectivity Suite — transforming remote access from a configuration task to a strategic business service.</p>
+        </div>
+    </section>
+
+    <!-- Service Content -->
+    <section class="service-content">
+        <div class="container">
+            <!-- Service Summary -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>Service Summary</h3>
+                <p>Fortishield-Matrix delivers enterprise-grade VPN solutions as a managed service, not just configuration. We provide secure remote connectivity with guaranteed uptime, integrated monitoring, and comprehensive support — transforming VPN from IT overhead to business advantage.</p>
+                <p><strong>Strategic Value:</strong> Secure remote workforce enablement, branch office connectivity, cloud integration, and compliance-ready access controls with measurable SLA guarantees.</p>
+            </div>
+
+            <!-- Technical Model -->
+            <div class="technical-container" data-aos="fade-up">
+                <h2 class="section-title">Technical Excellence</h2>
+                <div class="technical-grid">
+                    <div class="technical-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="technical-icon"><i class="fas fa-building"></i></div>
+                        <div class="technical-title">Site-to-Site VPN</div>
+                        <div class="technical-description">Secure branch, HQ, data center, and cloud interconnects with automatic failover and performance optimization.</div>
+                    </div>
+                    <div class="technical-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="technical-icon"><i class="fas fa-user-shield"></i></div>
+                        <div class="technical-title">Remote Access VPN</div>
+                        <div class="technical-description">Always-on connectivity with MFA integration, split-tunnel options, and granular access controls for staff and contractors.</div>
+                    </div>
+                    <div class="technical-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="technical-icon"><i class="fas fa-lock"></i></div>
+                        <div class="technical-title">Zero-Trust Security</div>
+                        <div class="technical-description">Identity-based access segmentation, least-privilege routing, and continuous authentication verification.</div>
+                    </div>
+                    <div class="technical-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="technical-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="technical-title">High Availability</div>
+                        <div class="technical-description">Redundant gateways, automatic failover, and load balancing for maximum uptime and performance.</div>
+                    </div>
+                    <div class="technical-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="technical-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="technical-title">Advanced Monitoring</div>
+                        <div class="technical-description">Integrated SOC/SIEM monitoring, performance analytics, and automated alerting for proactive management.</div>
+                    </div>
+                    <div class="technical-item" data-aos="fade-up" data-aos-delay="600">
+                        <div class="technical-icon"><i class="fas fa-cloud"></i></div>
+                        <div class="technical-title">Cloud Integration</div>
+                        <div class="technical-description">Seamless Azure, AWS, and GCP connectivity with centralized management and security controls.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Model -->
+            <div class="business-container" data-aos="fade-up">
+                <div class="business-header">
+                    <h3>Profitable Business Model</h3>
+                    <p>Shift from one-time setup to recurring managed service with clear value tiers</p>
+                </div>
+                
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Service Tier</th>
+                            <th>Scope</th>
+                            <th>Monthly Model</th>
+                            <th>Client Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tier-badge">Basic</span></td>
+                            <td>Up to 20 users, single gateway</td>
+                            <td>$499 setup + $199/month</td>
+                            <td>Simple secure remote access with basic monitoring</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tier-badge" style="background: var(--gradient-primary);">Business</span></td>
+                            <td>Up to 100 users, HA gateways, MFA</td>
+                            <td>$999 setup + $8/user/month</td>
+                            <td>Reliable, compliant connectivity with advanced features</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tier-badge" style="background: var(--secondary-color);">Enterprise</span></td>
+                            <td>Multi-site, cloud hybrid, 24×7 monitoring</td>
+                            <td>Custom SLA pricing</td>
+                            <td>Always-on, auditable, fully managed service</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="service-card">
+                    <h3>Revenue Drivers & Add-ons</h3>
+                    <div class="technical-grid">
+                        <div class="technical-item">
+                            <div class="technical-icon"><i class="fas fa-cogs"></i></div>
+                            <div class="technical-title">Setup & Deployment</div>
+                            <div class="technical-description">One-time professional services for design, configuration, and implementation</div>
+                        </div>
+                        <div class="technical-item">
+                            <div class="technical-icon"><i class="fas fa-sync-alt"></i></div>
+                            <div class="technical-title">Monthly Management</div>
+                            <div class="technical-description">Recurring revenue from monitoring, updates, and user lifecycle management</div>
+                        </div>
+                        <div class="technical-item">
+                            <div class="technical-icon"><i class="fas fa-chart-bar"></i></div>
+                            <div class="technical-title">Premium Analytics</div>
+                            <div class="technical-description">Performance monitoring, usage reporting, and business intelligence add-ons</div>
+                        </div>
+                        <div class="technical-item">
+                            <div class="technical-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="technical-title">Security Testing</div>
+                            <div class="technical-description">Penetration testing, vulnerability assessments, and compliance auditing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operational Excellence -->
+            <div class="operational-container" data-aos="fade-up">
+                <h2 class="section-title">Operational Discipline</h2>
+                <div class="operational-grid">
+                    <div class="operational-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="operational-icon"><i class="fas fa-clipboard-list"></i></div>
+                        <div class="operational-title">Structured Workflow</div>
+                        <div class="operational-description">Standardized processes from assessment to quarterly reviews ensuring consistent quality and client satisfaction.</div>
+                    </div>
+                    <div class="operational-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="operational-icon"><i class="fas fa-user-lock"></i></div>
+                        <div class="operational-title">Security First</div>
+                        <div class="operational-description">MFA enforcement, certificate-based authentication, and continuous vulnerability management.</div>
+                    </div>
+                    <div class="operational-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="operational-icon"><i class="fas fa-robot"></i></div>
+                        <div class="operational-title">Automation Driven</div>
+                        <div class="operational-description">Automated provisioning, certificate rotation, and configuration management for efficiency.</div>
+                    </div>
+                    <div class="operational-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="operational-icon"><i class="fas fa-book"></i></div>
+                        <div class="operational-title">Comprehensive Documentation</div>
+                        <div class="operational-description">Standard templates for configurations, backups, and operational procedures for every client.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="metrics-container" data-aos="fade-up">
+                <div class="metrics-header">
+                    <h3>Performance Guarantees</h3>
+                    <p>Monthly tracked metrics to protect margins and ensure service excellence</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="metric-value">99.95%</div>
+                        <div class="metric-title">Uptime SLA</div>
+                        <div class="metric-description">Guaranteed service availability with automatic failover</div>
+                    </div>
+                    <div class="metric-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="metric-value">&lt; 100ms</div>
+                        <div class="metric-title">Average Latency</div>
+                        <div class="metric-description">Optimized routing for performance-critical applications</div>
+                    </div>
+                    <div class="metric-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="metric-value">&lt; 1hr</div>
+                        <div class="metric-title">Mean Time to Repair</div>
+                        <div class="metric-description">Rapid response and resolution for any service issues</div>
+                    </div>
+                    <div class="metric-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="metric-value">≥ 45%</div>
+                        <div class="metric-title">Gross Margin</div>
+                        <div class="metric-description">Sustainable business model with healthy profitability</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategic Differentiators -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>Strategic Differentiators</h3>
+                <div class="technical-grid">
+                    <div class="technical-item">
+                        <div class="technical-icon"><i class="fas fa-cube"></i></div>
+                        <div class="technical-title">Secure Connectivity Suite</div>
+                        <div class="technical-description">VPN as part of integrated network monitoring, firewall management, and endpoint security package.</div>
+                    </div>
+                    <div class="technical-item">
+                        <div class="technical-icon"><i class="fas fa-user-check"></i></div>
+                        <div class="technical-title">Zero-Trust Migration</div>
+                        <div class="technical-description">Professional services for transitioning from IP-based to identity-based access controls.</div>
+                    </div>
+                    <div class="technical-item">
+                        <div class="technical-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="technical-title">Instant Deployment</div>
+                        <div class="technical-description">Ready-made user installers and guides for rapid remote workforce onboarding.</div>
+                    </div>
+                    <div class="technical-item">
+                        <div class="technical-icon"><i class="fas fa-gavel"></i></div>
+                        <div class="technical-title">Compliance Ready</div>
+                        <div class="technical-description">Built-in logging for GDPR, ISO 27001, and industry-specific compliance requirements.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="service-card text-center" data-aos="fade-up">
+                    <h3>Fortishield SecureConnect Portal</h3>
+                    <p>Experience our branded VPN management dashboard with real-time monitoring, user management, and performance analytics. Transform your remote connectivity from IT overhead to business advantage.</p>
+                    <a href="contact.html" class="btn btn-primary">Request SecureConnect Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
