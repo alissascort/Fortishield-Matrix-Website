@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Response - FortishieldMatrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --critical-color: #ff4444;
+            --high-color: #ff6b35;
+            --medium-color: #f59e0b;
+            --low-color: #00d4ff;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Emergency Banner */
+        .emergency-banner {
+            background: var(--critical-color);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            margin-top: 70px;
+            animation: pulse 2s infinite;
+        }
+
+        .emergency-banner a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 80px 0 60px;
+            text-align: center;
+            background: var(--dark-bg);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Service Content */
+        .service-content {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-card h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .service-features li {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .stack-list {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .stack-item {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .stack-item:hover {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .price-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 5px 40px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .price-card.featured:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .price-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .price-features li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .price-features li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-emergency {
+            background: var(--critical-color);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Incident Response Phases */
+        .phases-container {
+            margin: 60px 0;
+        }
+
+        .phases-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+        }
+
+        .phases-timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-primary);
+        }
+
+        .phase-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+        }
+
+        .phase-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .phase-content {
+            flex: 1;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .phase-content h4 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .phase-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Service Tiers */
+        .tiers-container {
+            margin: 60px 0;
+        }
+
+        .tier-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .tier-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .tier-card.featured {
+            border: 2px solid var(--primary-color);
+        }
+
+        .tier-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .tier-name {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .tier-price {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .tier-duration {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Response Capabilities */
+        .capabilities-container {
+            margin: 60px 0;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .capability-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .capability-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .capability-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .capability-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .capability-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* SLA & Guarantees */
+        .sla-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .sla-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .sla-header h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .sla-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .sla-item {
+            text-align: center;
+            padding: 25px;
+            background: var(--dark-bg);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .sla-value {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .sla-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* Incident Types */
+        .incident-types {
+            margin: 60px 0;
+        }
+
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .type-item {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .type-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .type-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .type-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Emergency Contact */
+        .emergency-contact {
+            background: var(--critical-color);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        .emergency-contact h3 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .emergency-contact p {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .emergency-phone {
+            font-size: 2.5rem;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin-top: 60px;
+            padding: 40px 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-card.featured {
+                transform: scale(1);
+            }
+
+            .price-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .phases-timeline::before {
+                left: 20px;
+            }
+
+            .phase-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .phase-number {
+                align-self: center;
+            }
+
+            .tier-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sla-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .types-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .emergency-phone {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Animation Classes */
+        [data-aos] {
+            opacity: 0;
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+
+        [data-aos="fade-up"] {
+            transform: translateY(30px);
+        }
+
+        [data-aos="fade-up"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-down"] {
+            transform: translateY(-30px);
+        }
+
+        [data-aos="fade-down"].aos-animate {
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-left"] {
+            transform: translateX(30px);
+        }
+
+        [data-aos="fade-left"].aos-animate {
+            transform: translateX(0);
+        }
+
+        [data-aos="fade-right"] {
+            transform: translateX(-30px);
+        }
+
+        [data-aos="fade-right"].aos-animate {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link active">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Emergency Banner -->
+    <div class="emergency-banner">
+        <div class="container">
+            <strong>🚨 ACTIVE SECURITY INCIDENT?</strong> Our emergency response team is available 24/7
+            <a href="tel:+255-XXX-XXXXXX">+255-XXX-XXXXXX</a>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Incident Response</h1>
+            <p data-aos="fade-up" data-aos-delay="200">24/7 emergency response to contain, eradicate, and recover from security incidents while minimizing business impact and preventing recurrence</p>
+        </div>
+    </section>
+
+    <!-- Service Content -->
+    <section class="service-content">
+        <div class="container">
+            <!-- Service Summary -->
+            <div class="service-card" data-aos="fade-up">
+                <h3>Service Summary</h3>
+                <p>Fortishield-Matrix provides comprehensive incident response services to rapidly contain security breaches, minimize damage, and restore normal operations. Our certified incident handlers follow proven methodologies to manage cyber incidents from detection through post-incident analysis.</p>
+                <p><strong>Outcome:</strong> Rapid containment, evidence preservation, root cause analysis, business restoration, and prevention of future incidents.</p>
+                <div class="text-center" style="margin-top: 30px;">
+                    <a href="#emergency-contact" class="btn btn-emergency">🚨 Emergency Response Hotline</a>
+                </div>
+            </div>
+
+            <!-- Incident Response Phases -->
+            <div class="phases-container" data-aos="fade-up">
+                <h2 class="section-title">Incident Response Lifecycle</h2>
+                <div class="phases-timeline">
+                    <div class="phase-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="phase-number">1</div>
+                        <div class="phase-content">
+                            <h4>Preparation</h4>
+                            <p>Develop incident response plans, establish communication protocols, deploy monitoring tools, and conduct team training. Preparation is key to effective response.</p>
+                            <ul class="service-features">
+                                <li>Incident response plan development</li>
+                                <li>Communication tree establishment</li>
+                                <li>Tool deployment and configuration</li>
+                                <li>Team training and tabletop exercises</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="phase-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="phase-number">2</div>
+                        <div class="phase-content">
+                            <h4>Detection & Analysis</h4>
+                            <p>Identify potential security incidents through monitoring, analyze scope and impact, and determine appropriate response level.</p>
+                            <ul class="service-features">
+                                <li>24/7 security monitoring</li>
+                                <li>Threat intelligence correlation</li>
+                                <li>Impact assessment and scoping</li>
+                                <li>Evidence collection and preservation</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="phase-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="phase-number">3</div>
+                        <div class="phase-content">
+                            <h4>Containment & Eradication</h4>
+                            <p>Immediate actions to prevent further damage, isolate affected systems, remove malicious presence, and prevent recurrence.</p>
+                            <ul class="service-features">
+                                <li>Network segmentation and isolation</li>
+                                <li>Malware removal and system cleansing</li>
+                                <li>Credential reset and access revocation</li>
+                                <li>Vulnerability patching and hardening</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="phase-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="phase-number">4</div>
+                        <div class="phase-content">
+                            <h4>Recovery</h4>
+                            <p>Restore systems to normal operation, validate security controls, and ensure business continuity while monitoring for residual threats.</p>
+                            <ul class="service-features">
+                                <li>System restoration from clean backups</li>
+                                <li>Security control validation</li>
+                                <li>Business process verification</li>
+                                <li>Continuous monitoring post-recovery</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="phase-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="phase-number">5</div>
+                        <div class="phase-content">
+                            <h4>Post-Incident Activity</h4>
+                            <p>Conduct root cause analysis, document lessons learned, implement improvements, and prepare for regulatory or legal requirements.</p>
+                            <ul class="service-features">
+                                <li>Comprehensive incident documentation</li>
+                                <li>Root cause analysis and reporting</li>
+                                <li>Process improvement implementation</li>
+                                <li>Regulatory and legal support</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Tiers -->
+            <div class="tiers-container" data-aos="fade-up">
+                <h2 class="section-title">Incident Response Service Tiers</h2>
+                <div class="tier-comparison">
+                    <div class="tier-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="tier-header">
+                            <div class="tier-name">Retainer</div>
+                            <div class="tier-price">$15,000/yr</div>
+                            <div class="tier-duration">Annual retainer + incident fees</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>Priority response during incidents</li>
+                            <li>Annual incident response plan review</li>
+                            <li>Tabletop exercise facilitation</li>
+                            <li>Discounted incident response rates</li>
+                            <li>24/7 on-call availability</li>
+                            <li>Monthly threat intelligence briefings</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-primary">Get Retainer</a>
+                    </div>
+
+                    <div class="tier-card featured" data-aos="fade-up" data-aos-delay="200">
+                        <div class="tier-header">
+                            <div class="tier-name">Emergency Response</div>
+                            <div class="tier-price">$5,000+</div>
+                            <div class="tier-duration">Per incident engagement</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>Immediate response activation</li>
+                            <li>On-site or remote incident handling</li>
+                            <li>Evidence collection and preservation</li>
+                            <li>Containment and eradication</li>
+                            <li>Comprehensive incident report</li>
+                            <li>30-day post-incident support</li>
+                            <li>Regulatory compliance documentation</li>
+                        </ul>
+                        <a href="#emergency-contact" class="btn btn-primary">Emergency Response</a>
+                    </div>
+
+                    <div class="tier-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="tier-header">
+                            <div class="tier-name">Managed IR</div>
+                            <div class="tier-price">$50,000+/yr</div>
+                            <div class="tier-duration">Full managed service</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>Dedicated incident response team</li>
+                            <li>24/7 monitoring and detection</li>
+                            <li>Proactive threat hunting</li>
+                            <li>Unlimited incident response</li>
+                            <li>Regular tabletop exercises</li>
+                            <li>Compliance and reporting</li>
+                            <li>Cyber insurance coordination</li>
+                        </ul>
+                        <a href="contact.html" class="btn btn-primary">Managed Service</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response Capabilities -->
+            <div class="capabilities-container" data-aos="fade-up">
+                <h2 class="section-title">Response Capabilities</h2>
+                <div class="capabilities-grid">
+                    <div class="capability-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="capability-icon"><i class="fas fa-virus"></i></div>
+                        <div class="capability-title">Malware Outbreaks</div>
+                        <div class="capability-description">Ransomware, trojans, worms, and other malware containment, analysis, and eradication with minimal business disruption.</div>
+                    </div>
+                    <div class="capability-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="capability-icon"><i class="fas fa-user-secret"></i></div>
+                        <div class="capability-title">Advanced Persistent Threats</div>
+                        <div class="capability-description">Sophisticated threat actor detection, containment, and eradication with threat intelligence integration.</div>
+                    </div>
+                    <div class="capability-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="capability-icon"><i class="fas fa-database"></i></div>
+                        <div class="capability-title">Data Breach Response</div>
+                        <div class="capability-description">Rapid containment of data exfiltration, impact assessment, regulatory notification, and recovery coordination.</div>
+                    </div>
+                    <div class="capability-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="capability-icon"><i class="fas fa-network-wired"></i></div>
+                        <div class="capability-title">DDoS & Network Attacks</div>
+                        <div class="capability-description">Distributed denial of service mitigation, network infrastructure protection, and service restoration.</div>
+                    </div>
+                    <div class="capability-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="capability-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="capability-title">Business Email Compromise</div>
+                        <div class="capability-description">Email system compromise response, financial fraud prevention, and communication restoration.</div>
+                    </div>
+                    <div class="capability-item" data-aos="fade-up" data-aos-delay="600">
+                        <div class="capability-icon"><i class="fas fa-cloud"></i></div>
+                        <div class="capability-title">Cloud Security Incidents</div>
+                        <div class="capability-description">Cloud infrastructure compromise response, IAM security, and multi-cloud environment protection.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLA & Guarantees -->
+            <div class="sla-container" data-aos="fade-up">
+                <div class="sla-header">
+                    <h3>Response Time Guarantees</h3>
+                    <p>Our service level agreements ensure rapid response and effective incident resolution</p>
+                </div>
+                <div class="sla-grid">
+                    <div class="sla-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="sla-value">15 min</div>
+                        <div class="sla-title">Initial Response</div>
+                        <div class="feature-description">Maximum time to initial contact and assessment initiation</div>
+                    </div>
+                    <div class="sla-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="sla-value">1 hour</div>
+                        <div class="sla-title">Containment Start</div>
+                        <div class="feature-description">Time to begin active containment measures for critical incidents</div>
+                    </div>
+                    <div class="sla-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="sla-value">4 hours</div>
+                        <div class="sla-title">Preliminary Report</div>
+                        <div class="feature-description">Initial incident assessment and containment status report</div>
+                    </div>
+                    <div class="sla-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="sla-value">24/7</div>
+                        <div class="sla-title">Expert Availability</div>
+                        <div class="feature-description">Certified incident handlers available around the clock</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Incident Types -->
+            <div class="incident-types" data-aos="fade-up">
+                <h2 class="section-title">Common Incident Types We Handle</h2>
+                <div class="types-grid">
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="type-icon"><i class="fas fa-lock"></i></div>
+                        <div class="type-title">Ransomware Attacks</div>
+                        <div class="feature-description">Encryption-based extortion with business continuity impact</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="type-icon"><i class="fas fa-user-shield"></i></div>
+                        <div class="type-title">Credential Compromise</div>
+                        <div class="feature-description">Stolen credentials leading to unauthorized access</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="type-icon"><i class="fas fa-code"></i></div>
+                        <div class="type-title">Web Application Attacks</div>
+                        <div class="feature-description">SQL injection, XSS, and other application-level breaches</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="type-icon"><i class="fas fa-envelope-open-text"></i></div>
+                        <div class="type-title">Phishing & Social Engineering</div>
+                        <div class="feature-description">Deceptive communication leading to security breaches</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="500">
+                        <div class="type-icon"><i class="fas fa-server"></i></div>
+                        <div class="type-title">Insider Threats</div>
+                        <div class="feature-description">Malicious or negligent actions by internal personnel</div>
+                    </div>
+                    <div class="type-item" data-aos="fade-up" data-aos-delay="600">
+                        <div class="type-icon"><i class="fas fa-cloud-download-alt"></i></div>
+                        <div class="type-title">Data Exfiltration</div>
+                        <div class="feature-description">Unauthorized data transfer outside the organization</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="emergency-contact" id="emergency-contact" data-aos="fade-up">
+                <h3>🚨 Emergency Incident Response</h3>
+                <p>If you're experiencing an active security incident, call our 24/7 emergency hotline immediately</p>
+                <div class="emergency-phone">+255-XXX-XXXXXX</div>
+                <p>Our certified incident handlers are standing by to assist you</p>
+                <a href="tel:+255-XXX-XXXXXX" class="btn" style="background: white; color: var(--critical-color);">Call Now</a>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="service-card text-center" data-aos="fade-up">
+                    <h3>Be Prepared Before an Incident Occurs</h3>
+                    <p>Don't wait for a security breach to happen. Partner with Fortishield-Matrix for proactive incident response planning, retainer services, and peace of mind knowing expert help is just a phone call away.</p>
+                    <a href="contact.html" class="btn btn-primary">Schedule Preparedness Assessment</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Emergency contact animation
+        const emergencyBtn = document.querySelector('.btn-emergency');
+        if (emergencyBtn) {
+            setInterval(() => {
+                emergencyBtn.style.transform = emergencyBtn.style.transform === 'scale(1.05)' ? 'scale(1)' : 'scale(1.05)';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
