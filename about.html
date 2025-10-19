@@ -836,197 +836,586 @@ textarea:focus {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
-            .services-main {
-                padding: 100px 0;
-                background: var(--dark-bg);
-            }
 
-            .services-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-                gap: 30px;
-            }
+/* About Page Specific Styles */
+.about-section {
+    padding: 100px 0;
+    background: var(--dark-bg);
+}
 
-            .service-card-main {
-                background: var(--card-bg);
-                border-radius: 15px;
-                overflow: hidden;
-                border: 1px solid rgba(0, 212, 255, 0.1);
-                transition: var(--transition);
-                position: relative;
-            }
+.about-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 
-            .service-card-main::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-                transition: left 0.5s ease;
-            }
+.about-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 50px;
+    margin-bottom: 60px;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
 
-            .service-card-main:hover::before {
-                left: 100%;
-            }
+.about-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
 
-            .service-card-main:hover {
-                transform: translateY(-10px);
-                box-shadow: var(--shadow-glow);
-            }
+.about-card:hover::before {
+    left: 100%;
+}
 
-            .service-header {
-                background: var(--gradient-primary);
-                padding: 30px;
-                text-align: center;
-                color: white;
-            }
+.about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+}
 
-            .service-header .service-icon {
-                font-size: 3rem;
-                margin-bottom: 15px;
-            }
+.about-card h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-family: 'Orbitron', monospace;
+    text-align: center;
+}
 
-            .service-header h3 {
-                font-size: 1.5rem;
-                font-weight: 700;
-            }
+.about-card h3 {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin: 30px 0 15px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    padding-bottom: 10px;
+}
 
-            .service-content {
-                padding: 30px;
-            }
+.about-card p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
 
-            .service-content p {
-                color: var(--text-secondary);
-                margin-bottom: 25px;
-                line-height: 1.6;
-            }
+.about-card ul {
+    list-style: none;
+    margin: 20px 0;
+}
 
-            .service-features {
-                list-style: none;
-                margin-bottom: 30px;
-            }
+.about-card ul li {
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    padding-left: 25px;
+    position: relative;
+}
 
-            .service-features li {
-                color: var(--text-secondary);
-                margin-bottom: 10px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
+.about-card ul li:before {
+    content: '▸';
+    color: var(--primary-color);
+    position: absolute;
+    left: 0;
+}
 
-            .service-features li i {
-                color: var(--primary-color);
-                font-size: 0.9rem;
-            }
+.objectives-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
 
-            .service-btn {
-                display: inline-block;
-                background: var(--gradient-primary);
-                color: white;
-                padding: 12px 25px;
-                border-radius: 25px;
-                text-decoration: none;
-                font-weight: 600;
-                transition: var(--transition);
-            }
+.objective-item {
+    background: rgba(0, 212, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid var(--primary-color);
+}
 
-            .service-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: var(--shadow-glow);
-            }
+.objective-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
 
-            .process-section {
-                padding: 100px 0;
-                background: var(--card-bg);
-            }
+.objective-item p {
+    margin-bottom: 0;
+}
 
-            .process-steps {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 40px;
-            }
+.functions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
 
-            .process-step {
-                text-align: center;
-                position: relative;
-            }
+.function-item {
+    background: rgba(0, 212, 255, 0.05);
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    transition: var(--transition);
+}
 
-            .step-number {
-                display: inline-block;
-                width: 80px;
-                height: 80px;
-                background: var(--gradient-primary);
-                color: white;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.5rem;
-                font-weight: 900;
-                font-family: 'Orbitron', monospace;
-                margin: 0 auto 20px;
-            }
+.function-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+}
 
-            .step-content h3 {
-                color: var(--primary-color);
-                margin-bottom: 15px;
-                font-size: 1.3rem;
-            }
+.function-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-            .step-content p {
-                color: var(--text-secondary);
-                line-height: 1.6;
-            }
+.function-item h4 i {
+    font-size: 1.5rem;
+}
 
-            .cta-section {
-                padding: 100px 0;
-                background: var(--dark-bg);
-                text-align: center;
-            }
+.function-item p {
+    margin-bottom: 0;
+}
 
-            .cta-content h2 {
-                font-size: 2.5rem;
-                color: var(--primary-color);
-                margin-bottom: 20px;
-                font-family: 'Orbitron', monospace;
-            }
+.vision-mission {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 40px;
+    margin-top: 30px;
+}
 
-            .cta-content p {
-                font-size: 1.2rem;
-                color: var(--text-secondary);
-                margin-bottom: 40px;
-                max-width: 600px;
-                margin-left: auto;
-                margin-right: auto;
-            }
+.vision-card, .mission-card {
+    background: rgba(0, 212, 255, 0.05);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    transition: var(--transition);
+}
 
-            .cta-buttons {
-                display: flex;
-                gap: 20px;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
+.vision-card:hover, .mission-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+}
 
-        @media (max-width: 768px) {
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
+.vision-card h3, .mission-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-family: 'Orbitron', monospace;
+}
 
-            .process-steps {
-                grid-template-columns: 1fr;
-            }
+.vision-card p, .mission-card p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
 
-            .cta-content h2 {
-                font-size: 2rem;
-            }
+.org-structure {
+    text-align: center;
+    margin-top: 30px;
+}
 
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
+.org-image-container {
+    max-width: 800px;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: var(--transition);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-glow);
+}
+
+.org-image-container:hover {
+    transform: scale(1.02);
+}
+
+.org-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+/* Process Section */
+.process-section {
+    padding: 100px 0;
+    background: var(--card-bg);
+}
+
+.process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.process-step {
+    text-align: center;
+    position: relative;
+}
+
+.step-number {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    font-family: 'Orbitron', monospace;
+    margin: 0 auto 20px;
+    transition: var(--transition);
+}
+
+.process-step:hover .step-number {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-glow);
+}
+
+.step-content h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    font-family: 'Orbitron', monospace;
+}
+
+.step-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+    padding: 100px 0;
+    background: var(--dark-bg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
+    z-index: 1;
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+.cta-content h2 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-family: 'Orbitron', monospace;
+}
+
+.cta-content p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Vision & Mission Section */
+.vision-mission-section {
+    padding: 100px 0;
+    background: var(--card-bg);
+}
+
+.vision-mission-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.vision-mission-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.vision-mission-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+}
+
+.vision-mission-header p {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.vision-mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 40px;
+}
+
+.vision-card, .mission-card {
+    background: var(--dark-bg);
+    border-radius: 15px;
+    padding: 40px;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.vision-card::before, .mission-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.vision-card:hover::before, .mission-card:hover::before {
+    left: 100%;
+}
+
+.vision-card:hover, .mission-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-glow);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px;
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--gradient-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.card-content h3 {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+    font-family: 'Orbitron', monospace;
+}
+
+.card-content p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+/* Organization Structure */
+.org-structure {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.org-image-container {
+    max-width: 800px;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: var(--transition);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-glow);
+    position: relative;
+}
+
+.org-image-container:hover {
+    transform: scale(1.02);
+}
+
+.org-image-container::after {
+    content: 'Click to enlarge';
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.org-image-container:hover::after {
+    opacity: 1;
+}
+
+.org-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Modal for Organization Structure */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 90%;
+    margin-top: 2%;
+    animation: zoomIn 0.3s ease;
+    border-radius: 10px;
+    box-shadow: var(--shadow-glow);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: var(--primary-color);
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 2001;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    color: var(--secondary-color);
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* Responsive Design Updates */
+@media (max-width: 768px) {
+    .process-steps {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-content h2 {
+        font-size: 2rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .vision-mission-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .modal-content {
+        max-width: 95%;
+        max-height: 95%;
+    }
+    
+    .close-modal {
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .org-image-container::after {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .process-step {
+        padding: 0 10px;
+    }
+    
+    .step-number {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2rem;
+    }
+    
+    .cta-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .vision-card, .mission-card {
+        padding: 25px 20px;
+    }
+    
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .card-content h3 {
+        font-size: 1.5rem;
+    }
+}
+
 
     </style>
 </head>
@@ -1069,138 +1458,106 @@ textarea:focus {
     <section class="page-header">
         <div class="container">
             <h1 data-aos="fade-up">About Fortishield-Matrix</h1>
-            <p data-aos="fade-up" data-aos-delay="200"> We provide comprehensive technology solutions and security systems, helping businesses stay protected, efficient, and ahead in today’s fast-changing digital environment.</p>
+            <p data-aos="fade-up" data-aos-delay="200">We provide comprehensive technology solutions and security systems, helping businesses stay protected, efficient, and ahead in today's fast-changing digital environment.</p>
         </div>
     </section>
 
-     <!--Services Grid-->
-    <section class="services-main">
+     <!--Background Section-->
+    <section class="about-section">
         <div class="container">
-            <div class="services-grid">
-                 <!--System Development--> 
-                <div class="service-card-main" data-aos="fade-up" data-aos-delay="100">
-                    <div class="service-header">
-                        <div class="service-icon">
-                            <i class="fas fa-code"></i>
+            <div class="about-content">
+                <div class="about-card" data-aos="fade-up">
+                    <h2>Background</h2>
+                    <p>Fortishield-Matrix was founded with a reputation built on precision, resilience, and technical integrity in cybersecurity and system engineering. From its inception, the company positioned itself as a trusted partner for organizations seeking intelligent security infrastructure, data protection, and digital modernization. Its professional experience spans enterprise-grade network architecture, incident response, and secure application development — disciplines where reliability and confidentiality define success. Over time, Fortishield-Matrix has specialized in advanced penetration testing, threat intelligence operations, and security architecture design, enabling clients to maintain continuity under evolving cyber threats.</p>
+                    
+                    <p>The company's track record includes successful deployments of security monitoring frameworks, endpoint protection environments, and automated defense systems across multiple sectors. These achievements have earned industry recognition for technical excellence and strategic advisory capabilities. Fortishield-Matrix maintains affiliations with recognized cybersecurity and technology bodies, fostering collaboration and adherence to international best practices.</p>
+                    
+                    <p>Its key contributions include the integration of real-time threat detection platforms, enterprise network redesigns for uptime and resilience, and capacity-building programs that strengthen national cybersecurity awareness. Professionally, Fortishield-Matrix operates under a clear philosophy — to protect, innovate, and empower — ensuring that every engagement upholds ethical responsibility, operational transparency, and technical depth. The company's culture values disciplined engineering, accountability, and respect for data privacy, while its commitment to continuous learning drives ongoing research, staff certification, and technology advancement to stay ahead of emerging threats.</p>
+                    
+                    <h3>Objectives</h3>
+                    <p>Fortishield-Matrix was established to deliver innovative, reliable, and secure digital solutions that protect data, infrastructure, and people.</p>
+                    
+                    <div class="objectives-list">
+                        <div class="objective-item" data-aos="fade-up" data-aos-delay="100">
+                            <h4>Advanced Solutions</h4>
+                            <p>To provide advanced cybersecurity, network architecture, and system development services for public and private organizations.</p>
                         </div>
-                        <h3>System Development</h3>
+                        <div class="objective-item" data-aos="fade-up" data-aos-delay="200">
+                            <h4>Digital Trust</h4>
+                            <p>To enhance digital trust through secure infrastructure, continuous monitoring, and compliance-driven solutions.</p>
+                        </div>
+                        <div class="objective-item" data-aos="fade-up" data-aos-delay="300">
+                            <h4>Digital Transformation</h4>
+                            <p>To support national and corporate digital transformation with security-focused technologies and professional expertise.</p>
+                        </div>
+                        <div class="objective-item" data-aos="fade-up" data-aos-delay="400">
+                            <h4>Sustainable Growth</h4>
+                            <p>To create sustainable technological growth by training and empowering cybersecurity professionals.</p>
+                        </div>
                     </div>
-                    <div class="service-content">
-                        <p>Custom software solutions tailored to your business needs. From web applications to enterprise systems, we build scalable and robust solutions.</p>
-                        <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Custom Web Applications</li>
-                            <li><i class="fas fa-check"></i> Enterprise Software</li>
-                            <li><i class="fas fa-check"></i> API Development</li>
-                            <li><i class="fas fa-check"></i> Database Design</li>
-                        </ul>
-                        <a href="service-system-development.html" class="service-btn">Learn More</a>
+                    
+                    <h3>Functions of the Authority</h3>
+                    <p>Fortishield-Matrix operates as a cybersecurity and system engineering authority, functioning across multiple domains:</p>
+                    
+                    <div class="functions-grid">
+                        <div class="function-item" data-aos="fade-up" data-aos-delay="100">
+                            <h4><i class="fas fa-shield-alt"></i> Cyber Defense Operations</h4>
+                            <p>Fortishield-Matrix deploys multi-layered defense systems integrating Security Information and Event Management (SIEM), intrusion detection, and endpoint protection to identify and neutralize threats in real time. This division handles incident triage, containment, and vulnerability lifecycle management through automated analytics and human threat-hunting teams.</p>
+                        </div>
+                        <div class="function-item" data-aos="fade-up" data-aos-delay="200">
+                            <h4><i class="fas fa-network-wired"></i> Network & Infrastructure Design</h4>
+                            <p>We architect and implement secure, scalable enterprise networks for on-premises, hybrid, and cloud environments using zero-trust segmentation, redundant routing, and encrypted transport protocols. Our engineers design topologies that ensure high availability, minimal latency, and resilience against data breaches and infrastructure compromise.</p>
+                        </div>
+                        <div class="function-item" data-aos="fade-up" data-aos-delay="300">
+                            <h4><i class="fas fa-code"></i> Software & Application Security</h4>
+                            <p>This function enforces security across the software development lifecycle through secure coding practices, static and dynamic code analysis, and pre-deployment penetration testing. Applications built or audited by Fortishield-Matrix undergo continuous validation against OWASP, NIST, and MITRE CWE standards to eliminate exploitable flaws.</p>
+                        </div>
+                        <div class="function-item" data-aos="fade-up" data-aos-delay="400">
+                            <h4><i class="fas fa-search"></i> Digital Forensics & Intelligence</h4>
+                            <p>Our forensic analysts collect, preserve, and analyze digital evidence from compromised systems to trace intrusion vectors, recover deleted data, and support legal proceedings. We integrate intelligence feeds and behavior analytics to correlate attack patterns, enabling proactive threat attribution and future incident prevention.</p>
+                        </div>
+                        <div class="function-item" data-aos="fade-up" data-aos-delay="500">
+                            <h4><i class="fas fa-graduation-cap"></i> Security Awareness & Capacity Building</h4>
+                            <p>Fortishield-Matrix runs structured training programs, phishing simulations, and executive workshops to raise security maturity across all organizational levels. These initiatives convert employees into active security defenders by reinforcing policy adherence and real-time incident reporting skills.</p>
+                        </div>
+                        <div class="function-item" data-aos="fade-up" data-aos-delay="600">
+                            <h4><i class="fas fa-file-contract"></i> Policy & Compliance Advisory</h4>
+                            <p>We assist organizations in aligning operations with global cybersecurity frameworks such as ISO 27001, NIST CSF, and GDPR by developing tailored security policies and audit documentation. Our consultants perform risk assessments, gap analyses, and readiness reviews to ensure measurable compliance and continuous improvement in governance.</p>
+                        </div>
                     </div>
                 </div>
-
-                 <!--Server Design-->
-                <div class="service-card-main" data-aos="fade-up" data-aos-delay="200">
-                    <div class="service-header">
-                        <div class="service-icon">
-                            <i class="fas fa-server"></i>
+                
+                 <!--Vision & Mission Section-->
+                <div class="about-card" data-aos="fade-up" data-aos-delay="100">
+                    <h2>Vision & Mission</h2>
+                    <div class="vision-mission">
+                        <div class="vision-card" data-aos="fade-up" data-aos-delay="200">
+                            <h3>Vision</h3>
+                            <p>To be the trusted partner for businesses seeking digital transformation, recognized globally for our expertise, integrity, and commitment to client success.</p>
                         </div>
-                        <h3>Server Design</h3>
-                    </div>
-                    <div class="service-content">
-                        <p>Robust and scalable server infrastructure solutions designed for optimal performance, reliability, and security.</p>
-                        <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Cloud Infrastructure</li>
-                            <li><i class="fas fa-check"></i> Load Balancing</li>
-                            <li><i class="fas fa-check"></i> High Availability Setup</li>
-                            <li><i class="fas fa-check"></i> Performance Optimization</li>
-                        </ul>
-                        <a href="service-server-design.html" class="service-btn">Learn More</a>
+                        <div class="mission-card" data-aos="fade-up" data-aos-delay="300">
+                            <h3>Mission</h3>
+                            <p>To deliver innovative, secure, and scalable technology solutions that empower businesses to thrive in the digital age, ensuring operational excellence and strategic growth.</p>
+                        </div>
                     </div>
                 </div>
-
-                 <!--Cybersecurity-->
-                <div class="service-card-main" data-aos="fade-up" data-aos-delay="300">
-                    <div class="service-header">
-                        <div class="service-icon">
-                            <i class="fas fa-shield-alt"></i>
+                
+                 <!--Organization Structure Section-->
+                <div class="about-card" data-aos="fade-up" data-aos-delay="200">
+                    <h2>Organization Structure</h2>
+                    <p>Our organizational structure is designed to maximize efficiency, collaboration, and expertise across all domains of cybersecurity and system engineering. Click on the image below to view our organizational structure in detail.</p>
+                    
+                    <div class="org-structure">
+                        <div class="org-image-container" id="org-image-container">
+                            <img src="ORG.png" alt="Fortishield-Matrix Organization Structure" class="org-image">
                         </div>
-                        <h3>Cybersecurity</h3>
-                    </div>
-                    <div class="service-content">
-                        <p>Comprehensive security solutions to protect your digital assets from evolving cyber threats and vulnerabilities.</p>
-                        <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Security Audits</li>
-                            <li><i class="fas fa-check"></i> Penetration Testing</li>
-                            <li><i class="fas fa-check"></i> Incident Response</li>
-                            <li><i class="fas fa-check"></i> Security Training</li>
-                        </ul>
-                        <a href="service-cybersecurity.html" class="service-btn">Learn More</a>
-                    </div>
-                </div>
-
-                 <!--Network Design--> 
-                <div class="service-card-main" data-aos="fade-up" data-aos-delay="400">
-                    <div class="service-header">
-                        <div class="service-icon">
-                            <i class="fas fa-network-wired"></i>
-                        </div>
-                        <h3>Network Design</h3>
-                    </div>
-                    <div class="service-content">
-                        <p>Efficient and secure network architecture planning to ensure optimal connectivity and performance across your organization.</p>
-                        <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Network Architecture</li>
-                            <li><i class="fas fa-check"></i> VPN Solutions</li>
-                            <li><i class="fas fa-check"></i> Firewall Configuration</li>
-                            <li><i class="fas fa-check"></i> Network Monitoring</li>
-                        </ul>
-                        <a href="service-network-design.html" class="service-btn">Learn More</a>
-                    </div>
-                </div>
-
-                 <!--System Analysis--> 
-                <div class="service-card-main" data-aos="fade-up" data-aos-delay="500">
-                    <div class="service-header">
-                        <div class="service-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h3>System Analysis</h3>
-                    </div>
-                    <div class="service-content">
-                        <p>Comprehensive analysis of your existing systems to identify optimization opportunities and improvement strategies.</p>
-                        <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Performance Analysis</li>
-                            <li><i class="fas fa-check"></i> System Optimization</li>
-                            <li><i class="fas fa-check"></i> Risk Assessment</li>
-                            <li><i class="fas fa-check"></i> Recommendations</li>
-                        </ul>
-                        <a href="service-system-analysis.html" class="service-btn">Learn More</a>
-                    </div>
-                </div>
-
-                 <!--Cloud Solutions--> 
-                <div class="service-card-main" data-aos="fade-up" data-aos-delay="600">
-                    <div class="service-header">
-                        <div class="service-icon">
-                            <i class="fas fa-cloud"></i>
-                        </div>
-                        <h3>Cloud Solutions</h3>
-                    </div>
-                    <div class="service-content">
-                        <p>Modern cloud infrastructure and migration services to help your business leverage the power of cloud computing.</p>
-                        <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Cloud Migration</li>
-                            <li><i class="fas fa-check"></i> Multi-Cloud Strategy</li>
-                            <li><i class="fas fa-check"></i> DevOps Integration</li>
-                            <li><i class="fas fa-check"></i> Cost Optimization</li>
-                        </ul>
-                        <a href="service-cloud-solutions.html" class="service-btn">Learn More</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-     <!--Process Section-->
+    
+    <!--Process Section-->
     <section class="process-section">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Our Process</h2>
@@ -1251,13 +1608,14 @@ textarea:focus {
         </div>
     </section>
 
+
      <!--Footer-->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
-                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                    <p>Fortishield-Matrix provides comprehensive technology solutions and security systems, helping businesses stay protected, efficient, and ahead in today's fast-changing digital environment.</p>
                 </div>
                 <div class="footer-section">
                     <h3>Quick Links</h3>
@@ -1627,7 +1985,29 @@ if ('IntersectionObserver' in window) {
         imageObserver.observe(img);
     });
 }
+   // Organization Structure Modal
+        const modal = document.getElementById('orgModal');
+        const modalImg = document.getElementById('modalImage');
+        const orgImageContainer = document.getElementById('org-image-container');
+        const closeModal = document.getElementById('closeModal');
 
+        orgImageContainer.addEventListener('click', function() {
+            modal.style.display = 'block';
+            modalImg.src = this.querySelector('img').src;
+        });
+
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside the image
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        
 // Console welcome message
 console.log(`
 
