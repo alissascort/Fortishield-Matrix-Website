@@ -43,12 +43,59 @@ body {
     margin: 0 auto;
     padding: 0 20px;
 }
+
+/* Updated Page Header with Video Background */
 .page-header {
-    padding: 80px 0 80px; /* Keep existing padding */
+    position: relative;
+    padding: 120px 0 100px;
     text-align: center;
-    background: var(--dark-bg);
-    margin-top: 70px; /* Add this line to push it down */
-        }
+    margin-top: 70px;
+    overflow: hidden;
+}
+
+.page-header-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.page-header-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.page-header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+}
+
+.page-header h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Orbitron', monospace;
+}
+
+.page-header p {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 /* Preloader */
 #preloader {
     position: fixed;
@@ -783,6 +830,14 @@ body {
         bottom: 80px;
         right: 20px;
     }
+    
+    .page-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .page-header p {
+        font-size: 1.2rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1228,8 +1283,15 @@ textarea:focus {
         </div>
     </nav>
 
-     <!--Page Header--> 
+     <!--Page Header with Video Background--> 
     <section class="page-header">
+        <div class="page-header-video">
+            <video autoplay muted loop>
+                <source src="server.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="page-header-overlay"></div>
         <div class="container">
             <h1 data-aos="fade-up">Our Services</h1>
             <p data-aos="fade-up" data-aos-delay="200">Comprehensive technology solutions tailored to your business needs</p>
