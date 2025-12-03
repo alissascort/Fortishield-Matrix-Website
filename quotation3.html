@@ -1,0 +1,893 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request a Quotation - FortishieldMatrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: var(--dark-bg);
+            margin-top: 70px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-family: 'Orbitron', monospace;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Quotation Content */
+        .quotation-content {
+            padding: 80px 0;
+        }
+
+        .quotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .quotation-info {
+            padding: 30px;
+        }
+
+        .quotation-info h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .quotation-info p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .info-features {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .info-features li {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .info-features li::before {
+            content: '✓';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .quotation-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .quotation-card h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: var(--darker-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .form-group input.error,
+        .form-group select.error,
+        .form-group textarea.error {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .error-message {
+            color: var(--secondary-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .step-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .quotation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a href="quotation.html" class="nav-link active">Quotation</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Request a Quotation</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Get a detailed estimate for your project with our transparent pricing approach</p>
+        </div>
+    </section>
+
+    <!-- Quotation Content -->
+    <section class="quotation-content">
+        <div class="container">
+            <div class="quotation-grid">
+                <div class="quotation-info" data-aos="fade-right">
+                    <h2>Why Request a Quotation?</h2>
+                    <p>Our detailed quotations provide transparent pricing and clear scope definitions for your project. We believe in upfront communication about costs and deliverables to ensure there are no surprises down the line.</p>
+                    
+                    <ul class="info-features">
+                        <li>Transparent pricing with no hidden costs</li>
+                        <li>Detailed breakdown of services and deliverables</li>
+                        <li>Clear project timelines and milestones</li>
+                        <li>Customized solutions tailored to your specific needs</li>
+                        <li>14-day validity period for all quotations</li>
+                        <li>Option to adjust scope before project commencement</li>
+                    </ul>
+
+                    <div class="process-steps">
+                        <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Submit Request</div>
+                            <div class="step-description">Fill out our quotation form with your project details</div>
+                        </div>
+                        <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Review & Analysis</div>
+                            <div class="step-description">Our experts analyze your requirements</div>
+                        </div>
+                        <div class="process-step" data-aos="fade-up" data-aos-delay="300">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Receive Quote</div>
+                            <div class="step-description">Get a detailed quotation within 48 hours</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quotation-card" data-aos="fade-left">
+                    <h3>Get Your Custom Quote</h3>
+                    <form class="quotation-form" id="quotationForm">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required>
+                            <div class="error-message" id="name-error">Please enter your full name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                            <div class="error-message" id="email-error">Please enter a valid email address</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company Name</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Service Needed *</label>
+                            <select id="service" name="service" required>
+                                <option value="">Select a service</option>
+                                <option value="Security Audits">Security Audits</option>
+                                <option value="Ethical hacking ">Ethical Hacking</option>
+                                <option value="Penetration Testing">Penetration Testing</option>
+                                <option value="Vulnerability Analysis">System Vulnerability Analysis & Report</option>
+                                <option value="Incident Management">Incident Response & Recovery Management</option>
+                                <option value="System Risk Integration">Security Risk Assessment</option>
+                                <option value="Data Analysis">Network Security</option>
+
+                            </select>
+                            <div class="error-message" id="service-error">Please select a service</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="budget">Project Budget Range</label>
+                            <select id="budget" name="budget">
+                                <option value="">Select budget range</option>
+                                <option value="$100">$100 - $400</option>
+                                <option value="$500">$500 - $900</option>
+                                <option value="$1,000">$1,000 - $4,000</option>
+                                <option value="$5,000">$5,000</option>
+                                <option value="$5,000 - $10,000">$5,000 - $10,000</option>
+                                <option value="$10,000 - $25,000">$10,000 - $25,000</option>
+                                <option value="$25,000 - $50,000">$25,000 - $50,000</option>
+                                <option value="$50,000+">$50,000+</option>
+                                <option value="Not sure">Not sure</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="timeline">Project Timeline</label>
+                            <select id="timeline" name="timeline">
+                                <option value="">Select timeline</option>
+                                <option value="ASAP">ASAP</option>
+                                <option value="1-2 weeks">1-2 weeks</option>
+                                <option value="1 month">1 month</option>
+                                <option value="1-3 months">1-3 months</option>
+                                <option value="3-6 months">3-6 months</option>
+                                <option value="6+ months">6+ months</option>
+                                <option value="Not sure">Not sure</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="details">Project Details *</label>
+                            <textarea id="details" name="details" rows="5" placeholder="Please describe your project requirements, goals, and any specific features needed..." required></textarea>
+                            <div class="error-message" id="details-error">Please provide project details</div>
+                        </div>
+                        <button type="submit" id="submitBtn" class="btn btn-primary">
+                            Request Professional Quotation
+                        </button>
+                    </form>
+                    <div class="success-message" id="successMessage">
+                        <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 15px;"></i>
+                        <h3>Thank You for Your Request!</h3>
+                        <p>We've received your quotation request and will contact you within 24 hours with a detailed estimate.</p>
+                        <p>Check your email for a confirmation message with your Quotation ID and next steps.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section"> 
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="quotation.html">Quotation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                        <li><a href="service-cloud-solutions.html">Cloud Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+   <script>
+    // Initialize AOS
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+    });
+
+    // Mobile Navigation
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navMenu = document.getElementById('nav-menu');
+
+    mobileMenu.addEventListener('click', function() {
+        mobileMenu.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            navMenu.classList.remove('active');
+        });
+    });
+
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Form validation and submission
+    const form = document.getElementById('quotationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+
+    //Initialize EmailJS with your Public Key
+    emailjs.init('P91QjvyS7Eu43w42Y'); 
+
+    // Generate Quotation ID
+    function generateQuotationId() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `QTN-${year}${month}${day}-${randomNum}`;
+    }
+
+    // Estimate cost based on budget
+    function estimateCost(service, budget) {
+        const budgetRanges = {
+            "$100": "$100 - $400",
+            "$500": "$500 - $900",
+            "$1,000": "$1,000 - $4,000",
+            "$5,000": "$5,000 (fixed range)",
+            "$5,000 - $10,000": "$5,000 - $10,000",
+            "$10,000 - $25,000": "$10,000 - $25,000",
+            "$25,000 - $50,000": "$25,000 - $50,000",
+            "$50,000+": "$50,000+",
+            "Not sure": "$100 - $5,000"
+        };
+
+        return budgetRanges[budget] || "$100 - $5,000";
+    }
+
+    function isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function showError(inputId, message) {
+        const errorElement = document.getElementById(`${inputId}-error`);
+        const inputElement = document.getElementById(inputId);
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+        inputElement.classList.add('error');
+    }
+
+    function hideError(inputId) {
+        const errorElement = document.getElementById(`${inputId}-error`);
+        const inputElement = document.getElementById(inputId);
+        errorElement.classList.remove('show');
+        inputElement.classList.remove('error');
+    }
+
+    function validateForm() {
+        let isValid = true;
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const service = document.getElementById('service').value;
+        const details = document.getElementById('details').value.trim();
+
+        if (name === '') { showError('name', 'Please enter your full name'); isValid = false; } else { hideError('name'); }
+        if (email === '') { showError('email', 'Please enter your email address'); isValid = false; } 
+        else if (!isValidEmail(email)) { showError('email', 'Please enter a valid email address'); isValid = false; } 
+        else { hideError('email'); }
+        if (service === '') { showError('service', 'Please select a service'); isValid = false; } else { hideError('service'); }
+        if (details === '') { showError('details', 'Please provide project details'); isValid = false; } else { hideError('details'); }
+
+        return isValid;
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<span class="loading-spinner"></span> Processing...';
+
+        const quotationId = generateQuotationId();
+
+        const formData = {
+            name: form.name.value,
+            email: form.email.value,
+            phone: form.phone.value,
+            company: form.company.value,
+            service: form.service.value,
+            budget: form.budget.value,
+            timeline: form.timeline.value,
+            details: form.details.value,
+            quotation_id: quotationId,
+            date: new Date().toLocaleDateString(),
+            subject: `Your Quotation [${quotationId}] from Fortishield-Matrix`
+        };
+
+        const estimatedCost = estimateCost(formData.service, formData.budget);
+
+        // ✅ Send to your email first
+        emailjs.send('service_4pe5j8e', 'template_cgtb6f6', formData)
+            .then(function() {
+                // ✅ Auto-reply to client
+                return emailjs.send('service_4pe5j8e', 'template_58ddxnn', {
+                    to_email: formData.email,
+                    to_name: formData.name,
+                    quotation_id: quotationId,
+                    service: formData.service,
+                    budget: formData.budget || 'Not specified',
+                    timeline: formData.timeline || 'Not specified',
+                    details: formData.details,
+                    estimated_cost: estimatedCost,
+                    date: formData.date
+                });
+            })
+            .then(function() {
+                form.reset();
+                successMessage.classList.add('show');
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = 'Request Professional Quotation';
+
+                setTimeout(() => { successMessage.classList.remove('show'); }, 8000);
+            }, function(error) {
+                alert('Sorry, there was an error sending your request. Please try again later or contact us directly.');
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = 'Request Professional Quotation';
+                console.error('EmailJS Error:', error);
+            });
+    });
+
+    // Real-time validation 
+    document.getElementById('name').addEventListener('input', function() { if (this.value.trim() !== '') hideError('name'); });
+    document.getElementById('email').addEventListener('input', function() { if (this.value.trim() !== '' && isValidEmail(this.value)) hideError('email'); });
+    document.getElementById('service').addEventListener('change', function() { if (this.value !== '') hideError('service'); });
+    document.getElementById('details').addEventListener('input', function() { if (this.value.trim() !== '') hideError('details'); });
+</script>
+</body>
+</html>
