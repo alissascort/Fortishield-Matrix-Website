@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
-        /* CSS Variables */
+        /* CSS Variables with Theme Support */
         :root {
             --primary-color: #00d4ff;
             --secondary-color: #ff6b35;
@@ -22,6 +22,43 @@
             --gradient-secondary: linear-gradient(135deg, #ff6b35, #cc5529);
             --shadow-glow: 0 10px 30px rgba(0, 212, 255, 0.3);
             --transition: all 0.3s ease;
+            --theme-filter: none;
+            --theme-toggler-bg: rgba(10, 10, 10, 0.9);
+        }
+
+        /* Black and White Theme Variables */
+        [data-theme="bw"] {
+            --primary-color: #1a73e8; /* Blue for white theme */
+            --secondary-color: #666666;
+            --dark-bg: #ffffff;
+            --card-bg: #f5f7fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5f6368;
+            --gradient-primary: linear-gradient(135deg, #1a73e8, #0d47a1);
+            --gradient-secondary: linear-gradient(135deg, #666666, #444444);
+            --shadow-glow: 0 10px 30px rgba(26, 115, 232, 0.2);
+            --theme-filter: none;
+            --theme-toggler-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Smooth theme transitions */
+        body, .navbar, .page-header, .contact-section, .map-section,
+        .faq-section, .footer, .contact-form, .contact-item, .quick-contact,
+        .faq-item, #chatbot-window, .whatsapp-float, .back-to-top {
+            transition: background-color 0.5s ease, 
+                        color 0.5s ease, 
+                        border-color 0.5s ease,
+                        box-shadow 0.5s ease;
+        }
+
+        /* Ensure gradients transition smoothly */
+        .btn-primary, .btn-secondary, .contact-icon, .social-icon,
+        #chatbot-toggle, .back-to-top, .theme-toggler {
+            transition: background 0.5s ease, 
+                        background-color 0.5s ease,
+                        border-color 0.5s ease,
+                        color 0.5s ease,
+                        transform 0.5s ease;
         }
         
         /* Global Styles */
@@ -37,8 +74,158 @@
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
         }
         
+        /* Dot-line networking background for white theme */
+        [data-theme="bw"] body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(26, 115, 232, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 30%, rgba(26, 115, 232, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 50% 80%, rgba(26, 115, 232, 0.05) 0%, transparent 20%);
+            z-index: -1;
+        }
+
+        /* Animated connecting lines */
+        .network-line {
+            position: fixed;
+            background: rgba(26, 115, 232, 0.3);
+            z-index: -1;
+            pointer-events: none;
+            animation: pulseLine 4s infinite;
+        }
+
+        @keyframes pulseLine {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Floating theme toggler */
+        .theme-toggler {
+            position: fixed;
+            bottom: 100px;
+            right: 40px;
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .theme-toggler.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--theme-toggler-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="bw"] .theme-toggle-btn {
+            box-shadow: 0 0 20px rgba(26, 115, 232, 0.3);
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 0 30px var(--primary-color);
+            animation: bounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(1.1) rotate(15deg) translateY(0); }
+            to { transform: scale(1.1) rotate(15deg) translateY(-5px); }
+        }
+
+        .theme-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent,
+                var(--primary-color),
+                transparent 30%
+            );
+            animation: rotate 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .theme-toggle-btn::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: var(--theme-toggler-bg);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .theme-toggle-btn i {
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+
+        .theme-toggle-btn:hover i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Theme status indicator */
+        .theme-status {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: var(--theme-toggler-bg);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .theme-toggle-btn:hover .theme-status {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -58,6 +245,10 @@
             transition: var(--transition);
         }
         
+        [data-theme="bw"] .navbar {
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
         .nav-container {
             display: flex;
             justify-content: space-between;
@@ -69,6 +260,7 @@
         
         .nav-logo img {
             height: 40px;
+            transition: filter 0.5s ease;
         }
         
         .nav-menu {
@@ -209,6 +401,10 @@
             border: 1px solid rgba(0, 212, 255, 0.1);
         }
         
+        [data-theme="bw"] .contact-form {
+            border: 1px solid rgba(26, 115, 232, 0.1);
+        }
+        
         .form-group {
             margin-bottom: 25px;
         }
@@ -231,10 +427,22 @@
             transition: var(--transition);
         }
         
+        [data-theme="bw"] .form-group input,
+        [data-theme="bw"] .form-group select,
+        [data-theme="bw"] .form-group textarea {
+            border: 1px solid rgba(26, 115, 232, 0.2);
+        }
+        
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+        
+        [data-theme="bw"] .form-group input:focus,
+        [data-theme="bw"] .form-group select:focus,
+        [data-theme="bw"] .form-group textarea:focus {
+            box-shadow: 0 0 10px rgba(26, 115, 232, 0.2);
         }
         
         .form-group textarea {
@@ -261,6 +469,10 @@
             border-radius: 10px;
             border: 1px solid rgba(0, 212, 255, 0.1);
             transition: var(--transition);
+        }
+        
+        [data-theme="bw"] .contact-item {
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         .contact-item:hover {
@@ -303,6 +515,10 @@
             background: var(--card-bg);
             border-radius: 15px;
             border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        
+        [data-theme="bw"] .quick-contact {
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         .quick-contact h3 {
@@ -361,6 +577,10 @@
             border: 1px solid rgba(0, 212, 255, 0.1);
         }
         
+        [data-theme="bw"] .map-container {
+            border: 1px solid rgba(26, 115, 232, 0.1);
+        }
+        
         /* FAQ Section */
         .faq-section {
             padding: 100px 0;
@@ -380,6 +600,10 @@
             overflow: hidden;
         }
         
+        [data-theme="bw"] .faq-item {
+            border: 1px solid rgba(26, 115, 232, 0.1);
+        }
+        
         .faq-question {
             padding: 25px;
             cursor: pointer;
@@ -391,6 +615,10 @@
         
         .faq-question:hover {
             background: rgba(0, 212, 255, 0.05);
+        }
+        
+        [data-theme="bw"] .faq-question:hover {
+            background: rgba(26, 115, 232, 0.05);
         }
         
         .faq-question h4 {
@@ -428,7 +656,7 @@
         /* Chatbot Styles */
         #chatbot-container {
             position: fixed;
-            bottom: 100px;
+            bottom: 180px;
             right: 30px;
             z-index: 1000;
         }
@@ -465,6 +693,10 @@
             display: flex;
             flex-direction: column;
             transition: var(--transition);
+        }
+        
+        [data-theme="bw"] #chatbot-window {
+            border: 1px solid rgba(26, 115, 232, 0.2);
         }
         
         .chatbot-hidden {
@@ -519,6 +751,11 @@
             border: 1px solid rgba(0, 212, 255, 0.2);
         }
         
+        [data-theme="bw"] .bot-message {
+            background: rgba(26, 115, 232, 0.1);
+            border: 1px solid rgba(26, 115, 232, 0.2);
+        }
+        
         .user-message {
             background: var(--primary-color);
             color: white;
@@ -532,6 +769,10 @@
             gap: 10px;
         }
         
+        [data-theme="bw"] .chatbot-input {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
+        }
+        
         .chatbot-input input {
             flex: 1;
             padding: 10px 15px;
@@ -540,6 +781,10 @@
             background: var(--dark-bg);
             color: var(--text-primary);
             outline: none;
+        }
+        
+        [data-theme="bw"] .chatbot-input input {
+            border: 1px solid rgba(26, 115, 232, 0.2);
         }
         
         .chatbot-input input:focus {
@@ -560,15 +805,15 @@
             background: var(--secondary-color);
         }
         
-        /* WhatsApp Button */
+        /* WhatsApp Button - Keep original colors */
         .whatsapp-float {
             position: fixed;
             width: 60px;
             height: 60px;
             bottom: 40px;
             right: 40px;
-            background-color: #25d366;
-            color: white;
+            background-color: #25d366 !important;
+            color: white !important;
             border-radius: 50px;
             text-align: center;
             font-size: 30px;
@@ -579,10 +824,12 @@
             align-items: center;
             justify-content: center;
             transition: var(--transition);
+            filter: none !important;
         }
         
         .whatsapp-float:hover {
             transform: scale(1.1);
+            background-color: #1da851 !important;
         }
         
         /* Back to Top Button */
@@ -617,6 +864,10 @@
             background: var(--card-bg);
             padding: 60px 0 20px;
             border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        
+        [data-theme="bw"] .footer {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         .footer-content {
@@ -690,81 +941,8 @@
             color: var(--text-secondary);
         }
         
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 70px;
-                flex-direction: column;
-                background-color: var(--dark-bg);
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-                padding: 20px 0;
-            }
-            
-            .nav-menu.active {
-                left: 0;
-            }
-            
-            .nav-toggle {
-                display: flex;
-            }
-            
-            .page-header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            
-            .contact-form {
-                padding: 30px 20px;
-            }
-            
-            .quick-contact-buttons {
-                flex-direction: column;
-            }
-            
-            #chatbot-window {
-                width: 300px;
-                height: 400px;
-            }
-            
-            #chatbot-container {
-                right: 20px;
-                bottom: 80px;
-            }
-            
-            .whatsapp-float {
-                right: 20px;
-                bottom: 20px;
-            }
-            
-            .back-to-top {
-                left: 20px;
-                bottom: 20px;
-            }
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
+        [data-theme="bw"] .footer-bottom {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         /* Form validation styles */
@@ -794,6 +972,105 @@
             text-align: center;
             display: none;
         }
+        
+        [data-theme="bw"] .success-message {
+            background: rgba(26, 115, 232, 0.1);
+            border: 1px solid var(--primary-color);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: var(--dark-bg);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 20px 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-toggle {
+                display: flex;
+            }
+            
+            .theme-toggler {
+                bottom: 80px;
+                right: 20px;
+            }
+            
+            .theme-toggle-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .theme-status {
+                top: -35px;
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .contact-form {
+                padding: 30px 20px;
+            }
+            
+            .quick-contact-buttons {
+                flex-direction: column;
+            }
+            
+            #chatbot-window {
+                width: 300px;
+                height: 400px;
+            }
+            
+            #chatbot-container {
+                right: 20px;
+                bottom: 150px;
+            }
+            
+            .whatsapp-float {
+                right: 20px;
+                bottom: 20px;
+            }
+            
+            .back-to-top {
+                left: 20px;
+                bottom: 20px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
     </style>
 </head>
 <body>
@@ -803,6 +1080,7 @@
             <div class="nav-logo">
                 <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix Logo">
             </div>
+            
             <ul class="nav-menu" id="nav-menu">
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">Home</a>
@@ -830,6 +1108,14 @@
             </div>
         </div>
     </nav>
+
+    <!-- Floating Theme Toggler -->
+    <div class="theme-toggler" id="themeToggler">
+        <button class="theme-toggle-btn" title="Toggle Theme">
+            <i class="fas fa-palette"></i>
+            <span class="theme-status">Color Theme</span>
+        </button>
+    </div>
 
     <!--Page Header-->
     <section class="page-header">
@@ -1111,6 +1397,142 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
+    // Create network lines for white theme
+    function createNetworkLines() {
+        if (document.documentElement.getAttribute('data-theme') === 'bw') {
+            // Remove existing lines
+            document.querySelectorAll('.network-line').forEach(line => line.remove());
+            
+            // Create new lines
+            for (let i = 0; i < 15; i++) {
+                const line = document.createElement('div');
+                line.className = 'network-line';
+                
+                const startX = Math.random() * 100;
+                const startY = Math.random() * 100;
+                const endX = Math.random() * 100;
+                const endY = Math.random() * 100;
+                const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                
+                line.style.width = length + 'vw';
+                line.style.height = '1px';
+                line.style.top = startY + 'vh';
+                line.style.left = startX + 'vw';
+                line.style.transform = `rotate(${Math.atan2(endY - startY, endX - startX)}rad)`;
+                line.style.animationDelay = Math.random() * 4 + 's';
+                
+                document.body.appendChild(line);
+            }
+        }
+    }
+
+    // Theme Toggle Functionality
+    const themeToggler = document.getElementById('themeToggler');
+    const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+    const themeIcon = document.querySelector('.theme-toggle-btn i');
+    const themeStatus = document.querySelector('.theme-status');
+
+    // Check for saved theme or prefer-color-scheme
+    function getPreferredTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) return savedTheme;
+        
+        // Check for system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            return 'bw';
+        }
+        return 'default';
+    }
+
+    // Apply theme
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        
+        // Update toggle button and status
+        if (theme === 'bw') {
+            themeIcon.className = 'fas fa-sun';
+            themeStatus.textContent = 'White Theme';
+            themeToggleBtn.title = 'Switch to Dark Theme';
+            
+            // Create networking lines
+            setTimeout(createNetworkLines, 100);
+            
+            // Show theme toggler with animation
+            setTimeout(() => {
+                themeToggler.classList.add('show');
+            }, 300);
+        } else {
+            themeIcon.className = 'fas fa-moon';
+            themeStatus.textContent = 'Dark Theme';
+            themeToggleBtn.title = 'Switch to White Theme';
+            
+            // Remove networking lines
+            document.querySelectorAll('.network-line').forEach(line => line.remove());
+            
+            // Show theme toggler with animation
+            setTimeout(() => {
+                themeToggler.classList.add('show');
+            }, 300);
+        }
+    }
+
+    // Initialize theme
+    const currentTheme = getPreferredTheme();
+    applyTheme(currentTheme);
+
+    // Toggle theme on button click
+    themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'bw' ? 'default' : 'bw';
+        
+        // Add animation effect
+        document.body.style.opacity = '0.8';
+        themeToggler.style.opacity = '0';
+        
+        setTimeout(() => {
+            applyTheme(newTheme);
+            document.body.style.opacity = '1';
+            themeToggler.style.opacity = '1';
+        }, 300);
+    });
+
+    // Auto-hide/show theme toggler on scroll
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > lastScrollTop) {
+            // Scrolling down - hide toggler
+            themeToggler.classList.remove('show');
+        } else {
+            // Scrolling up - show toggler after a delay
+            setTimeout(() => {
+                themeToggler.classList.add('show');
+            }, 200);
+        }
+        lastScrollTop = scrollTop;
+    });
+
+    // Show toggler on mouse move
+    let mouseMoveTimer;
+    document.addEventListener('mousemove', () => {
+        themeToggler.classList.add('show');
+        clearTimeout(mouseMoveTimer);
+        mouseMoveTimer = setTimeout(() => {
+            if (window.pageYOffset > 100) {
+                themeToggler.classList.remove('show');
+            }
+        }, 3000);
+    });
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) { // Only if user hasn't manually set a theme
+            applyTheme(e.matches ? 'bw' : 'default');
+        }
+    });
+
     // Init EmailJS with your Public Key
     (function() {
         emailjs.init("P91QjvyS7Eu43w42Y"); 
@@ -1469,6 +1891,9 @@
             }
         });
     }
+
+    // Handle window resize for networking lines
+    window.addEventListener('resize', createNetworkLines);
 </script>
 </body>
 </html>
