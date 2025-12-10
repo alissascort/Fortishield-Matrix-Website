@@ -113,11 +113,38 @@
             transition: var(--transition);
         }
 
-        /* Page Header */
+        /* Updated Page Header with Video Background */
         .page-header {
+            position: relative;
             padding: 150px 0 80px;
             text-align: center;
-            background: var(--dark-bg);
+            overflow: hidden;
+            margin-top: 70px;
+        }
+
+        .page-header-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .page-header-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .page-header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
         }
 
         .page-header h1 {
@@ -640,8 +667,16 @@
                 display: flex;
             }
 
+            .page-header {
+                padding: 120px 0 60px;
+            }
+            
             .page-header h1 {
                 font-size: 2.5rem;
+            }
+            
+            .page-header p {
+                font-size: 1.2rem;
             }
 
             .filter-buttons {
@@ -722,22 +757,21 @@
                 <span class="bar"></span>
             </div>
         </div>
-    </nav> 
+    </nav>
 
-     <!--Page Header--> 
+     <!--Page Header with Video Background--> 
     <section class="page-header">
-        <div class="container">
-            <div class ="page-header-video">
+        <div class="page-header-video">
             <video autoplay muted loop>
                 <source src="project.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
-    <div class="page-header-overlay">
+        </div>
+        <div class="page-header-overlay"></div>
         <div class="container">
             <h1 data-aos="fade-up">Our Projects</h1>
             <p data-aos="fade-up" data-aos-delay="200">Showcasing our expertise through successful implementations across diverse industries</p>
         </div>
-    </div>
     </section>
 
      <!--Filter Section--> 
@@ -1113,7 +1147,7 @@
             project1: {
                 title: "Enterprise Security Overhaul",
                 category: "Cybersecurity",
-                image: "Enterprice.jpg", // <-- Use actual image file
+                image: "Enterprice.jpg",
                 description: "A comprehensive cybersecurity transformation for a Fortune 500 company, implementing advanced threat detection, SIEM integration, multi-factor authentication, and zero-trust architecture to protect against evolving cyber threats.",
                 technologies: ["Advanced Threat Detection", "SIEM Integration", "Multi-Factor Authentication", "Zero Trust Architecture", "Endpoint Protection", "Security Orchestration"],
                 challenges: "The client faced increasing sophisticated cyber threats, compliance requirements, and needed a scalable security infrastructure that could protect their global operations while maintaining business continuity.",
