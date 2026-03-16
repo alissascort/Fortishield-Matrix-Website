@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS Variables */
+        /* CSS Variables with Theme Support */
         :root {
             --primary-color: #00d4ff;
             --secondary-color: #ff6b35;
@@ -20,6 +20,42 @@
             --gradient-secondary: linear-gradient(135deg, #ff6b35, #cc5529);
             --shadow-glow: 0 10px 30px rgba(0, 212, 255, 0.3);
             --transition: all 0.3s ease;
+            --theme-toggler-bg: rgba(10, 10, 10, 0.9);
+            
+            /* Particle colors */
+            --particle-color: #00d4ff;
+            --particle-connection: rgba(0, 212, 255, 0.2);
+            --mouse-connection: rgba(255, 107, 53, 0.3);
+        }
+
+        /* Black and White Theme Variables */
+        [data-theme="bw"] {
+            --primary-color: #1a73e8;
+            --secondary-color: #666666;
+            --dark-bg: #ffffff;
+            --card-bg: #f5f7fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5f6368;
+            --gradient-primary: linear-gradient(135deg, #1a73e8, #0d47a1);
+            --gradient-secondary: linear-gradient(135deg, #666666, #444444);
+            --shadow-glow: 0 10px 30px rgba(26, 115, 232, 0.2);
+            --theme-toggler-bg: rgba(255, 255, 255, 0.95);
+            
+            /* Particle colors for white theme */
+            --particle-color: #1a73e8;
+            --particle-connection: rgba(26, 115, 232, 0.2);
+            --mouse-connection: rgba(13, 71, 161, 0.3);
+        }
+
+        /* Smooth theme transitions */
+        body, .navbar, .page-header, .about-section, .team-section,
+        .values-section, .cta-section, .footer, .about-content,
+        .about-image, .team-member-card, .value-item, .mv-card,
+        .back-to-top, .whatsapp-float, .particle-canvas {
+            transition: background-color 0.5s ease, 
+                        color 0.5s ease, 
+                        border-color 0.5s ease,
+                        box-shadow 0.5s ease;
         }
 
         /* Global Styles */
@@ -35,12 +71,53 @@
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Particle Canvas Container */
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* Ensure content is above particles */
+        .navbar,
+        .page-header,
+        .about-section,
+        .team-section,
+        .values-section,
+        .cta-section,
+        .footer,
+        .whatsapp-float,
+        #chatbot-container,
+        .back-to-top,
+        .theme-toggler {
+            position: relative;
+            z-index: 2;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
 
         /* Navigation */
@@ -56,6 +133,10 @@
             transition: var(--transition);
         }
 
+        [data-theme="bw"] .navbar {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
         .nav-container {
             display: flex;
             justify-content: space-between;
@@ -67,6 +148,7 @@
 
         .nav-logo img {
             height: 40px;
+            transition: filter 0.5s ease;
         }
 
         .nav-menu {
@@ -112,12 +194,130 @@
             transition: var(--transition);
         }
 
+        /* Floating theme toggler */
+        .theme-toggler {
+            position: fixed;
+            bottom: 100px;
+            right: 40px;
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .theme-toggler.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--theme-toggler-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="bw"] .theme-toggle-btn {
+            box-shadow: 0 0 20px rgba(26, 115, 232, 0.3);
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 0 30px var(--primary-color);
+            animation: bounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(1.1) rotate(15deg) translateY(0); }
+            to { transform: scale(1.1) rotate(15deg) translateY(-5px); }
+        }
+
+        .theme-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent,
+                var(--primary-color),
+                transparent 30%
+            );
+            animation: rotate 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .theme-toggle-btn::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: var(--theme-toggler-bg);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .theme-toggle-btn i {
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+
+        .theme-toggle-btn:hover i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Theme status indicator */
+        .theme-status {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: var(--theme-toggler-bg);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .theme-toggle-btn:hover .theme-status {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Page Header */
         .page-header {
-            padding: 80px 0 80px; /* Adjusted top padding */
+            padding: 150px 0 80px;
             text-align: center;
-            background: var(--dark-bg);
-            margin-top: 70px; /* To clear the fixed navbar */
+            background: transparent;
+            margin-top: 0;
         }
 
         .page-header h1 {
@@ -181,7 +381,7 @@
         /* About Section */
         .about-section {
             padding: 100px 0;
-            background: var(--dark-bg);
+            background: transparent;
         }
 
         .about-grid {
@@ -189,6 +389,19 @@
             grid-template-columns: 1fr 1fr;
             gap: 60px;
             align-items: center;
+        }
+
+        .about-content {
+            background: rgba(var(--card-bg-rgb), 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        [data-theme="bw"] .about-content {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
 
         .about-content h2 {
@@ -210,57 +423,22 @@
             height: auto;
             border-radius: 15px;
             box-shadow: var(--shadow-glow);
-        }
-
-        .mission-vision-section {
-            padding: 100px 0;
-            background: var(--card-bg);
-        }
-
-        .mv-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
-
-        .mv-card {
-            background: var(--dark-bg);
-            padding: 40px;
-            border-radius: 15px;
             border: 1px solid rgba(0, 212, 255, 0.1);
-            transition: var(--transition);
         }
 
-        .mv-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-glow);
+        [data-theme="bw"] .about-image img {
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
 
-        .mv-card .icon {
-            font-size: 3rem;
-            color: var(--secondary-color);
-            margin-bottom: 20px;
-        }
-
-        .mv-card h3 {
-            color: var(--primary-color);
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-        }
-
-        .mv-card p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
+        /* Team Section */
         .team-section {
             padding: 100px 0;
-            background: var(--dark-bg);
+            background: transparent;
         }
 
         .team-grid { 
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
 
@@ -271,6 +449,11 @@
             border: 1px solid rgba(0, 212, 255, 0.1);
             text-align: center;
             transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="bw"] .team-member-card {
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
 
         .team-member-card:hover {
@@ -319,7 +502,7 @@
         /* Values Section */
         .values-section {
             padding: 100px 0;
-            background: var(--card-bg);
+            background: transparent;
         }
 
         .values-grid {
@@ -329,12 +512,17 @@
         }
 
         .value-item {
-            background: var(--dark-bg);
-            padding: 30px;
+            background: var(--card-bg);
+            padding: 40px;
             border-radius: 15px;
             border: 1px solid rgba(0, 212, 255, 0.1);
             text-align: center;
             transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="bw"] .value-item {
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
 
         .value-item:hover {
@@ -362,7 +550,7 @@
         /* CTA Section */
         .cta-section {
             padding: 100px 0;
-            background: var(--dark-bg);
+            background: transparent;
             text-align: center;
         }
 
@@ -385,7 +573,7 @@
         /* Chatbot Styles */
         #chatbot-container {
             position: fixed;
-            bottom: 100px;
+            bottom: 180px;
             right: 30px;
             z-index: 1000;
         }
@@ -422,6 +610,11 @@
             display: flex;
             flex-direction: column;
             transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="bw"] #chatbot-window {
+            border: 1px solid rgba(26, 115, 232, 0.2);
         }
 
         .chatbot-hidden {
@@ -477,6 +670,11 @@
             border: 1px solid rgba(0, 212, 255, 0.2);
         }
 
+        [data-theme="bw"] .bot-message {
+            background: rgba(26, 115, 232, 0.1);
+            border: 1px solid rgba(26, 115, 232, 0.2);
+        }
+
         .user-message {
             background: var(--primary-color);
             color: white;
@@ -490,6 +688,10 @@
             gap: 10px;
         }
 
+        [data-theme="bw"] .chatbot-input {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
         .chatbot-input input {
             flex: 1;
             padding: 10px 15px;
@@ -498,6 +700,10 @@
             background: var(--dark-bg);
             color: var(--text-primary);
             outline: none;
+        }
+
+        [data-theme="bw"] .chatbot-input input {
+            border: 1px solid rgba(26, 115, 232, 0.2);
         }
 
         .chatbot-input input:focus {
@@ -525,8 +731,8 @@
             height: 60px;
             bottom: 40px;
             right: 40px;
-            background-color: #25d366;
-            color: white;
+            background-color: #25d366 !important;
+            color: white !important;
             border-radius: 50px;
             text-align: center;
             font-size: 30px;
@@ -537,10 +743,12 @@
             align-items: center;
             justify-content: center;
             transition: var(--transition);
+            filter: none !important;
         }
 
         .whatsapp-float:hover {
             transform: scale(1.1);
+            background-color: #1da851 !important;
         }
 
         /* Back to Top Button */
@@ -572,9 +780,13 @@
 
         /* Footer */
         .footer {
-            background: var(--card-bg);
+            background: transparent;
             padding: 60px 0 20px;
             border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        [data-theme="bw"] .footer {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
         }
 
         .footer-content {
@@ -616,6 +828,7 @@
         .footer-logo {
             height: 40px;
             margin-bottom: 20px;
+            transition: filter 0.5s ease;
         }
 
         .social-icons {
@@ -648,6 +861,10 @@
             color: var(--text-secondary);
         }
 
+        [data-theme="bw"] .footer-bottom {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-menu {
@@ -663,6 +880,10 @@
                 padding: 20px 0;
             }
 
+            [data-theme="bw"] .nav-menu {
+                background-color: rgba(255, 255, 255, 0.98);
+            }
+
             .nav-menu.active {
                 left: 0;
             }
@@ -675,13 +896,13 @@
                 font-size: 2.5rem;
             }
 
+            .page-header {
+                padding: 120px 0 60px;
+            }
+
             .about-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
-            }
-
-            .mv-grid {
-                grid-template-columns: 1fr;
             }
 
             .team-grid {
@@ -692,6 +913,23 @@
                 grid-template-columns: 1fr;
             }
 
+            .theme-toggler {
+                bottom: 80px;
+                right: 20px;
+            }
+            
+            .theme-toggle-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .theme-status {
+                top: -35px;
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+
             #chatbot-window {
                 width: 300px;
                 height: 400px;
@@ -699,7 +937,7 @@
 
             #chatbot-container {
                 right: 20px;
-                bottom: 80px;
+                bottom: 150px;
             }
 
             .whatsapp-float {
@@ -725,7 +963,12 @@
     </style>
 </head>
 <body>
-     <!--Navigation--> 
+    <!-- Particle Canvas Container -->
+    <div id="particle-container">
+        <canvas id="particleCanvas" class="particle-canvas"></canvas>
+    </div>
+
+    <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
@@ -759,7 +1002,15 @@
         </div>
     </nav>
 
-     <!--Page Header-->
+    <!-- Floating Theme Toggler -->
+    <div class="theme-toggler" id="themeToggler">
+        <button class="theme-toggle-btn" title="Toggle Theme">
+            <i class="fas fa-palette"></i>
+            <span class="theme-status">Color Theme</span>
+        </button>
+    </div>
+
+    <!-- Page Header -->
     <section class="page-header">
         <div class="container">
             <h1 data-aos="fade-up">Fortishield-Matrix Team</h1>
@@ -767,7 +1018,7 @@
         </div>
     </section>
 
-     <!--About Section--> 
+    <!-- About Section -->
     <section class="about-section">
         <div class="container">
             <div class="about-grid">
@@ -784,14 +1035,14 @@
         </div>
     </section>
 
-     <!--Team Section--> 
+    <!-- Team Section -->
     <section class="team-section">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Meet Our Expert Team</h2>
             <div class="team-grid">
                 <div class="team-member-card" data-aos="fade-up" data-aos-delay="100">
                     <img src="CEO.jpg" alt="Ian Isack">
-                    <h3>Ian Isack </h3>
+                    <h3>Ian Isack</h3>
                     <p>CEO & Founder</p>
                     <div class="member-social-icons">
                         <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -801,7 +1052,7 @@
                 <div class="team-member-card" data-aos="fade-up" data-aos-delay="200">
                     <img src="Official. chriss.jpeg" alt="Chriss Karenge">
                     <h3>Chrispin Karengi</h3>
-                    <p>Chief Operating Officer (COO) </p>
+                    <p>Chief Operating Officer (COO)</p>
                     <div class="member-social-icons">
                         <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -825,19 +1076,20 @@
                         <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
-                <div class="team-member-card" data-aos="fade-up" data-aos-delay="400">
-                    <img src="getu2.jpeg" alt="Catherine Mwenempazi">
+                <div class="team-member-card" data-aos="fade-up" data-aos-delay="500">
+                    <img src="getu2.jpeg" alt="Getrude Ally">
                     <h3>Getrude Ally</h3>
                     <p>Customer Admin</p>
                     <div class="member-social-icons">
                         <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
                     </div>
+                </div>
             </div>
         </div>
     </section>
 
-     <!--Values Section--> 
+    <!-- Values Section -->
     <section class="values-section">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Our Core Values</h2>
@@ -876,7 +1128,7 @@
         </div>
     </section>
 
-     <!--CTA Section--> 
+    <!-- CTA Section -->
     <section class="cta-section">
         <div class="container">
             <h2 data-aos="fade-up">Ready to Partner with Fortishield-Matrix?</h2>
@@ -885,7 +1137,7 @@
         </div>
     </section>
 
-     <!--Footer--> 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -931,17 +1183,17 @@
         </div>
     </footer>
 
-     <!--WhatsApp Floating Button--> 
+    <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/+255743981440" class="whatsapp-float" target="_blank" rel="noopener" title="Chat with us on WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-     <!--Back to Top Button--> 
+    <!-- Back to Top Button -->
     <button class="back-to-top" id="backToTop" title="Back to top">
         <i class="fas fa-chevron-up"></i>
     </button>
 
-     <!--Chatbot--> 
+    <!-- Chatbot -->
     <div id="chatbot-container">
         <div id="chatbot-toggle" onclick="toggleChatbot()">
             <i class="fas fa-comments"></i>
@@ -963,9 +1215,238 @@
         </div>
     </div>
 
-     <!--Scripts--> 
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
+        // Particle System - Enhanced Version
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.animationFrame = null;
+                this.theme = document.documentElement.getAttribute('data-theme') || 'default';
+                
+                this.init();
+            }
+            
+            init() {
+                this.resize();
+                this.createParticles();
+                this.setupEventListeners();
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const particleCount = Math.min(100, Math.floor((this.canvas.width * this.canvas.height) / 15000));
+                this.particles = [];
+                
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 2 + 1
+                    });
+                }
+            }
+            
+            setupEventListeners() {
+                window.addEventListener('resize', () => {
+                    this.resize();
+                    this.createParticles();
+                });
+                
+                window.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.attributeName === 'data-theme') {
+                            this.theme = document.documentElement.getAttribute('data-theme');
+                        }
+                    });
+                });
+                
+                observer.observe(document.documentElement, { attributes: true });
+            }
+            
+            getParticleColor() {
+                return this.theme === 'bw' ? '#1a73e8' : '#00d4ff';
+            }
+            
+            getConnectionColor(opacity) {
+                return this.theme === 'bw' 
+                    ? `rgba(26, 115, 232, ${opacity})` 
+                    : `rgba(0, 212, 255, ${opacity})`;
+            }
+            
+            getMouseConnectionColor(opacity) {
+                return this.theme === 'bw'
+                    ? `rgba(13, 71, 161, ${opacity})`
+                    : `rgba(255, 107, 53, ${opacity})`;
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                const particleColor = this.getParticleColor();
+                
+                this.particles.forEach((particle, i) => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                    
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        particle.x -= dx * 0.01;
+                        particle.y -= dy * 0.01;
+                    }
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = particleColor + '99';
+                    this.ctx.fill();
+                    
+                    this.particles.slice(i + 1).forEach((other) => {
+                        const dx = particle.x - other.x;
+                        const dy = particle.y - other.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 120) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particle.x, particle.y);
+                            this.ctx.lineTo(other.x, other.y);
+                            this.ctx.strokeStyle = this.getConnectionColor(0.2 * (1 - distance / 120));
+                            this.ctx.lineWidth = 0.5;
+                            this.ctx.stroke();
+                        }
+                    });
+                    
+                    const mouseDist = Math.sqrt(
+                        Math.pow(particle.x - this.mouse.x, 2) + 
+                        Math.pow(particle.y - this.mouse.y, 2)
+                    );
+                    
+                    if (mouseDist < 200) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(particle.x, particle.y);
+                        this.ctx.lineTo(this.mouse.x, this.mouse.y);
+                        this.ctx.strokeStyle = this.getMouseConnectionColor(0.3 * (1 - mouseDist / 200));
+                        this.ctx.lineWidth = 0.8;
+                        this.ctx.stroke();
+                    }
+                });
+                
+                this.animationFrame = requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Initialize particle system when page loads
+        window.addEventListener('load', () => {
+            new ParticleSystem();
+        });
+
+        // Theme Toggle Functionality
+        const themeToggler = document.getElementById('themeToggler');
+        const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+        const themeIcon = document.querySelector('.theme-toggle-btn i');
+        const themeStatus = document.querySelector('.theme-status');
+
+        function getPreferredTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) return savedTheme;
+            
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                return 'bw';
+            }
+            return 'default';
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            if (theme === 'bw') {
+                themeIcon.className = 'fas fa-sun';
+                themeStatus.textContent = 'White Theme';
+                themeToggleBtn.title = 'Switch to Dark Theme';
+                
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 300);
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                themeStatus.textContent = 'Dark Theme';
+                themeToggleBtn.title = 'Switch to White Theme';
+                
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 300);
+            }
+        }
+
+        const currentTheme = getPreferredTheme();
+        applyTheme(currentTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'bw' ? 'default' : 'bw';
+            
+            document.body.style.opacity = '0.8';
+            themeToggler.style.opacity = '0';
+            
+            setTimeout(() => {
+                applyTheme(newTheme);
+                document.body.style.opacity = '1';
+                themeToggler.style.opacity = '1';
+            }, 300);
+        });
+
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop) {
+                themeToggler.classList.remove('show');
+            } else {
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 200);
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        let mouseMoveTimer;
+        document.addEventListener('mousemove', () => {
+            themeToggler.classList.add('show');
+            clearTimeout(mouseMoveTimer);
+            mouseMoveTimer = setTimeout(() => {
+                if (window.pageYOffset > 100) {
+                    themeToggler.classList.remove('show');
+                }
+            }, 3000);
+        });
+
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                applyTheme(e.matches ? 'bw' : 'default');
+            }
+        });
+
         // Initialize AOS
         AOS.init({
             duration: 1000,
@@ -1023,7 +1504,7 @@
             });
         }
 
-        // Chatbot functionality (same as contact page)
+        // Chatbot functionality (enhanced from contact page)
         let chatbotOpen = false;
         let conversationContext = {
             lastTopic: null,
@@ -1056,10 +1537,8 @@
                 addMessage(message, 'user');
                 input.value = '';
                 
-                // Show typing indicator
                 showTypingIndicator();
                 
-                // Simulate bot response with realistic delay
                 setTimeout(() => {
                     hideTypingIndicator();
                     const response = getIntelligentBotResponse(message);
@@ -1098,16 +1577,45 @@
             const lowerMessage = message.toLowerCase();
             const words = lowerMessage.split(' ');
             
-            // Extract user information
             extractUserInfo(message);
             
-            // Greeting responses
-            if (lowerMessage.match(/^(hi|hello|hey|good morning|good afternoon|good evening)/)) {
+            // Team-specific responses
+            if (lowerMessage.includes('team') || lowerMessage.includes('who is') || lowerMessage.includes('founder') || lowerMessage.includes('ceo')) {
+                conversationContext.lastTopic = 'team';
+                return "Our expert team is led by Ian Isack (CEO & Founder), Chrispin Karengi (COO), Elizabeth Hilbert (CFO), Catherine Mwenempazi (Project Manager), and Getrude Ally (Customer Admin). Each brings years of experience and dedication to delivering exceptional technology solutions. Would you like to know more about any specific team member?";
+            }
+            
+            if (lowerMessage.includes('ian') || lowerMessage.includes('isack') || lowerMessage.includes('founder')) {
+                conversationContext.lastTopic = 'team';
+                return "Ian Isack is our CEO and Founder, bringing over a decade of experience in technology leadership and innovation. He founded Fortishield-Matrix with a vision to provide cutting-edge, secure, and reliable technology solutions to businesses of all sizes. His expertise spans system architecture, cybersecurity strategy, and business transformation.";
+            }
+            
+            if (lowerMessage.includes('chris') || lowerMessage.includes('karengi')) {
+                conversationContext.lastTopic = 'team';
+                return "Chrispin Karengi serves as our Chief Operating Officer (COO), overseeing day-to-day operations and ensuring service excellence. With a background in operational efficiency and technology management, Chrispin ensures that every project delivers maximum value to our clients while maintaining the highest quality standards.";
+            }
+            
+            if (lowerMessage.includes('elizabeth') || lowerMessage.includes('hilbert')) {
+                conversationContext.lastTopic = 'team';
+                return "Elizabeth Hilbert is our Chief Financial Officer (CFO), managing financial strategy and ensuring sustainable growth. With expertise in technology finance and investment, Elizabeth ensures that Fortishield-Matrix remains financially robust while providing competitive, transparent pricing to our clients.";
+            }
+            
+            if (lowerMessage.includes('catherine') || lowerMessage.includes('mwenempazi')) {
+                conversationContext.lastTopic = 'team';
+                return "Catherine Mwenempazi is our dedicated Project Manager, ensuring that every project is delivered on time, within scope, and exceeds client expectations. Her expertise in agile methodologies and client communication makes her an invaluable asset to our delivery team.";
+            }
+            
+            if (lowerMessage.includes('getrude') || lowerMessage.includes('ally')) {
+                conversationContext.lastTopic = 'team';
+                return "Getrude Ally is our Customer Admin, providing exceptional support and ensuring that every client interaction is positive and productive. She's your first point of contact for inquiries and ensures that your needs are promptly addressed by the right team members.";
+            }
+            
+            if (lowerMessage.includes('greeting') || lowerMessage.match(/^(hi|hello|hey|good morning|good afternoon|good evening)/)) {
                 conversationContext.lastTopic = 'greeting';
                 const greetings = [
-                    "Hello! Welcome to Fortishield-Matrix. I'm here to help you with any questions about our tech solutions.",
+                    "Hello! Welcome to Fortishield-Matrix. I'm here to help you learn about our amazing team and services!",
                     "Hi there! Thanks for reaching out to Fortishield-Matrix. How can I assist you today?",
-                    "Hey! Great to see you're interested in our services. What can I help you with?"
+                    "Hey! Great to see you're interested in our team. What would you like to know about us?"
                 ];
                 return greetings[Math.floor(Math.random() * greetings.length)];
             }
@@ -1118,55 +1626,10 @@
                 return "We offer comprehensive technology solutions including:\n\n🔧 System Development - Custom software and applications\n🖥️ Server Design - Infrastructure and cloud solutions\n🛡️ Cybersecurity - Protection and compliance\n🌐 Network Design - Architecture and optimization\n☁️ Cloud Solutions - Migration and management\n📊 System Analysis - Consulting and optimization\n\nWhich service interests you most?";
             }
             
-            // Specific service inquiries
-            if (lowerMessage.includes('cybersecurity') || lowerMessage.includes('security')) {
-                conversationContext.lastTopic = 'cybersecurity';
-                return "Our cybersecurity services are comprehensive and industry-leading:\n\n• Security audits and vulnerability assessments\n• Penetration testing and threat analysis\n• Incident response and recovery\n• Compliance consulting (ISO 27001, SOC 2, GDPR)\n• Employee security training\n• 24/7 monitoring and support\n\nWe've helped over 500 companies secure their digital assets. What specific security challenges are you facing?";
-            }
-            
-            if (lowerMessage.includes('cloud') || lowerMessage.includes('migration')) {
-                conversationContext.lastTopic = 'cloud';
-                return "Our cloud solutions help businesses modernize and scale efficiently:\n\n• Cloud migration strategies (AWS, Azure, Google Cloud)\n• Multi-cloud architecture design\n• Cost optimization and performance tuning\n• Disaster recovery planning\n• Cloud security implementation\n• Ongoing management and support\n\nAre you looking to migrate existing systems or build new cloud infrastructure?";
-            }
-            
-            if (lowerMessage.includes('development') || lowerMessage.includes('software') || lowerMessage.includes('app')) {
-                conversationContext.lastTopic = 'development';
-                return "We specialize in custom software development across various platforms:\n\n• Web applications (React, Node.js, Python)\n• Mobile apps (iOS, Android, React Native)\n• Enterprise systems and ERP solutions\n• API development and integration\n• Database design and optimization\n• E-commerce platforms\n\nWhat type of application or system are you looking to develop?";
-            }
-
-            if (lowerMessage.includes('system analysis') || lowerMessage.includes('analysis') || lowerMessage.includes('optimize') || lowerMessage.includes('efficiency')) {
-                conversationContext.lastTopic = 'system-analysis';
-                return "Our System Analysis service focuses on optimizing your operations:\n\n• Business Process Analysis to identify inefficiencies\n• Requirements Gathering for new systems\n• Feasibility Studies for proposed projects\n• System Design & Architecture for scalability\n• Performance Optimization to enhance speed\n• Technology Consulting for strategic IT planning\n\nAre you looking to improve an existing system or plan for a new one?";
-            }
-            
-            // Pricing inquiries
-            if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('budget') || lowerMessage.includes('quote')) {
-                conversationContext.lastTopic = 'pricing';
-                return "Our pricing is tailored to each project's specific requirements and scope. Factors that influence cost include:\n\n• Project complexity and timeline\n• Technology stack and integrations\n• Team size and expertise required\n• Ongoing support and maintenance needs\n\nI'd be happy to connect you with our team for a detailed quote. Could you tell me more about your project requirements?";
-            }
-            
             // Contact and support
             if (lowerMessage.includes('contact') || lowerMessage.includes('reach') || lowerMessage.includes('phone') || lowerMessage.includes('email')) {
                 conversationContext.lastTopic = 'contact';
-                return "You can reach our team through multiple channels:\n\n📞 Phone: +1 (555) 123-4567\n📧 Email: info@fortishield-matrix.com\n💬 WhatsApp: Available 24/7\n🏢 Office: 123 Tech Street, Digital City\n\nOur business hours are Monday-Friday, 9 AM-6 PM, with 24/7 emergency support available. Would you prefer to schedule a call or continue chatting here?";
-            }
-            
-            // Timeline and project start
-            if (lowerMessage.includes('how long') || lowerMessage.includes('timeline') || lowerMessage.includes('when') || lowerMessage.includes('start')) {
-                conversationContext.lastTopic = 'timeline';
-                return "Our project timelines vary based on scope and complexity:\n\n• Initial consultation: 24-48 hours\n• Small projects: 2-4 weeks\n• Medium projects: 1-3 months\n• Large enterprise projects: 3-12 months\n\nWe can often accommodate expedited timelines for urgent projects. We also provide detailed project roadmaps with milestones. What's your target timeline?";
-            }
-            
-            // Company information
-            if (lowerMessage.includes('about') || lowerMessage.includes('company') || lowerMessage.includes('team') || lowerMessage.includes('experience')) {
-                conversationContext.lastTopic = 'company';
-                return "Fortishield-Matrix is a leading technology solutions provider with:\n\n• 10+ years of industry experience\n• 500+ successful projects completed\n• Expert team of certified professionals\n• 24/7 support and monitoring\n• Clients across healthcare, finance, e-commerce, and more\n\nWe combine technical expertise with business acumen to deliver solutions that drive real results. What industry are you in?";
-            }
-            
-            // Support and maintenance
-            if (lowerMessage.includes('support') || lowerMessage.includes('maintenance') || lowerMessage.includes('help')) {
-                conversationContext.lastTopic = 'support';
-                return "We provide comprehensive ongoing support:\n\n• 24/7 technical assistance\n• Regular system health checks\n• Performance monitoring and optimization\n• Security updates and patches\n• Backup and disaster recovery\n• User training and documentation\n\nOur support packages are customized to your needs. Are you looking for support on an existing system or planning for a new project?";
+                return "You can reach our team through multiple channels:\n\n📞 Phone: +255 743 981 440\n📧 Email: fortishield-matrix@gmail.com\n💬 WhatsApp: Available 24/7\n🏢 Office: Njiro Business Complex, Arusha, Tanzania\n\nOur business hours are Monday-Friday, 9 AM-6 PM, with 24/7 emergency support available. Would you prefer to schedule a call or continue chatting here?";
             }
             
             // Follow-up based on context
@@ -1177,34 +1640,34 @@
             // Default intelligent response
             const defaultResponses = [
                 "That's an interesting question! Could you provide more details so I can give you the most helpful information?",
-                "I'd be happy to help you with that. Can you tell me more about your specific needs or requirements?",
-                "Thanks for reaching out! To better assist you, could you share more context about what you're looking for?",
+                "I'd be happy to help you with that. Can you tell me more about what you're looking for?",
+                "Thanks for reaching out! To better assist you, could you share more context about your needs?",
                 "I want to make sure I give you the most relevant information. Could you elaborate on your question?"
             ];
             
             return defaultResponses[Math.floor(Math.random() * defaultResponses.length)] + 
-                   "\n\nYou can also ask me about our services, projects, pricing, timelines, or how to get in touch with our team.";
+                   "\n\nYou can also ask me about our team members, services, projects, pricing, or how to get in touch with our team.";
         }
 
         function getContextualResponse(message, lastTopic) {
             const lowerMessage = message.toLowerCase();
             
             switch(lastTopic) {
+                case 'team':
+                    if (lowerMessage.includes('more')) {
+                        return "Each member of our team brings unique expertise to the table. You can ask me specifically about Ian (CEO), Chrispin (COO), Elizabeth (CFO), Catherine (Project Manager), or Getrude (Customer Admin). What would you like to know more about?";
+                    }
+                    break;
+                    
                 case 'services':
                     if (lowerMessage.includes('all') || lowerMessage.includes('everything')) {
                         return "Great! We can definitely discuss a comprehensive solution that covers multiple services. Many of our clients benefit from integrated approaches. Would you like to schedule a consultation to discuss your complete technology needs?";
                     }
                     break;
                     
-                case 'pricing':
-                    if (lowerMessage.includes('expensive') || lowerMessage.includes('cheap')) {
-                        return "We focus on delivering value and ROI rather than just low cost. Our solutions typically pay for themselves through improved efficiency and reduced operational costs. We also offer flexible payment options. Would you like to discuss your budget range?";
-                    }
-                    break;
-                    
-                case 'timeline':
-                    if (lowerMessage.includes('urgent') || lowerMessage.includes('asap') || lowerMessage.includes('quickly')) {
-                        return "We understand urgent needs and can often fast-track projects. We have dedicated rapid deployment teams for critical situations. Let me connect you with our project manager to discuss your urgent requirements immediately.";
+                case 'contact':
+                    if (lowerMessage.includes('schedule') || lowerMessage.includes('call')) {
+                        return "I'd be happy to schedule a call for you. Could you provide your name, preferred time, and a brief description of what you'd like to discuss? Our team will get back to you promptly to confirm the appointment.";
                     }
                     break;
             }
@@ -1215,7 +1678,6 @@
         function extractUserInfo(message) {
             const lowerMessage = message.toLowerCase();
             
-            // Extract potential company name
             if (lowerMessage.includes('company') || lowerMessage.includes('business')) {
                 const words = message.split(' ');
                 const companyIndex = words.findIndex(word => 
@@ -1226,7 +1688,6 @@
                 }
             }
             
-            // Extract industry mentions
             const industries = ['healthcare', 'finance', 'retail', 'manufacturing', 'education', 'government', 'startup'];
             industries.forEach(industry => {
                 if (lowerMessage.includes(industry)) {
