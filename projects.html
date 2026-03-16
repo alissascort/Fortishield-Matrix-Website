@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS Variables */
+        /* CSS Variables with Theme Support */
         :root {
             --primary-color: #00d4ff;
             --secondary-color: #ff6b35;
@@ -21,6 +21,53 @@
             --gradient-secondary: linear-gradient(135deg, #ff6b35, #cc5529);
             --shadow-glow: 0 10px 30px rgba(0, 212, 255, 0.3);
             --transition: all 0.3s ease;
+            --theme-filter: none;
+            --theme-toggler-bg: rgba(10, 10, 10, 0.9);
+            
+            /* Particle colors */
+            --particle-color: #00d4ff;
+            --particle-connection: rgba(0, 212, 255, 0.2);
+            --mouse-connection: rgba(11, 94, 215, 0.3);
+        }
+
+        /* Black and White Theme Variables */
+        [data-theme="bw"] {
+            --primary-color: #1a73e8;
+            --secondary-color: #666666;
+            --dark-bg: #ffffff;
+            --card-bg: #f5f7fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5f6368;
+            --gradient-primary: linear-gradient(135deg, #1a73e8, #0d47a1);
+            --gradient-secondary: linear-gradient(135deg, #666666, #444444);
+            --shadow-glow: 0 10px 30px rgba(26, 115, 232, 0.2);
+            --theme-filter: none;
+            --theme-toggler-bg: rgba(255, 255, 255, 0.95);
+            
+            /* Particle colors for white theme */
+            --particle-color: #1a73e8;
+            --particle-connection: rgba(26, 115, 232, 0.2);
+            --mouse-connection: rgba(11, 94, 215, 0.3);
+        }
+
+        /* Smooth theme transitions */
+        body, .navbar, .page-header, .filter-section, .projects-grid-section,
+        .footer, .project-item, .filter-btn, #chatbot-window, 
+        .whatsapp-float, .back-to-top, .particle-canvas {
+            transition: background-color 0.5s ease, 
+                        color 0.5s ease, 
+                        border-color 0.5s ease,
+                        box-shadow 0.5s ease;
+        }
+
+        /* Ensure gradients transition smoothly */
+        .btn-primary, .btn-secondary, .project-btn, .social-icon,
+        #chatbot-toggle, .back-to-top, .theme-toggler {
+            transition: background 0.5s ease, 
+                        background-color 0.5s ease,
+                        border-color 0.5s ease,
+                        color 0.5s ease,
+                        transform 0.5s ease;
         }
 
         /* Global Styles */
@@ -36,12 +83,51 @@
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Particle Canvas Container */
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* Ensure content is above particles */
+        .navbar,
+        .page-header,
+        .filter-section,
+        .projects-grid-section,
+        .footer,
+        .whatsapp-float,
+        #chatbot-container,
+        .back-to-top,
+        .theme-toggler {
+            position: relative;
+            z-index: 2;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
 
         /* Navigation */
@@ -57,6 +143,10 @@
             transition: var(--transition);
         }
 
+        [data-theme="bw"] .navbar {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
         .nav-container {
             display: flex;
             justify-content: space-between;
@@ -68,6 +158,7 @@
 
         .nav-logo img {
             height: 40px;
+            transition: filter 0.5s ease;
         }
 
         .nav-menu {
@@ -113,6 +204,124 @@
             transition: var(--transition);
         }
 
+        /* Floating theme toggler */
+        .theme-toggler {
+            position: fixed;
+            bottom: 100px;
+            right: 40px;
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .theme-toggler.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--theme-toggler-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="bw"] .theme-toggle-btn {
+            box-shadow: 0 0 20px rgba(26, 115, 232, 0.3);
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 0 30px var(--primary-color);
+            animation: bounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(1.1) rotate(15deg) translateY(0); }
+            to { transform: scale(1.1) rotate(15deg) translateY(-5px); }
+        }
+
+        .theme-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent,
+                var(--primary-color),
+                transparent 30%
+            );
+            animation: rotate 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .theme-toggle-btn::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: var(--theme-toggler-bg);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .theme-toggle-btn i {
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+
+        .theme-toggle-btn:hover i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Theme status indicator */
+        .theme-status {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: var(--theme-toggler-bg);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .theme-toggle-btn:hover .theme-status {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Updated Page Header with Video Background */
         .page-header {
             position: relative;
@@ -120,6 +329,7 @@
             text-align: center;
             overflow: hidden;
             margin-top: 70px;
+            background: transparent;
         }
 
         .page-header-video {
@@ -145,6 +355,10 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
             z-index: -1;
+        }
+
+        [data-theme="bw"] .page-header-overlay {
+            background: rgba(255, 255, 255, 0.7);
         }
 
         .page-header h1 {
@@ -208,7 +422,7 @@
         /* Filter Section */
         .filter-section {
             padding: 50px 0;
-            background: var(--card-bg);
+            background: transparent;
         }
 
         .filter-buttons {
@@ -227,6 +441,7 @@
             cursor: pointer;
             transition: var(--transition);
             font-weight: 600;
+            backdrop-filter: blur(5px);
         }
 
         .filter-btn:hover,
@@ -238,7 +453,7 @@
         /* Projects Grid */
         .projects-grid-section {
             padding: 100px 0;
-            background: var(--dark-bg);
+            background: transparent;
         }
 
         .projects-grid {
@@ -253,6 +468,11 @@
             overflow: hidden;
             border: 1px solid rgba(0, 212, 255, 0.1);
             transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="bw"] .project-item {
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
 
         .project-item:hover {
@@ -284,6 +504,10 @@
             justify-content: center;
             opacity: 0;
             transition: var(--transition);
+        }
+
+        [data-theme="bw"] .project-overlay {
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .project-item:hover .project-overlay {
@@ -360,6 +584,7 @@
             max-height: 80vh;
             overflow-y: auto;
             position: relative;
+            border: 1px solid var(--primary-color);
         }
 
         .close {
@@ -381,7 +606,7 @@
         /* Chatbot Styles */
         #chatbot-container {
             position: fixed;
-            bottom: 100px;
+            bottom: 180px;
             right: 30px;
             z-index: 1000;
         }
@@ -418,6 +643,11 @@
             display: flex;
             flex-direction: column;
             transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="bw"] #chatbot-window {
+            border: 1px solid rgba(26, 115, 232, 0.2);
         }
 
         .chatbot-hidden {
@@ -473,6 +703,11 @@
             border: 1px solid rgba(0, 212, 255, 0.2);
         }
 
+        [data-theme="bw"] .bot-message {
+            background: rgba(26, 115, 232, 0.1);
+            border: 1px solid rgba(26, 115, 232, 0.2);
+        }
+
         .user-message {
             background: var(--primary-color);
             color: white;
@@ -486,6 +721,10 @@
             gap: 10px;
         }
 
+        [data-theme="bw"] .chatbot-input {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
         .chatbot-input input {
             flex: 1;
             padding: 10px 15px;
@@ -494,6 +733,10 @@
             background: var(--dark-bg);
             color: var(--text-primary);
             outline: none;
+        }
+
+        [data-theme="bw"] .chatbot-input input {
+            border: 1px solid rgba(26, 115, 232, 0.2);
         }
 
         .chatbot-input input:focus {
@@ -521,8 +764,8 @@
             height: 60px;
             bottom: 40px;
             right: 40px;
-            background-color: #25d366;
-            color: white;
+            background-color: #25d366 !important;
+            color: white !important;
             border-radius: 50px;
             text-align: center;
             font-size: 30px;
@@ -533,10 +776,12 @@
             align-items: center;
             justify-content: center;
             transition: var(--transition);
+            filter: none !important;
         }
 
         .whatsapp-float:hover {
             transform: scale(1.1);
+            background-color: #1da851 !important;
         }
 
         /* Back to Top Button */
@@ -568,9 +813,13 @@
 
         /* Footer */
         .footer {
-            background: var(--card-bg);
+            background: transparent;
             padding: 60px 0 20px;
             border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        [data-theme="bw"] .footer {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
         }
 
         .footer-content {
@@ -644,6 +893,10 @@
             color: var(--text-secondary);
         }
 
+        [data-theme="bw"] .footer-bottom {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-menu {
@@ -665,6 +918,23 @@
 
             .nav-toggle {
                 display: flex;
+            }
+
+            .theme-toggler {
+                bottom: 80px;
+                right: 20px;
+            }
+            
+            .theme-toggle-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .theme-status {
+                top: -35px;
+                font-size: 0.8rem;
+                padding: 6px 12px;
             }
 
             .page-header {
@@ -699,7 +969,7 @@
 
             #chatbot-container {
                 right: 20px;
-                bottom: 80px;
+                bottom: 150px;
             }
 
             .whatsapp-float {
@@ -725,7 +995,12 @@
     </style>
 </head>
 <body>
-     <!--Navigation--> 
+    <!-- Particle Canvas Container -->
+    <div id="particle-container">
+        <canvas id="particleCanvas" class="particle-canvas"></canvas>
+    </div>
+
+    <!--Navigation--> 
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
@@ -759,7 +1034,15 @@
         </div>
     </nav>
 
-     <!--Page Header with Video Background--> 
+    <!-- Floating Theme Toggler -->
+    <div class="theme-toggler" id="themeToggler">
+        <button class="theme-toggle-btn" title="Toggle Theme">
+            <i class="fas fa-palette"></i>
+            <span class="theme-status">Color Theme</span>
+        </button>
+    </div>
+
+    <!--Page Header with Video Background--> 
     <section class="page-header">
         <div class="page-header-video">
             <video autoplay muted loop>
@@ -774,7 +1057,7 @@
         </div>
     </section>
 
-     <!--Filter Section--> 
+    <!--Filter Section--> 
     <section class="filter-section">
         <div class="container">
             <div class="filter-buttons" data-aos="fade-up">
@@ -789,11 +1072,11 @@
         </div>
     </section>
 
-     <!--Projects Grid--> 
+    <!--Projects Grid--> 
     <section class="projects-grid-section">
         <div class="container">
             <div class="projects-grid">
-                 <!--Enterprise Security System--> 
+                <!--Enterprise Security System--> 
                 <div class="project-item" data-category="security" data-aos="fade-up" data-aos-delay="100">
                     <div class="project-image">
                         <img src="Enterprice.jpg" alt="Enterprise Security System">
@@ -815,7 +1098,7 @@
                     </div>
                 </div>
 
-                 <!--Cloud Infrastructure--> 
+                <!--Cloud Infrastructure--> 
                 <div class="project-item" data-category="cloud servers" data-aos="fade-up" data-aos-delay="200">
                     <div class="project-image">
                         <img src="Project.jpg" alt="Multi-Cloud Infrastructure">
@@ -837,7 +1120,7 @@
                     </div>
                 </div>
 
-                 <!--Custom ERP System--> 
+                <!--Custom ERP System--> 
                 <div class="project-item" data-category="development" data-aos="fade-up" data-aos-delay="300">
                     <div class="project-image">
                         <img src="ERP.jpg" alt="Custom ERP System">
@@ -859,7 +1142,7 @@
                     </div>
                 </div>
 
-                 <!--Network Infrastructure--> 
+                <!--Network Infrastructure--> 
                 <div class="project-item" data-category="networks" data-aos="fade-up" data-aos-delay="400">
                     <div class="project-image">
                         <img src="Corporate Network Redesign.jpg" alt="Network Infrastructure">
@@ -881,7 +1164,7 @@
                     </div>
                 </div>
 
-                 <!--E-commerce Platform--> 
+                <!--E-commerce Platform--> 
                 <div class="project-item" data-category="development" data-aos="fade-up" data-aos-delay="500">
                     <div class="project-image">
                         <img src="High-Performance E-commerce.jpg" alt="E-commerce Platform">
@@ -903,7 +1186,7 @@
                     </div>
                 </div>
 
-                 <!--Data Center Setup--> 
+                <!--Data Center Setup--> 
                 <div class="project-item" data-category="servers" data-aos="fade-up" data-aos-delay="600">
                     <div class="project-image">
                         <img src="Enterprise Data Center.jpg" alt="Data Center Setup">
@@ -947,7 +1230,7 @@
                     </div>
                 </div>
 
-                 <!--Cloud Migration--> 
+                <!--Cloud Migration--> 
                 <div class="project-item" data-category="cloud consulting" data-aos="fade-up" data-aos-delay="800">
                     <div class="project-image">
                         <img src="Cloud Migration.jpg" alt="Cloud Migration">
@@ -969,7 +1252,7 @@
                     </div>
                 </div>
 
-                 <!--IoT Platform--> 
+                <!--IoT Platform--> 
                 <div class="project-item" data-category="development networks" data-aos="fade-up" data-aos-delay="900">
                     <div class="project-image">
                         <img src="IoT Development.jpg" alt="IoT Platform">
@@ -994,17 +1277,17 @@
         </div>
     </section>
 
-     <!--Project Modal--> 
+    <!--Project Modal--> 
     <div id="projectModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeProjectModal()">&times;</span>
             <div id="modalContent">
-                 Dynamic content will be loaded here 
+                <!-- Dynamic content will be loaded here -->
             </div>
         </div>
     </div>
 
-     <!--Footer--> 
+    <!--Footer--> 
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -1048,17 +1331,17 @@
         </div>
     </footer>
 
-     <!--WhatsApp Floating Button--> 
+    <!--WhatsApp Floating Button--> 
     <a href="https://wa.me/+255743981440" class="whatsapp-float" target="_blank" rel="noopener" title="Contact us on WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-     <!--Back to Top Button--> 
+    <!--Back to Top Button--> 
     <button class="back-to-top" id="backToTop">
         <i class="fas fa-chevron-up"></i>
     </button>
 
-     <!--Chatbot--> 
+    <!--Chatbot--> 
     <div id="chatbot-container">
         <div id="chatbot-toggle" onclick="toggleChatbot()">
             <i class="fas fa-comments"></i>
@@ -1080,9 +1363,258 @@
         </div>
     </div>
 
-     <!--Scripts--> 
+    <!--Scripts--> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
+        // Particle System - Enhanced Version
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.animationFrame = null;
+                this.theme = document.documentElement.getAttribute('data-theme') || 'default';
+                
+                this.init();
+            }
+            
+            init() {
+                this.resize();
+                this.createParticles();
+                this.setupEventListeners();
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                // Dynamic particle count based on screen size
+                const particleCount = Math.min(100, Math.floor((this.canvas.width * this.canvas.height) / 15000));
+                this.particles = [];
+                
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 2 + 1
+                    });
+                }
+            }
+            
+            setupEventListeners() {
+                window.addEventListener('resize', () => {
+                    this.resize();
+                    this.createParticles();
+                });
+                
+                window.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                // Observe theme changes
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.attributeName === 'data-theme') {
+                            this.theme = document.documentElement.getAttribute('data-theme');
+                        }
+                    });
+                });
+                
+                observer.observe(document.documentElement, { attributes: true });
+            }
+            
+            getParticleColor() {
+                return this.theme === 'bw' ? '#1a73e8' : '#00d4ff';
+            }
+            
+            getConnectionColor(opacity) {
+                return this.theme === 'bw' 
+                    ? `rgba(26, 115, 232, ${opacity})` 
+                    : `rgba(0, 212, 255, ${opacity})`;
+            }
+            
+            getMouseConnectionColor(opacity) {
+                return this.theme === 'bw'
+                    ? `rgba(11, 94, 215, ${opacity})`
+                    : `rgba(11, 94, 215, ${opacity})`;
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                const particleColor = this.getParticleColor();
+                
+                // Update and draw particles
+                this.particles.forEach((particle, i) => {
+                    // Update position
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    // Bounce off edges
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                    
+                    // Mouse interaction
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        particle.x -= dx * 0.01;
+                        particle.y -= dy * 0.01;
+                    }
+                    
+                    // Draw particle
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = particleColor + '99'; // Add 60% opacity
+                    this.ctx.fill();
+                    
+                    // Draw connections between particles
+                    this.particles.slice(i + 1).forEach((other) => {
+                        const dx = particle.x - other.x;
+                        const dy = particle.y - other.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 120) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particle.x, particle.y);
+                            this.ctx.lineTo(other.x, other.y);
+                            this.ctx.strokeStyle = this.getConnectionColor(0.2 * (1 - distance / 120));
+                            this.ctx.lineWidth = 0.5;
+                            this.ctx.stroke();
+                        }
+                    });
+                    
+                    // Draw connections to mouse
+                    const mouseDist = Math.sqrt(
+                        Math.pow(particle.x - this.mouse.x, 2) + 
+                        Math.pow(particle.y - this.mouse.y, 2)
+                    );
+                    
+                    if (mouseDist < 200) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(particle.x, particle.y);
+                        this.ctx.lineTo(this.mouse.x, this.mouse.y);
+                        this.ctx.strokeStyle = this.getMouseConnectionColor(0.3 * (1 - mouseDist / 200));
+                        this.ctx.lineWidth = 0.8;
+                        this.ctx.stroke();
+                    }
+                });
+                
+                this.animationFrame = requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Initialize particle system when page loads
+        window.addEventListener('load', () => {
+            new ParticleSystem();
+        });
+
+        // Theme Toggle Functionality
+        const themeToggler = document.getElementById('themeToggler');
+        const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+        const themeIcon = document.querySelector('.theme-toggle-btn i');
+        const themeStatus = document.querySelector('.theme-status');
+
+        // Check for saved theme or prefer-color-scheme
+        function getPreferredTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) return savedTheme;
+            
+            // Check for system preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                return 'bw';
+            }
+            return 'default';
+        }
+
+        // Apply theme
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            // Update toggle button and status
+            if (theme === 'bw') {
+                themeIcon.className = 'fas fa-sun';
+                themeStatus.textContent = 'White Theme';
+                themeToggleBtn.title = 'Switch to Dark Theme';
+                
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 300);
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                themeStatus.textContent = 'Dark Theme';
+                themeToggleBtn.title = 'Switch to White Theme';
+                
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 300);
+            }
+        }
+
+        // Initialize theme
+        const currentTheme = getPreferredTheme();
+        applyTheme(currentTheme);
+
+        // Toggle theme on button click
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'bw' ? 'default' : 'bw';
+            
+            // Add animation effect
+            document.body.style.opacity = '0.8';
+            themeToggler.style.opacity = '0';
+            
+            setTimeout(() => {
+                applyTheme(newTheme);
+                document.body.style.opacity = '1';
+                themeToggler.style.opacity = '1';
+            }, 300);
+        });
+
+        // Auto-hide/show theme toggler on scroll
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop) {
+                themeToggler.classList.remove('show');
+            } else {
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 200);
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Show toggler on mouse move
+        let mouseMoveTimer;
+        document.addEventListener('mousemove', () => {
+            themeToggler.classList.add('show');
+            clearTimeout(mouseMoveTimer);
+            mouseMoveTimer = setTimeout(() => {
+                if (window.pageYOffset > 100) {
+                    themeToggler.classList.remove('show');
+                }
+            }, 3000);
+        });
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                applyTheme(e.matches ? 'bw' : 'default');
+            }
+        });
+
         // Initialize AOS
         AOS.init({
             duration: 1000,
@@ -1148,7 +1680,7 @@
                 title: "Enterprise Security Overhaul",
                 category: "Cybersecurity",
                 image: "Enterprice.jpg",
-                description: "A comprehensive cybersecurity transformation for a Fortune 500 company, implementing advanced threat detection, SIEM integration, multi-factor authentication, and zero-trust architecture to protect against evolving cyber threats.",
+                description: "A comprehensive cybersecurity transformation for a Fortune 500 company, implementing advanced threat detection, SIEM integration, multi-factor authentication, and zero-trust architecture.",
                 technologies: ["Advanced Threat Detection", "SIEM Integration", "Multi-Factor Authentication", "Zero Trust Architecture", "Endpoint Protection", "Security Orchestration"],
                 challenges: "The client faced increasing sophisticated cyber threats, compliance requirements, and needed a scalable security infrastructure that could protect their global operations while maintaining business continuity.",
                 solution: "We implemented a comprehensive multi-layered security approach including advanced threat detection systems, SIEM integration, zero-trust network architecture, employee security training programs, and 24/7 security operations center.",
@@ -1251,7 +1783,7 @@
                         
                         <h3 style="color: var(--primary-color); margin-bottom: 15px;">Technologies Used</h3>
                         <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
-                            ${project.technologies.map(tech => `<span style=\"background: rgba(0, 212, 255, 0.1); color: var(--primary-color); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;\">${tech}</span>`).join('')}
+                            ${project.technologies.map(tech => `<span style="background: rgba(0, 212, 255, 0.1); color: var(--primary-color); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">${tech}</span>`).join('')}
                         </div>
                         
                         <h3 style="color: var(--primary-color); margin-bottom: 15px;">Challenge</h3>
@@ -1262,7 +1794,7 @@
                         
                         <h3 style="color: var(--primary-color); margin-bottom: 15px;">Results</h3>
                         <ul style="color: var(--text-secondary); line-height: 1.8;">
-                            ${project.results.map(result => `<li style=\"margin-bottom: 8px;\"><i class=\"fas fa-check\" style=\"color: var(--primary-color); margin-right: 10px;\"></i>${result}</li>`).join('')}
+                            ${project.results.map(result => `<li style="margin-bottom: 8px;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 10px;"></i>${result}</li>`).join('')}
                         </ul>
                     </div>
                 `;
@@ -1310,11 +1842,15 @@
                 addMessage(message, 'user');
                 input.value = '';
                 
+                // Show typing indicator
+                showTypingIndicator();
+                
                 // Simulate bot response
                 setTimeout(() => {
+                    hideTypingIndicator();
                     const response = getBotResponse(message);
                     addMessage(response, 'bot');
-                }, 1000);
+                }, 1500);
             }
         }
 
@@ -1327,25 +1863,44 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'bot-message typing-indicator';
+            typingDiv.innerHTML = '<p><i class="fas fa-circle"></i> <i class="fas fa-circle"></i> <i class="fas fa-circle"></i></p>';
+            typingDiv.style.opacity = '0.6';
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.querySelector('.typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
         function getBotResponse(message) {
             const lowerMessage = message.toLowerCase();
             
-            if (lowerMessage.includes('service') || lowerMessage.includes('what do you do')) {
+            if (lowerMessage.includes('project') || lowerMessage.includes('portfolio')) {
+                return "We've completed over 500 projects across various industries including healthcare, finance, manufacturing, and e-commerce. You can browse our project portfolio above. Are you looking for examples in a specific industry or technology?";
+            } else if (lowerMessage.includes('service') || lowerMessage.includes('what do you do')) {
                 return "We offer comprehensive tech solutions including System Development, Server Design, Cybersecurity, Network Design, Cloud Solutions, and System Analysis. Would you like to know more about any specific service?";
             } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
                 return "Our pricing varies based on project requirements and scope. I'd recommend contacting our team for a personalized quote. Would you like me to connect you with our sales team?";
             } else if (lowerMessage.includes('contact') || lowerMessage.includes('reach')) {
                 return "You can reach us through our contact page, WhatsApp, or email at fortishield-matrix@gmail.com. Our team is available 24/7 to assist you. What's the best way for us to get in touch with you?";
             } else if (lowerMessage.includes('security') || lowerMessage.includes('cybersecurity')) {
-                return "Our cybersecurity services include security audits, penetration testing, incident response, and security training. We've helped over 500 companies secure their digital assets. What specific security concerns do you have?";
-            } else if (lowerMessage.includes('project') || lowerMessage.includes('portfolio')) {
-                return "We've completed over 500 projects across various industries including healthcare, finance, manufacturing, and e-commerce. You can view our detailed project portfolio on this page. Are you looking for examples in a specific industry or technology?";
+                return "Our cybersecurity services include security audits, penetration testing, incident response, and security training. We've helped over 500 companies secure their digital assets. You can see examples in our Enterprise Security Overhaul project above. What specific security concerns do you have?";
             } else if (lowerMessage.includes('cloud') || lowerMessage.includes('migration')) {
-                return "Our cloud solutions include migration services, multi-cloud architecture, and optimization. We work with AWS, Azure, and Google Cloud to provide scalable and cost-effective solutions. Are you considering cloud migration?";
+                return "Our cloud solutions include migration services, multi-cloud architecture, and optimization. We work with AWS, Azure, and Google Cloud. Check out our Multi-Cloud Architecture and Legacy System Modernization projects for examples. Are you considering cloud migration?";
             } else if (lowerMessage.includes('development') || lowerMessage.includes('software')) {
                 return "We specialize in custom software development including web applications, mobile apps, enterprise systems, and API development. Our team uses modern technologies and agile methodologies. What type of application are you looking to develop?";
+            } else if (lowerMessage.includes('iot') || lowerMessage.includes('manufacturing')) {
+                return "Our IoT solutions include smart manufacturing platforms with real-time monitoring, predictive analytics, and automated quality control. Check out our Smart Manufacturing Platform project for a detailed example. How can we help with your IoT needs?";
             } else {
-                return "Thank you for your message! I'm here to help you learn more about Fortishield-Matrix and our projects. You can ask me about our services, specific projects, pricing, or how to get in touch with our team. How can I assist you today?";
+                return "Thank you for your message! I'm here to help you learn more about Fortishield-Matrix and our projects. You can ask me about specific projects, our services, pricing, or how to get in touch with our team. How can I assist you today?";
             }
         }
     </script>
