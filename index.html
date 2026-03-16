@@ -65,8 +65,8 @@
         /* Smooth theme transitions */
         body, .navbar, .hero, .stats, .services-preview, .projects-carousel,
         .why-choose-us, .partners-section, .footer, .service-card, .stat-item,
-        .project-slide, .feature-item, .partner-card, .solar-system,
-        .whatsapp-float, .back-to-top, .particle-canvas, .cert-item {
+        .project-slide, .feature-item, .solar-system, .planet, .sun,
+        .whatsapp-float, .back-to-top, .particle-canvas {
             transition: background-color 0.5s ease, 
                         color 0.5s ease, 
                         border-color 0.5s ease,
@@ -735,238 +735,163 @@
             line-height: 1.6;
         }
 
-        /* Partners Section */
+        /* Partners Section - Enhanced Solar System */
         .partners-section {
             padding: 100px 0;
             background: transparent;
             position: relative;
             overflow: hidden;
+            min-height: 600px;
         }
 
-        .partners-container {
-            position: relative;
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Design 1: Infinite Scrolling Cards */
-        .scrolling-partners {
-            width: 100%;
-            overflow: hidden;
-            padding: 20px 0;
-            background: var(--card-bg);
-            border-radius: 15px;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        [data-theme="bw"] .scrolling-partners {
-            border: 1px solid rgba(26, 115, 232, 0.1);
-        }
-
-        .scrolling-track {
-            display: flex;
-            animation: scroll 30s linear infinite;
-        }
-
-        .scrolling-track:hover {
-            animation-play-state: paused;
-        }
-
-        .partner-card {
-            flex: 0 0 200px;
-            margin: 0 20px;
-            padding: 20px;
-            background: var(--dark-bg);
-            border-radius: 10px;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-            transition: var(--transition);
-            text-align: center;
-        }
-
-        [data-theme="bw"] .partner-card {
-            border: 1px solid rgba(26, 115, 232, 0.1);
-        }
-
-        .partner-card:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: var(--shadow-glow);
-            border-color: var(--primary-color);
-        }
-
-        .partner-card img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 10px;
-            filter: grayscale(0.5);
-            transition: var(--transition);
-        }
-
-        .partner-card:hover img {
-            filter: grayscale(0);
-            transform: scale(1.1);
-        }
-
-        .partner-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(-240px * 8)); }
-        }
-
-        /* Design 2: Solar System */
         .solar-system {
             position: relative;
             width: 100%;
-            height: 400px;
+            height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--card-bg);
-            border-radius: 15px;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-            backdrop-filter: blur(10px);
+            cursor: grab;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
-        [data-theme="bw"] .solar-system {
-            border: 1px solid rgba(26, 115, 232, 0.1);
+        .solar-system:active {
+            cursor: grabbing;
         }
 
         .sun {
             position: absolute;
             width: 120px;
             height: 120px;
-            background: var(--gradient-primary);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 50px var(--primary-color);
-            animation: pulse 2s ease-in-out infinite;
             z-index: 10;
+            filter: drop-shadow(0 0 30px var(--primary-color));
+            animation: sunPulse 3s ease-in-out infinite;
         }
 
         .sun img {
-            width: 60px;
-            height: 60px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
             border-radius: 50%;
-            background: white;
-            padding: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 40px var(--primary-color);
+            transition: var(--transition);
         }
 
-        .orbit {
+        .sun img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 60px var(--primary-color);
+        }
+
+        @keyframes sunPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .orbit-container {
             position: absolute;
-            border: 1px dashed rgba(0, 212, 255, 0.3);
-            border-radius: 50%;
-            animation: rotate var(--duration) linear infinite;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
         }
 
-        [data-theme="bw"] .orbit {
-            border: 1px dashed rgba(26, 115, 232, 0.3);
+        .orbit-path {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px dashed var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            animation: orbitGlow 3s ease-in-out infinite;
         }
+
+        @keyframes orbitGlow {
+            0%, 100% { opacity: 0.3; box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); }
+            50% { opacity: 0.6; box-shadow: 0 0 30px rgba(0, 212, 255, 0.4); }
+        }
+
+        .orbit-1 { width: 200px; height: 200px; }
+        .orbit-2 { width: 300px; height: 300px; }
+        .orbit-3 { width: 400px; height: 400px; }
 
         .planet {
             position: absolute;
-            top: -30px;
+            width: 70px;
+            height: 70px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 60px;
-            background: var(--dark-bg);
-            border-radius: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: var(--transition);
+            filter: drop-shadow(0 0 15px var(--primary-color));
+        }
+
+        .planet img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
             border: 2px solid var(--primary-color);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
             transition: var(--transition);
         }
 
         .planet:hover {
-            transform: translateX(-50%) scale(1.2);
-            box-shadow: 0 0 30px var(--primary-color);
+            transform: translate(-50%, -50%) scale(1.2);
             z-index: 20;
         }
 
-        .planet img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            border-radius: 50%;
+        .planet:hover img {
+            box-shadow: 0 0 30px var(--primary-color);
+            border-color: var(--secondary-color);
         }
 
-        .orbit-1 { --duration: 20s; width: 200px; height: 200px; }
-        .orbit-2 { --duration: 25s; width: 280px; height: 280px; }
-        .orbit-3 { --duration: 30s; width: 360px; height: 360px; }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        /* Design Toggle */
-        .design-toggle {
+        .planet-label {
             position: absolute;
-            top: -40px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .toggle-btn {
-            padding: 8px 16px;
-            background: var(--card-bg);
-            border: 1px solid var(--primary-color);
-            color: var(--text-primary);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.9rem;
-        }
-
-        .toggle-btn:hover {
-            background: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .toggle-btn.active {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .design-container {
-            position: relative;
-            width: 100%;
-            min-height: 400px;
-        }
-
-        .design {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            white-space: nowrap;
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: var(--transition);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 20px;
+            border: 1px solid var(--primary-color);
+            pointer-events: none;
         }
 
-        .design.active {
+        .planet:hover .planet-label {
             opacity: 1;
-            visibility: visible;
+            bottom: -30px;
+        }
+
+        .orbit-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: particleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-10px); opacity: 1; }
         }
 
         /* Footer */
@@ -1232,14 +1157,17 @@
                 left: 20px;
             }
 
+            .solar-system {
+                height: 400px;
+            }
+
+            .sun { width: 80px; height: 80px; }
+            .sun img { width: 60px; height: 60px; }
+            .planet { width: 50px; height: 50px; }
+            .planet img { width: 35px; height: 35px; }
             .orbit-1 { width: 150px; height: 150px; }
             .orbit-2 { width: 220px; height: 220px; }
             .orbit-3 { width: 290px; height: 290px; }
-            
-            .planet { width: 45px; height: 45px; }
-            .planet img { width: 30px; height: 30px; }
-            .sun { width: 90px; height: 90px; }
-            .sun img { width: 45px; height: 45px; }
         }
 
         @media (max-width: 480px) {
@@ -1524,114 +1452,41 @@
         </div>
     </section>
 
-    <!-- Partners Section -->
+    <!-- Partners Section - Enhanced Solar System -->
     <section class="partners-section" data-aos="fade-up">
         <div class="container">
             <h2 class="section-title">Our Trusted Partners</h2>
-            <div class="partners-container">
-                <div class="design-toggle">
-                    <button class="toggle-btn active" onclick="switchDesign(1)">Scrolling Cards</button>
-                    <button class="toggle-btn" onclick="switchDesign(2)">Solar System</button>
+            <div class="solar-system" id="solarSystem">
+                <!-- Sun (Fortishield-Matrix Logo) -->
+                <div class="sun" id="sun">
+                    <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix">
                 </div>
-                <div class="design-container">
-                    <!-- Design 1: Infinite Scrolling Cards -->
-                    <div class="design active" id="design1">
-                        <div class="scrolling-partners">
-                            <div class="scrolling-track">
-                                <!-- First set of partners -->
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/00d4ff/000000?text=MS" alt="Microsoft">
-                                    <p>Microsoft</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/ff6b35/000000?text=AWS" alt="AWS">
-                                    <p>Amazon Web Services</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/7c3aed/000000?text=GCP" alt="Google Cloud">
-                                    <p>Google Cloud</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/00d4ff/000000?text=IBM" alt="IBM">
-                                    <p>IBM</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/ff6b35/000000?text=ORCL" alt="Oracle">
-                                    <p>Oracle</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/7c3aed/000000?text=CRM" alt="Salesforce">
-                                    <p>Salesforce</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/00d4ff/000000?text=CSCO" alt="Cisco">
-                                    <p>Cisco Systems</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/ff6b35/000000?text=DELL" alt="Dell">
-                                    <p>Dell Technologies</p>
-                                </div>
-                                <!-- Duplicate set for seamless loop -->
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/00d4ff/000000?text=MS" alt="Microsoft">
-                                    <p>Microsoft</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/ff6b35/000000?text=AWS" alt="AWS">
-                                    <p>Amazon Web Services</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/7c3aed/000000?text=GCP" alt="Google Cloud">
-                                    <p>Google Cloud</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/00d4ff/000000?text=IBM" alt="IBM">
-                                    <p>IBM</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/ff6b35/000000?text=ORCL" alt="Oracle">
-                                    <p>Oracle</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/7c3aed/000000?text=CRM" alt="Salesforce">
-                                    <p>Salesforce</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/00d4ff/000000?text=CSCO" alt="Cisco">
-                                    <p>Cisco Systems</p>
-                                </div>
-                                <div class="partner-card">
-                                    <img src="https://via.placeholder.com/80x80/ff6b35/000000?text=DELL" alt="Dell">
-                                    <p>Dell Technologies</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Design 2: Solar System -->
-                    <div class="design" id="design2">
-                        <div class="solar-system">
-                            <div class="sun">
-                                <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix">
-                            </div>
-                            <div class="orbit orbit-1">
-                                <div class="planet">
-                                    <img src="https://via.placeholder.com/40x40/00d4ff/000000?text=MS" alt="Microsoft">
-                                </div>
-                            </div>
-                            <div class="orbit orbit-2">
-                                <div class="planet">
-                                    <img src="https://via.placeholder.com/40x40/ff6b35/000000?text=AWS" alt="AWS">
-                                </div>
-                            </div>
-                            <div class="orbit orbit-3">
-                                <div class="planet">
-                                    <img src="https://via.placeholder.com/40x40/7c3aed/000000?text=GCP" alt="Google Cloud">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                
+                <!-- Orbit 1 -->
+                <div class="orbit-path orbit-1" style="position: absolute;"></div>
+                <div class="planet" id="planet1" style="transform: translate(-50%, -50%) rotate(0deg) translateX(100px) rotate(0deg);">
+                    <img src="https://via.placeholder.com/50x50/00d4ff/000000?text=MS" alt="Microsoft">
+                    <span class="planet-label">Microsoft</span>
                 </div>
+                
+                <!-- Orbit 2 -->
+                <div class="orbit-path orbit-2" style="position: absolute;"></div>
+                <div class="planet" id="planet2" style="transform: translate(-50%, -50%) rotate(45deg) translateX(150px) rotate(-45deg);">
+                    <img src="https://via.placeholder.com/50x50/ff6b35/000000?text=AWS" alt="AWS">
+                    <span class="planet-label">Amazon Web Services</span>
+                </div>
+                
+                <!-- Orbit 3 -->
+                <div class="orbit-path orbit-3" style="position: absolute;"></div>
+                <div class="planet" id="planet3" style="transform: translate(-50%, -50%) rotate(90deg) translateX(200px) rotate(-90deg);">
+                    <img src="https://via.placeholder.com/50x50/7c3aed/000000?text=GCP" alt="Google Cloud">
+                    <span class="planet-label">Google Cloud</span>
+                </div>
+                
+                <!-- Additional decorative particles -->
+                <div class="orbit-particle" style="top: 40%; left: 30%;"></div>
+                <div class="orbit-particle" style="top: 60%; left: 70%;"></div>
+                <div class="orbit-particle" style="top: 30%; left: 80%;"></div>
             </div>
         </div>
     </section>
@@ -1840,6 +1695,92 @@
             }
         }
 
+        // Solar System Drag and Rotate
+        class SolarSystem {
+            constructor() {
+                this.container = document.getElementById('solarSystem');
+                if (!this.container) return;
+                
+                this.planets = [
+                    document.getElementById('planet1'),
+                    document.getElementById('planet2'),
+                    document.getElementById('planet3')
+                ];
+                
+                this.rotation = { x: 0, y: 0 };
+                this.targetRotation = { x: 0, y: 0 };
+                this.isDragging = false;
+                this.lastMouse = { x: 0, y: 0 };
+                this.radius = [100, 150, 200];
+                this.angles = [0, 45, 90];
+                
+                this.init();
+            }
+            
+            init() {
+                // Start automatic rotation
+                this.autoRotate();
+                
+                // Add drag functionality
+                this.container.addEventListener('mousedown', (e) => this.startDrag(e));
+                window.addEventListener('mousemove', (e) => this.drag(e));
+                window.addEventListener('mouseup', () => this.stopDrag());
+                
+                // Touch support
+                this.container.addEventListener('touchstart', (e) => this.startDrag(e.touches[0]));
+                window.addEventListener('touchmove', (e) => this.drag(e.touches[0]));
+                window.addEventListener('touchend', () => this.stopDrag());
+            }
+            
+            startDrag(e) {
+                this.isDragging = true;
+                this.lastMouse.x = e.clientX;
+                this.lastMouse.y = e.clientY;
+                this.container.style.cursor = 'grabbing';
+            }
+            
+            drag(e) {
+                if (!this.isDragging) return;
+                
+                const dx = e.clientX - this.lastMouse.x;
+                const dy = e.clientY - this.lastMouse.y;
+                
+                this.targetRotation.y += dx * 0.01;
+                this.targetRotation.x += dy * 0.01;
+                
+                this.lastMouse.x = e.clientX;
+                this.lastMouse.y = e.clientY;
+            }
+            
+            stopDrag() {
+                this.isDragging = false;
+                this.container.style.cursor = 'grab';
+            }
+            
+            autoRotate() {
+                if (!this.isDragging) {
+                    this.targetRotation.y += 0.005;
+                }
+                
+                // Smooth interpolation
+                this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.1;
+                this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.1;
+                
+                // Update planet positions
+                this.planets.forEach((planet, index) => {
+                    if (!planet) return;
+                    
+                    const angle = this.angles[index] + this.rotation.y;
+                    const x = Math.cos(angle) * this.radius[index];
+                    const y = Math.sin(angle) * this.radius[index];
+                    
+                    planet.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+                });
+                
+                requestAnimationFrame(() => this.autoRotate());
+            }
+        }
+
         // Theme Toggle Functionality
         const themeToggler = document.getElementById('themeToggler');
         const themeToggleBtn = document.querySelector('.theme-toggle-btn');
@@ -1927,32 +1868,6 @@
             }
         });
 
-        // Design toggle for partners section
-        function switchDesign(designNumber) {
-            const designs = document.querySelectorAll('.design');
-            const toggleBtns = document.querySelectorAll('.toggle-btn');
-            
-            designs.forEach(design => design.classList.remove('active'));
-            toggleBtns.forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(`design${designNumber}`).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        // Auto-switch designs every 10 seconds
-        let currentDesign = 1;
-        setInterval(() => {
-            currentDesign = currentDesign === 1 ? 2 : 1;
-            const designs = document.querySelectorAll('.design');
-            const toggleBtns = document.querySelectorAll('.toggle-btn');
-            
-            designs.forEach(design => design.classList.remove('active'));
-            toggleBtns.forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(`design${currentDesign}`).classList.add('active');
-            toggleBtns[currentDesign - 1].classList.add('active');
-        }, 10000);
-
         window.addEventListener('load', function() {
             const preloader = document.getElementById('preloader');
             setTimeout(() => {
@@ -1964,6 +1879,9 @@
 
             // Initialize particle system
             new ParticleSystem();
+            
+            // Initialize solar system
+            new SolarSystem();
         });
 
         // Initialize AOS
