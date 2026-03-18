@@ -15,6 +15,13 @@
             box-sizing: border-box;
         }
 
+        /* FIX: Prevent horizontal overflow */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+
         /* CSS Variables with Theme Support - UPDATED for better contrast */
         :root {
             --primary-color: #00d4ff;
@@ -92,6 +99,7 @@
             overflow-x: hidden;
             position: relative;
             min-height: 100vh;
+            width: 100%;
         }
 
         /* Particle Canvas Container */
@@ -130,6 +138,8 @@
         .theme-toggler {
             position: relative;
             z-index: 2;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         .container {
@@ -138,6 +148,13 @@
             padding: 0 20px;
             position: relative;
             z-index: 2;
+            width: 100%;
+        }
+
+        /* FIX: Ensure images don't overflow */
+        img {
+            max-width: 100%;
+            height: auto;
         }
 
         /* Floating theme toggler */
@@ -266,6 +283,7 @@
             margin-top: 70px;
             overflow: hidden;
             background: transparent;
+            width: 100%;
         }
 
         .page-header-video {
@@ -313,6 +331,7 @@
             color: var(--text-secondary);
             max-width: 800px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
         /* Preloader */
@@ -389,11 +408,13 @@
             justify-content: space-between;
             align-items: center;
             height: 70px;
+            width: 100%;
         }
 
         .nav-logo img {
             height: 66px;
             filter: brightness(1.2);
+            max-width: 100%;
         }
 
         .nav-menu {
@@ -474,12 +495,12 @@
             transform: rotate(180deg);
         }
 
-        /* Main Dropdown Menu - Card Design */
+        /* Main Dropdown Menu - Card Design - FIXED positioning */
         .dropdown-menu {
             position: absolute;
             top: calc(100% + 15px);
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
+            left: 0;
+            transform: translateY(10px);
             min-width: 280px;
             background: var(--dropdown-bg);
             border-radius: 16px;
@@ -503,7 +524,7 @@
         .dropdown:hover .dropdown-menu {
             opacity: 1;
             visibility: visible;
-            transform: translateX(-50%) translateY(0);
+            transform: translateY(0);
         }
 
         /* Dropdown Arrow */
@@ -511,8 +532,8 @@
             content: '';
             position: absolute;
             top: -6px;
-            left: 50%;
-            transform: translateX(-50%) rotate(45deg);
+            left: 20px;
+            transform: rotate(45deg);
             width: 12px;
             height: 12px;
             background: var(--dropdown-bg);
@@ -539,6 +560,7 @@
             font-weight: 500;
             border-bottom: 1px solid var(--dropdown-border);
             position: relative;
+            cursor: pointer;
         }
 
         .dropdown-menu li:last-child .dropdown-link {
@@ -648,6 +670,7 @@
             border: 1px solid var(--primary-color);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
+            width: 100%;
         }
 
         .quick-nav h3 {
@@ -699,6 +722,7 @@
         .services-overview {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .overview-content {
@@ -719,6 +743,7 @@
             line-height: 1.6;
             max-width: 800px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
         .overview-stats {
@@ -727,6 +752,7 @@
             gap: 40px;
             max-width: 1000px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
         .stat-item {
@@ -765,6 +791,7 @@
         .main-services {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .section-title {
@@ -776,12 +803,14 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            padding: 0 15px;
         }
 
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 40px;
+            padding: 0 15px;
         }
 
         .service-card {
@@ -897,6 +926,7 @@
         .service-process {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .process-steps { 
@@ -905,6 +935,7 @@
             gap: 40px;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
         .process-step {
@@ -941,6 +972,7 @@
         .why-choose-us {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .why-choose-content {
@@ -948,6 +980,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 60px;
             align-items: center;
+            padding: 0 15px;
         }
 
         .why-choose-text h2 {
@@ -995,12 +1028,14 @@
         .industries-section {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .industries-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
+            padding: 0 15px;
         }
 
         .industry-item {
@@ -1051,6 +1086,7 @@
             padding: 100px 0;
             background: transparent;
             text-align: center;
+            width: 100%;
         }
 
         .services-cta h2 {
@@ -1067,6 +1103,7 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            padding: 0 15px;
         }
 
         .cta-buttons {
@@ -1074,6 +1111,7 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
+            padding: 0 15px;
         }
 
         /* Footer */
@@ -1081,6 +1119,7 @@
             background: transparent;
             padding: 60px 0 20px;
             border-top: 1px solid rgba(0, 212, 255, 0.1);
+            width: 100%;
         }
 
         [data-theme="bw"] .footer {
@@ -1092,6 +1131,7 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
             margin-bottom: 40px;
+            padding: 0 15px;
         }
 
         .footer-section h3 {
@@ -1225,6 +1265,12 @@
         }
 
         /* ===== PROFESSIONAL MOBILE RESPONSIVENESS ===== */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 15px;
+            }
+        }
+
         @media (max-width: 992px) {
             .dropdown-menu {
                 position: static;
@@ -1261,6 +1307,7 @@
                 padding: 0;
                 transition: max-height 0.4s ease, padding 0.3s ease;
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+                left: 0;
             }
 
             .submenu::before {
@@ -1373,6 +1420,7 @@
             .services-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
+                padding: 0 15px;
             }
 
             .service-actions {
@@ -1395,6 +1443,23 @@
                 gap: 10px;
                 width: 100%;
             }
+            
+            .overview-stats {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .industries-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1408,6 +1473,29 @@
 
             .stat-number {
                 font-size: 2rem;
+            }
+            
+            .service-card {
+                padding: 25px 20px;
+            }
+            
+            .service-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .service-card h3 {
+                font-size: 1.2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons .btn {
+                width: 100%;
             }
         }
 
