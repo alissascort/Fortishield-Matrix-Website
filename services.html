@@ -15,7 +15,13 @@
             box-sizing: border-box;
         }
 
-        /* CSS Variables with Theme Support - UPDATED for better contrast */
+        /* FIX 1: html overflow — prevents mobile horizontal scroll/layout break */
+        html {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+
+        /* CSS Variables with Theme Support */
         :root {
             --primary-color: #00d4ff;
             --secondary-color: #ff6b35;
@@ -30,21 +36,16 @@
             --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --theme-toggler-bg: rgba(10, 10, 10, 0.9);
-            
-            /* Dropdown specific colors */
             --dropdown-bg: #1e1e1e;
             --dropdown-hover: #2a2a2a;
             --dropdown-border: #333333;
             --dropdown-text: #ffffff;
             --dropdown-text-secondary: #cccccc;
-            
-            /* Particle colors */
             --particle-color: #00d4ff;
             --particle-connection: rgba(0, 212, 255, 0.2);
             --mouse-connection: rgba(124, 58, 237, 0.3);
         }
 
-        /* Black and White Theme Variables - UPDATED for better contrast */
         [data-theme="bw"] {
             --primary-color: #1a73e8;
             --secondary-color: #555555;
@@ -58,21 +59,16 @@
             --gradient-secondary: linear-gradient(135deg, #6c757d, #343a40);
             --shadow-glow: 0 0 20px rgba(26, 115, 232, 0.3);
             --theme-toggler-bg: rgba(255, 255, 255, 0.95);
-            
-            /* Dropdown specific colors - LIGHT THEME OPTIMIZED */
             --dropdown-bg: #ffffff;
             --dropdown-hover: #f1f3f4;
             --dropdown-border: #dadce0;
             --dropdown-text: #202124;
             --dropdown-text-secondary: #5f6368;
-            
-            /* Particle colors for white theme */
             --particle-color: #1a73e8;
             --particle-connection: rgba(26, 115, 232, 0.2);
             --mouse-connection: rgba(13, 71, 161, 0.3);
         }
 
-        /* Smooth theme transitions */
         body, .navbar, .page-header, .services-overview, .main-services,
         .service-process, .why-choose-us, .industries-section, .services-cta,
         .footer, .service-card, .stat-item, .process-step, .industry-item,
@@ -94,7 +90,6 @@
             min-height: 100vh;
         }
 
-        /* Particle Canvas Container */
         #particle-container {
             position: fixed;
             top: 0;
@@ -115,7 +110,6 @@
             pointer-events: none;
         }
 
-        /* Ensure content is above particles */
         .navbar,
         .page-header,
         .services-overview,
@@ -140,7 +134,6 @@
             z-index: 2;
         }
 
-        /* Floating theme toggler */
         .theme-toggler {
             position: fixed;
             bottom: 100px;
@@ -197,11 +190,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(
-                transparent,
-                var(--primary-color),
-                transparent 30%
-            );
+            background: conic-gradient(transparent, var(--primary-color), transparent 30%);
             animation: rotate 4s linear infinite;
             z-index: -1;
         }
@@ -233,7 +222,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Theme status indicator */
         .theme-status {
             position: absolute;
             top: -40px;
@@ -258,7 +246,6 @@
             transform: translateY(0);
         }
 
-        /* Updated Page Header with Video Background */
         .page-header {
             position: relative;
             padding: 120px 0 100px;
@@ -315,7 +302,6 @@
             margin: 0 auto;
         }
 
-        /* Preloader */
         #preloader {
             position: fixed;
             top: 0;
@@ -330,9 +316,7 @@
             transition: opacity 0.5s ease;
         }
 
-        .loader {
-            text-align: center;
-        }
+        .loader { text-align: center; }
 
         .cyber-loader {
             width: 60px;
@@ -350,12 +334,6 @@
             font-weight: 600;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Navigation */
         .navbar {
             position: fixed;
             top: 0;
@@ -384,7 +362,7 @@
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px; 
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -402,9 +380,7 @@
             gap: 30px;
         }
 
-        .nav-item {
-            position: relative;
-        }
+        .nav-item { position: relative; }
 
         .nav-link {
             color: var(--text-secondary);
@@ -419,10 +395,7 @@
             padding: 8px 0;
         }
 
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--primary-color);
-        }
+        .nav-link:hover, .nav-link.active { color: var(--primary-color); }
 
         .nav-link::after {
             content: '';
@@ -435,10 +408,7 @@
             transition: width 0.3s ease;
         }
 
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
 
         .nav-toggle {
             display: none;
@@ -454,10 +424,7 @@
             transition: var(--transition);
         }
 
-        /* ===== PROFESSIONAL DROPDOWN DESIGN ===== */
-        .dropdown {
-            position: relative;
-        }
+        .dropdown { position: relative; }
 
         .dropdown-toggle {
             display: flex;
@@ -470,11 +437,8 @@
             transition: transform 0.3s ease;
         }
 
-        .dropdown:hover .dropdown-toggle i {
-            transform: rotate(180deg);
-        }
+        .dropdown:hover .dropdown-toggle i { transform: rotate(180deg); }
 
-        /* Main Dropdown Menu - Card Design */
         .dropdown-menu {
             position: absolute;
             top: calc(100% + 15px);
@@ -487,16 +451,14 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4),
-                        0 0 0 1px var(--primary-color);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--primary-color);
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 1000;
             list-style: none;
         }
 
         [data-theme="bw"] .dropdown-menu {
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2),
-                        0 0 0 1px var(--primary-color);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--primary-color);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
@@ -506,7 +468,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Dropdown Arrow */
         .dropdown-menu::before {
             content: '';
             position: absolute;
@@ -521,7 +482,6 @@
             border-radius: 3px 0 0 0;
         }
 
-        /* Dropdown Items */
         .dropdown-menu li {
             list-style: none;
             width: 100%;
@@ -541,9 +501,7 @@
             position: relative;
         }
 
-        .dropdown-menu li:last-child .dropdown-link {
-            border-bottom: none;
-        }
+        .dropdown-menu li:last-child .dropdown-link { border-bottom: none; }
 
         .dropdown-link i {
             font-size: 12px;
@@ -556,14 +514,9 @@
             padding-left: 25px;
         }
 
-        .dropdown-link:hover i {
-            transform: translateX(5px);
-        }
+        .dropdown-link:hover i { transform: translateX(5px); }
 
-        /* Submenu Styles - Professional Nested Menu */
-        .dropdown-submenu {
-            position: relative;
-        }
+        .dropdown-submenu { position: relative; }
 
         .submenu {
             position: absolute;
@@ -577,15 +530,13 @@
             visibility: hidden;
             transform: translateX(10px);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4),
-                        0 0 0 1px var(--primary-color);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--primary-color);
             border: 1px solid rgba(255, 255, 255, 0.1);
             list-style: none;
         }
 
         [data-theme="bw"] .submenu {
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2),
-                        0 0 0 1px var(--primary-color);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--primary-color);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
@@ -595,7 +546,6 @@
             transform: translateX(0);
         }
 
-        /* Submenu Arrow */
         .submenu::before {
             content: '';
             position: absolute;
@@ -620,9 +570,7 @@
             border-bottom: 1px solid var(--dropdown-border);
         }
 
-        .submenu li:last-child a {
-            border-bottom: none;
-        }
+        .submenu li:last-child a { border-bottom: none; }
 
         .submenu li a:hover {
             background: var(--dropdown-hover);
@@ -630,7 +578,6 @@
             color: var(--primary-color);
         }
 
-        /* Quick Navigation Styles (for service detail pages) */
         .quick-nav-section {
             padding: 20px 0;
             background: transparent;
@@ -687,15 +634,9 @@
             transition: width 0.3s ease;
         }
 
-        .quick-nav-links li a:hover {
-            color: var(--primary-color);
-        }
+        .quick-nav-links li a:hover { color: var(--primary-color); }
+        .quick-nav-links li a:hover::after { width: 100%; }
 
-        .quick-nav-links li a:hover::after {
-            width: 100%;
-        }
-
-        /* Services Overview - Rest of your existing styles remain the same */
         .services-overview {
             padding: 100px 0;
             background: transparent;
@@ -739,9 +680,7 @@
             backdrop-filter: blur(10px);
         }
 
-        [data-theme="bw"] .stat-item {
-            border: 1px solid rgba(26, 115, 232, 0.1);
-        }
+        [data-theme="bw"] .stat-item { border: 1px solid rgba(26, 115, 232, 0.1); }
 
         .stat-item:hover {
             transform: translateY(-5px);
@@ -757,10 +696,7 @@
             margin-bottom: 10px;
         }
 
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
+        .stat-label { color: var(--text-secondary); font-size: 0.9rem; }
 
         .main-services {
             padding: 100px 0;
@@ -795,9 +731,7 @@
             backdrop-filter: blur(10px);
         }
 
-        [data-theme="bw"] .service-card {
-            border: 1px solid rgba(26, 115, 232, 0.1);
-        }
+        [data-theme="bw"] .service-card { border: 1px solid rgba(26, 115, 232, 0.1); }
 
         .service-card:hover {
             transform: translateY(-10px);
@@ -899,7 +833,7 @@
             background: transparent;
         }
 
-        .process-steps { 
+        .process-steps {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
@@ -988,9 +922,7 @@
             border: 1px solid rgba(0, 212, 255, 0.1);
         }
 
-        [data-theme="bw"] .why-choose-image img {
-            border: 1px solid rgba(26, 115, 232, 0.1);
-        }
+        [data-theme="bw"] .why-choose-image img { border: 1px solid rgba(26, 115, 232, 0.1); }
 
         .industries-section {
             padding: 100px 0;
@@ -1013,9 +945,7 @@
             backdrop-filter: blur(10px);
         }
 
-        [data-theme="bw"] .industry-item {
-            border: 1px solid rgba(26, 115, 232, 0.1);
-        }
+        [data-theme="bw"] .industry-item { border: 1px solid rgba(26, 115, 232, 0.1); }
 
         .industry-item:hover {
             transform: translateY(-5px);
@@ -1076,16 +1006,13 @@
             flex-wrap: wrap;
         }
 
-        /* Footer */
         .footer {
             background: transparent;
             padding: 60px 0 20px;
             border-top: 1px solid rgba(0, 212, 255, 0.1);
         }
 
-        [data-theme="bw"] .footer {
-            border-top: 1px solid rgba(26, 115, 232, 0.1);
-        }
+        [data-theme="bw"] .footer { border-top: 1px solid rgba(26, 115, 232, 0.1); }
 
         .footer-content {
             display: grid;
@@ -1100,18 +1027,11 @@
             font-size: 1.2rem;
         }
 
-        .footer-section p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
+        .footer-section p { color: var(--text-secondary); line-height: 1.6; }
 
-        .footer-section ul {
-            list-style: none;
-        }
+        .footer-section ul { list-style: none; }
 
-        .footer-section ul li {
-            margin-bottom: 10px;
-        }
+        .footer-section ul li { margin-bottom: 10px; }
 
         .footer-section ul li a {
             color: var(--text-secondary);
@@ -1119,9 +1039,7 @@
             transition: var(--transition);
         }
 
-        .footer-section ul li a:hover {
-            color: var(--primary-color);
-        }
+        .footer-section ul li a:hover { color: var(--primary-color); }
 
         .footer-logo {
             height: 40px;
@@ -1129,10 +1047,7 @@
             filter: brightness(1.2);
         }
 
-        .social-icons {
-            display: flex;
-            gap: 15px;
-        }
+        .social-icons { display: flex; gap: 15px; }
 
         .social-icon {
             display: flex;
@@ -1160,11 +1075,8 @@
             color: var(--text-secondary);
         }
 
-        [data-theme="bw"] .footer-bottom {
-            border-top: 1px solid rgba(26, 115, 232, 0.1);
-        }
+        [data-theme="bw"] .footer-bottom { border-top: 1px solid rgba(26, 115, 232, 0.1); }
 
-        /* WhatsApp Float */
         .whatsapp-float {
             position: fixed;
             bottom: 40px;
@@ -1195,7 +1107,6 @@
             60% { transform: translateY(-5px); }
         }
 
-        /* Back to Top */
         .back-to-top {
             position: fixed;
             bottom: 40px;
@@ -1240,9 +1151,7 @@
                 left: 0;
             }
 
-            .dropdown-menu::before {
-                display: none;
-            }
+            .dropdown-menu::before { display: none; }
 
             .dropdown.active .dropdown-menu {
                 max-height: 800px;
@@ -1263,35 +1172,25 @@
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
             }
 
-            .submenu::before {
-                display: none;
-            }
+            .submenu::before { display: none; }
 
             .dropdown-submenu.active .submenu {
                 max-height: 400px;
                 padding: 10px 0;
             }
 
-            .dropdown-toggle i {
-                margin-left: auto;
-            }
+            .dropdown-toggle i { margin-left: auto; }
 
-            .dropdown-link {
-                padding: 14px 20px;
-            }
+            .dropdown-link { padding: 14px 20px; }
 
-            .nav-menu {
-                gap: 0;
-            }
+            .nav-menu { gap: 0; }
 
             .nav-item {
                 width: 100%;
                 border-bottom: 1px solid rgba(0, 212, 255, 0.1);
             }
 
-            .nav-link {
-                padding: 15px 0;
-            }
+            .nav-link { padding: 15px 0; }
         }
 
         @media (max-width: 768px) {
@@ -1312,78 +1211,122 @@
                 z-index: 999;
             }
 
-            .nav-menu.active {
-                left: 0;
-            }
+            .nav-menu.active { left: 0; }
 
-            .nav-toggle {
-                display: flex;
-            }
+            .nav-toggle { display: flex; }
 
-            .nav-toggle.active .bar:nth-child(2) {
-                opacity: 0;
-            }
+            .nav-toggle.active .bar:nth-child(2) { opacity: 0; }
+            .nav-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .nav-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-            .nav-toggle.active .bar:nth-child(1) {
-                transform: translateY(8px) rotate(45deg);
-            }
-
-            .nav-toggle.active .bar:nth-child(3) {
-                transform: translateY(-8px) rotate(-45deg);
-            }
-
+            /* FIX: Dropdown text visibility on mobile — explicit color enforcement */
             .dropdown-menu {
-                background: rgba(0, 0, 0, 0.2);
+                background: rgba(0, 0, 0, 0.15);
                 border: 1px solid var(--primary-color);
             }
 
-            [data-theme="bw"] .dropdown-menu {
-                background: #f1f3f4;
+            [data-theme="bw"] .dropdown-menu { background: #f1f3f4; }
+
+            /* Force all dropdown link text to be visible on mobile */
+            .dropdown-menu .dropdown-link,
+            .dropdown-menu span.dropdown-link,
+            .dropdown-menu a.dropdown-link {
+                color: var(--dropdown-text) !important;
+                display: flex !important;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 14px 20px !important;
+                font-size: 15px;
+                font-weight: 500;
             }
 
+            /* Force submenu item text visible on mobile */
             .submenu {
-                background: rgba(0, 0, 0, 0.3);
+                background: rgba(0, 0, 0, 0.25);
             }
 
-            [data-theme="bw"] .submenu {
-                background: #e8eaed;
+            [data-theme="bw"] .submenu { background: #e8eaed; }
+
+            .submenu li a {
+                color: var(--dropdown-text) !important;
+                display: block !important;
+                padding: 10px 20px 10px 30px !important;
+                font-size: 14px;
+                text-decoration: none;
+                border-bottom: 1px solid var(--dropdown-border);
             }
 
-            .theme-toggler {
-                bottom: 80px;
-                right: 15px;
+            .submenu li:last-child a { border-bottom: none; }
+
+            /* FIX: Reduce section padding — eliminates large blank gaps on mobile */
+            .services-overview,
+            .main-services,
+            .service-process,
+            .why-choose-us,
+            .industries-section,
+            .services-cta {
+                padding: 60px 0;
             }
 
-            .theme-status {
-                display: none;
+            /* FIX: Section heading font sizes for mobile */
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
             }
 
+            .overview-content h2 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+
+            .overview-content p { font-size: 1rem; }
+
+            .why-choose-text h2 { font-size: 1.8rem; }
+            .why-choose-text p { font-size: 1rem; }
+
+            .services-cta h2 { font-size: 1.8rem; }
+            .services-cta p { font-size: 1rem; }
+
+            /* FIX: Page header */
             .page-header {
                 padding: 100px 0 60px;
             }
 
-            .page-header h1 {
-                font-size: 2rem;
+            .page-header h1 { font-size: 2rem; }
+            .page-header p { font-size: 1rem; }
+
+            /* FIX: Stats grid — 2 columns on mobile */
+            .overview-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
             }
 
-            .page-header p {
-                font-size: 1rem;
-            }
+            .stat-item { padding: 20px 15px; }
 
+            /* FIX: Services grid single column */
             .services-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
 
-            .service-actions {
-                flex-direction: column;
-            }
+            .service-card { padding: 30px 20px; }
 
+            .service-actions { flex-direction: column; }
+
+            /* FIX: Why choose us — single column */
             .why-choose-content {
                 grid-template-columns: 1fr;
                 gap: 30px;
             }
 
+            /* FIX: Industries grid — single column */
+            .industries-grid { grid-template-columns: 1fr; }
+
+            /* FIX: Process steps gap */
+            .process-steps { gap: 20px; }
+
+            /* FIX: Quick nav */
             .quick-nav {
                 flex-direction: column;
                 align-items: flex-start;
@@ -1395,61 +1338,85 @@
                 gap: 10px;
                 width: 100%;
             }
+
+            /* FIX: Theme toggler */
+            .theme-toggler {
+                bottom: 80px;
+                right: 15px;
+            }
+
+            .theme-status { display: none; }
         }
 
+        /* FIX: Extra small screens (phones < 480px) */
         @media (max-width: 480px) {
-            .section-title {
-                font-size: 1.8rem;
+            /* FIX: Ensure no element causes horizontal overflow */
+            .container {
+                padding: 0 15px;
+                width: 100%;
             }
 
-            .nav-logo img {
-                height: 40px;
+            /* Tighten vertical padding further */
+            .services-overview,
+            .main-services,
+            .service-process,
+            .why-choose-us,
+            .industries-section,
+            .services-cta {
+                padding: 40px 0;
             }
 
-            .stat-number {
-                font-size: 2rem;
+            .page-header {
+                padding: 80px 0 50px;
             }
+
+            .page-header h1 { font-size: 1.6rem; }
+            .page-header p { font-size: 0.9rem; }
+
+            /* Scale down all major headings */
+            .overview-content h2,
+            .section-title,
+            .why-choose-text h2,
+            .services-cta h2 {
+                font-size: 1.5rem;
+            }
+
+            /* Stats go 1 column on tiny screens */
+            .overview-stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat-number { font-size: 1.8rem; }
+
+            .nav-logo img { height: 40px; }
+
+            .footer-content { gap: 25px; }
+
+            .footer-section h3 { font-size: 1rem; }
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--dark-bg);
-        }
-
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
         ::-webkit-scrollbar-thumb {
             background: var(--primary-color);
             border-radius: 4px;
         }
+        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-color); }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-color);
-        }
-
-        /* Selection */
         ::selection {
             background: var(--primary-color);
             color: white;
         }
 
-        /* Focus styles for accessibility */
-        button:focus,
-        a:focus,
-        input:focus,
-        textarea:focus {
+        button:focus, a:focus, input:focus, textarea:focus {
             outline: 2px solid var(--primary-color);
             outline-offset: 2px;
         }
 
-        /* Ripple effect for buttons */
-        .btn {
-            position: relative;
-            overflow: hidden;
-        }
-        
+        .btn { position: relative; overflow: hidden; }
+
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -1458,15 +1425,11 @@
             animation: ripple-animation 0.6s linear;
             pointer-events: none;
         }
-        
+
         @keyframes ripple-animation {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
+            to { transform: scale(4); opacity: 0; }
         }
 
-        /* Error styles for forms */
         .error {
             border-color: #ff6b35 !important;
             box-shadow: 0 0 5px rgba(255, 107, 53, 0.3) !important;
@@ -1506,7 +1469,6 @@
                 <li class="nav-item dropdown">
                     <a href="services.html" class="nav-link active dropdown-toggle">Services <i class="fas fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
-                        <!-- System Development with Submenu and Chevron -->
                         <li class="dropdown-submenu">
                             <span class="dropdown-link">System Development <i class="fas fa-chevron-right"></i></span>
                             <ul class="submenu">
@@ -1516,8 +1478,6 @@
                                 <li><a href="service-api-development.html">API Development</a></li>
                             </ul>
                         </li>
-                        
-                        <!-- Server Design with Submenu and Chevron -->
                         <li class="dropdown-submenu">
                             <span class="dropdown-link">Server Design <i class="fas fa-chevron-right"></i></span>
                             <ul class="submenu">
@@ -1527,8 +1487,6 @@
                                 <li><a href="service-performance-optimization.html">Performance Optimization</a></li>
                             </ul>
                         </li>
-                        
-                        <!-- Cybersecurity with Submenu and Chevron -->
                         <li class="dropdown-submenu">
                             <span class="dropdown-link">Cybersecurity <i class="fas fa-chevron-right"></i></span>
                             <ul class="submenu">
@@ -1538,8 +1496,6 @@
                                 <li><a href="service-security-training.html">Security Training</a></li>
                             </ul>
                         </li>
-                        
-                        <!-- Network Design with Submenu and Chevron -->
                         <li class="dropdown-submenu">
                             <span class="dropdown-link">Network Design <i class="fas fa-chevron-right"></i></span>
                             <ul class="submenu">
@@ -1549,11 +1505,7 @@
                                 <li><a href="service-network-monitoring.html">Network Monitoring</a></li>
                             </ul>
                         </li>
-                        
-                        <!-- Cloud Solutions (standalone - no chevron) -->
                         <li><a href="service-cloud-solutions.html" class="dropdown-link">Cloud Solutions</a></li>
-                        
-                        <!-- System Analysis (standalone - no chevron) -->
                         <li><a href="service-system-analysis.html" class="dropdown-link">System Analysis</a></li>
                     </ul>
                 </li>
@@ -1628,14 +1580,11 @@
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Our Core Services</h2>
             <div class="services-grid">
-                <!-- System Development -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="service-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
+                    <div class="service-icon"><i class="fas fa-code"></i></div>
                     <h3>System Development</h3>
                     <p>Custom software solutions tailored to your business needs. From web applications to enterprise systems, we build scalable and robust solutions.</p>
-                    <ul class="service-features">  
+                    <ul class="service-features">
                         <li>Web Applications</li>
                         <li>Enterprise Software</li>
                         <li>Mobile Applications</li>
@@ -1647,11 +1596,8 @@
                     </div>
                 </div>
 
-                <!-- Server Design -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="service-icon">
-                        <i class="fas fa-server"></i>
-                    </div>
+                    <div class="service-icon"><i class="fas fa-server"></i></div>
                     <h3>Server Design & Infrastructure</h3>
                     <p>Robust and scalable server infrastructure solutions designed for optimal performance, reliability, and security.</p>
                     <ul class="service-features">
@@ -1666,11 +1612,8 @@
                     </div>
                 </div>
 
-                <!-- Cybersecurity -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="service-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
+                    <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
                     <h3>Cybersecurity Solutions</h3>
                     <p>Comprehensive security solutions to protect your digital assets from evolving cyber threats and vulnerabilities.</p>
                     <ul class="service-features">
@@ -1685,11 +1628,8 @@
                     </div>
                 </div>
 
-                <!-- Network Design -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="service-icon">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
+                    <div class="service-icon"><i class="fas fa-network-wired"></i></div>
                     <h3>Network Design & Architecture</h3>
                     <p>Efficient and secure network architecture planning to ensure optimal connectivity and performance across your organization.</p>
                     <ul class="service-features">
@@ -1704,11 +1644,8 @@
                     </div>
                 </div>
 
-                <!-- Cloud Solutions -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="500">
-                    <div class="service-icon">
-                        <i class="fas fa-cloud"></i>
-                    </div>
+                    <div class="service-icon"><i class="fas fa-cloud"></i></div>
                     <h3>Cloud Solutions & Migration</h3>
                     <p>Transform your business with scalable cloud infrastructure and seamless migration services for enhanced flexibility and cost efficiency.</p>
                     <ul class="service-features">
@@ -1723,11 +1660,8 @@
                     </div>
                 </div>
 
-                <!-- System Analysis -->
                 <div class="service-card" data-aos="fade-up" data-aos-delay="600">
-                    <div class="service-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
+                    <div class="service-icon"><i class="fas fa-chart-line"></i></div>
                     <h3>System Analysis & Consulting</h3>
                     <p>Expert analysis and strategic consulting to optimize your existing systems and plan for future technology needs.</p>
                     <ul class="service-features">
@@ -1829,44 +1763,32 @@
             <h2 class="section-title" data-aos="fade-up">Industries We Serve</h2>
             <div class="industries-grid">
                 <div class="industry-item" data-aos="fade-up" data-aos-delay="100">
-                    <div class="industry-icon">
-                        <i class="fas fa-hospital"></i>
-                    </div>
+                    <div class="industry-icon"><i class="fas fa-hospital"></i></div>
                     <h3>Healthcare</h3>
                     <p>HIPAA-compliant solutions for medical practices, hospitals, and healthcare organizations.</p>
                 </div>
                 <div class="industry-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="industry-icon">
-                        <i class="fas fa-university"></i>
-                    </div>
+                    <div class="industry-icon"><i class="fas fa-university"></i></div>
                     <h3>Financial Services</h3>
                     <p>Secure and compliant technology solutions for banks, credit unions, and financial institutions.</p>
                 </div>
                 <div class="industry-item" data-aos="fade-up" data-aos-delay="300">
-                    <div class="industry-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
+                    <div class="industry-icon"><i class="fas fa-graduation-cap"></i></div>
                     <h3>Education</h3>
                     <p>Modern learning platforms and administrative systems for schools and universities.</p>
                 </div>
                 <div class="industry-item" data-aos="fade-up" data-aos-delay="400">
-                    <div class="industry-icon">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
+                    <div class="industry-icon"><i class="fas fa-shopping-cart"></i></div>
                     <h3>E-commerce</h3>
                     <p>Scalable online platforms and payment solutions for retail and e-commerce businesses.</p>
                 </div>
                 <div class="industry-item" data-aos="fade-up" data-aos-delay="500">
-                    <div class="industry-icon">
-                        <i class="fas fa-industry"></i>
-                    </div>
+                    <div class="industry-icon"><i class="fas fa-industry"></i></div>
                     <h3>Manufacturing</h3>
                     <p>Industrial automation and ERP solutions for manufacturing and production companies.</p>
                 </div>
                 <div class="industry-item" data-aos="fade-up" data-aos-delay="600">
-                    <div class="industry-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
+                    <div class="industry-icon"><i class="fas fa-building"></i></div>
                     <h3>Government</h3>
                     <p>Secure and compliant solutions for government agencies and public sector organizations.</p>
                 </div>
@@ -1928,7 +1850,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Powered by Fortishield-Matrix © 2025</p>
+                <p>Powered by Fortishield-Matrix &copy; 2025</p>
             </div>
         </div>
     </footer>
@@ -1948,7 +1870,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/swiper/8.4.5/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countUp.min.js"></script>
     <script>
-        // Particle System - Enhanced Version
+        // Particle System
         class ParticleSystem {
             constructor() {
                 this.canvas = document.getElementById('particleCanvas');
@@ -1957,7 +1879,6 @@
                 this.mouse = { x: 0, y: 0 };
                 this.animationFrame = null;
                 this.theme = document.documentElement.getAttribute('data-theme') || 'default';
-                
                 this.init();
             }
             
@@ -1976,7 +1897,6 @@
             createParticles() {
                 const particleCount = Math.min(100, Math.floor((this.canvas.width * this.canvas.height) / 15000));
                 this.particles = [];
-                
                 for (let i = 0; i < particleCount; i++) {
                     this.particles.push({
                         x: Math.random() * this.canvas.width,
@@ -1993,12 +1913,10 @@
                     this.resize();
                     this.createParticles();
                 });
-                
                 window.addEventListener('mousemove', (e) => {
                     this.mouse.x = e.clientX;
                     this.mouse.y = e.clientY;
                 });
-                
                 const observer = new MutationObserver((mutations) => {
                     mutations.forEach((mutation) => {
                         if (mutation.attributeName === 'data-theme') {
@@ -2006,7 +1924,6 @@
                         }
                     });
                 });
-                
                 observer.observe(document.documentElement, { attributes: true });
             }
             
@@ -2015,8 +1932,8 @@
             }
             
             getConnectionColor(opacity) {
-                return this.theme === 'bw' 
-                    ? `rgba(26, 115, 232, ${opacity})` 
+                return this.theme === 'bw'
+                    ? `rgba(26, 115, 232, ${opacity})`
                     : `rgba(0, 212, 255, ${opacity})`;
             }
             
@@ -2028,13 +1945,11 @@
             
             animate() {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                
                 const particleColor = this.getParticleColor();
                 
                 this.particles.forEach((particle, i) => {
                     particle.x += particle.vx;
                     particle.y += particle.vy;
-                    
                     if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
                     if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
                     
@@ -2055,7 +1970,6 @@
                         const dx = particle.x - other.x;
                         const dy = particle.y - other.y;
                         const distance = Math.sqrt(dx * dx + dy * dy);
-                        
                         if (distance < 120) {
                             this.ctx.beginPath();
                             this.ctx.moveTo(particle.x, particle.y);
@@ -2067,10 +1981,9 @@
                     });
                     
                     const mouseDist = Math.sqrt(
-                        Math.pow(particle.x - this.mouse.x, 2) + 
+                        Math.pow(particle.x - this.mouse.x, 2) +
                         Math.pow(particle.y - this.mouse.y, 2)
                     );
-                    
                     if (mouseDist < 200) {
                         this.ctx.beginPath();
                         this.ctx.moveTo(particle.x, particle.y);
@@ -2080,7 +1993,6 @@
                         this.ctx.stroke();
                     }
                 });
-                
                 this.animationFrame = requestAnimationFrame(() => this.animate());
             }
         }
@@ -2090,16 +2002,12 @@
             const preloader = document.getElementById('preloader');
             setTimeout(() => {
                 preloader.style.opacity = '0';
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                }, 500);
+                setTimeout(() => { preloader.style.display = 'none'; }, 500);
             }, 1000);
-
-            // Initialize particle system after preloader
             new ParticleSystem();
         });
 
-        // Theme Toggle Functionality
+        // Theme Toggle
         const themeToggler = document.getElementById('themeToggler');
         const themeToggleBtn = document.querySelector('.theme-toggle-btn');
         const themeIcon = document.querySelector('.theme-toggle-btn i');
@@ -2108,46 +2016,32 @@
         function getPreferredTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) return savedTheme;
-            
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                return 'bw';
-            }
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) return 'bw';
             return 'default';
         }
 
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
-            
             if (theme === 'bw') {
                 themeIcon.className = 'fas fa-sun';
                 themeStatus.textContent = 'White Theme';
                 themeToggleBtn.title = 'Switch to Dark Theme';
-                
-                setTimeout(() => {
-                    themeToggler.classList.add('show');
-                }, 300);
             } else {
                 themeIcon.className = 'fas fa-moon';
                 themeStatus.textContent = 'Dark Theme';
                 themeToggleBtn.title = 'Switch to White Theme';
-                
-                setTimeout(() => {
-                    themeToggler.classList.add('show');
-                }, 300);
             }
+            setTimeout(() => { themeToggler.classList.add('show'); }, 300);
         }
 
-        const currentTheme = getPreferredTheme();
-        applyTheme(currentTheme);
+        applyTheme(getPreferredTheme());
 
         themeToggleBtn.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'bw' ? 'default' : 'bw';
-            
             document.body.style.opacity = '0.8';
             themeToggler.style.opacity = '0';
-            
             setTimeout(() => {
                 applyTheme(newTheme);
                 document.body.style.opacity = '1';
@@ -2158,13 +2052,10 @@
         let lastScrollTop = 0;
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
             if (scrollTop > lastScrollTop) {
                 themeToggler.classList.remove('show');
             } else {
-                setTimeout(() => {
-                    themeToggler.classList.add('show');
-                }, 200);
+                setTimeout(() => { themeToggler.classList.add('show'); }, 200);
             }
             lastScrollTop = scrollTop;
         });
@@ -2174,24 +2065,16 @@
             themeToggler.classList.add('show');
             clearTimeout(mouseMoveTimer);
             mouseMoveTimer = setTimeout(() => {
-                if (window.pageYOffset > 100) {
-                    themeToggler.classList.remove('show');
-                }
+                if (window.pageYOffset > 100) themeToggler.classList.remove('show');
             }, 3000);
         });
 
         window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-            if (!localStorage.getItem('theme')) {
-                applyTheme(e.matches ? 'bw' : 'default');
-            }
+            if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'bw' : 'default');
         });
 
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
-        });
+        // AOS
+        AOS.init({ duration: 1000, once: true, offset: 100 });
 
         // Mobile Navigation
         const mobileMenu = document.getElementById('mobile-menu');
@@ -2200,8 +2083,6 @@
         mobileMenu.addEventListener('click', function() {
             mobileMenu.classList.toggle('active');
             navMenu.classList.toggle('active');
-            
-            // Close all dropdowns when closing mobile menu
             if (!navMenu.classList.contains('active')) {
                 document.querySelectorAll('.dropdown.active, .dropdown-submenu.active').forEach(el => {
                     el.classList.remove('active');
@@ -2209,20 +2090,16 @@
             }
         });
 
-        // Close mobile menu when clicking on a link (except dropdown toggles)
         document.querySelectorAll('.nav-link:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.remove('active');
                 navMenu.classList.remove('active');
-                
-                // Close all dropdowns
                 document.querySelectorAll('.dropdown.active, .dropdown-submenu.active').forEach(el => {
                     el.classList.remove('active');
                 });
             });
         });
 
-        // Mobile dropdown toggle - stays open until clicked again
         function setupMobileDropdowns() {
             if (window.innerWidth <= 992) {
                 document.querySelectorAll('.dropdown-toggle, .dropdown-submenu > .dropdown-link').forEach(item => {
@@ -2235,10 +2112,7 @@
         function handleDropdownClick(e) {
             e.preventDefault();
             e.stopPropagation();
-            
             const parent = this.parentElement;
-            
-            // Close other dropdowns at same level
             if (parent.parentElement) {
                 const siblings = parent.parentElement.children;
                 for (let sibling of siblings) {
@@ -2247,15 +2121,11 @@
                     }
                 }
             }
-            
-            // Toggle current dropdown
             parent.classList.toggle('active');
         }
 
-        // Handle window resize
         window.addEventListener('resize', function() {
             setupMobileDropdowns();
-            
             if (window.innerWidth > 992) {
                 document.querySelectorAll('.dropdown.active, .dropdown-submenu.active').forEach(el => {
                     el.classList.remove('active');
@@ -2263,7 +2133,6 @@
             }
         });
 
-        // Initialize mobile dropdowns on load
         document.addEventListener('DOMContentLoaded', setupMobileDropdowns);
 
         // Navbar scroll effect
@@ -2276,34 +2145,24 @@
             }
         });
 
-        // Smooth scrolling for anchor links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
 
         // Animated counters
         function animateCounters() {
             const counters = document.querySelectorAll('.stat-number');
-            const options = {
-                threshold: 0.7
-            };
-
             const observer = new IntersectionObserver(function(entries) {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const counter = entry.target;
                         const targetText = counter.getAttribute('data-count');
                         const target = parseFloat(targetText);
-                        
                         if (!isNaN(target)) {
                             const countUp = new CountUp(counter, target, {
                                 duration: 2,
@@ -2312,27 +2171,19 @@
                                 separator: ',',
                                 suffix: targetText.includes('%') ? '%' : target === 24 ? '/7' : '+'
                             });
-                            
-                            if (!countUp.error) {
-                                countUp.start();
-                            }
+                            if (!countUp.error) countUp.start();
                         }
-                        
                         observer.unobserve(counter);
                     }
                 });
-            }, options);
-
-            counters.forEach(counter => {
-                observer.observe(counter);
-            });
+            }, { threshold: 0.7 });
+            counters.forEach(counter => observer.observe(counter));
         }
 
         document.addEventListener('DOMContentLoaded', animateCounters);
 
-        // Back to top button
+        // Back to top
         const backToTopButton = document.getElementById('backToTop');
-
         window.addEventListener('scroll', function() {
             if (window.pageYOffset > 300) {
                 backToTopButton.classList.add('show');
@@ -2340,56 +2191,28 @@
                 backToTopButton.classList.remove('show');
             }
         });
-
         backToTopButton.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // Button ripple effect
         document.querySelectorAll('.btn').forEach(button => {
             button.addEventListener('click', function(e) {
-                if (this.getAttribute('href').startsWith('http') || this.getAttribute('href').startsWith('#')) {
-                    return;
-                }
-                
+                const href = this.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#')) return;
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
                 ripple.style.width = ripple.style.height = size + 'px';
                 ripple.style.left = x + 'px';
                 ripple.style.top = y + 'px';
                 ripple.classList.add('ripple');
-                
                 this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
+                setTimeout(() => ripple.remove(), 600);
             });
         });
-
-        // Console welcome message
-        console.log(`
-
-███████╗ ██████╗ ██████╗ ████████╗██╗███████╗██╗  ██╗██╗███████╗██╗     ██████╗ 
-██╔════╝██╔═══██╗██╔══██╗╚══██╔══╝██║██╔════╝██║  ██║██║██╔════╝██║     ██╔══██╗
-█████╗  ██║   ██║██████╔╝   ██║   ██║███████╗███████║██║█████╗  ██║     ██║  ██║
-██╔══╝  ██║   ██║██╔══██╗   ██║   ██║╚════██║██╔══██║██║██╔══╝  ██║     ██║  ██║
-██║     ╚██████╔╝██║  ██║   ██║   ██║███████║██║  ██║██║███████╗███████╗██████╔╝
-╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚═════╝ 
-                                                                                  
-%cWelcome to Fortishield-Matrix Services!
-Professional Tech Solutions & Cybersecurity Excellence
-`, 
-        'color: #00d4ff; font-family: monospace;',
-        'color: #00d4ff; font-size: 16px; font-weight: bold;'
-        );
     </script>
 </body>
 </html>
