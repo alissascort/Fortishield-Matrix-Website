@@ -7,12 +7,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
- <style>
+    <style>
         /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        /* FIX: Prevent horizontal overflow and right side gap */
+        html {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100%;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* FIX: Ensure all containers stay within viewport */
+        .container,
+        .services-grid,
+        .overview-stats,
+        .process-steps,
+        .why-choose-content,
+        .industries-grid,
+        .footer-content {
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         /* CSS Variables with Theme Support */
@@ -82,17 +112,6 @@
                         box-shadow 0.5s ease;
         } 
 
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            width: 100%;
-            position: relative;
-            min-height: 100vh;
-        }
-
         /* Particle Canvas Container */
         #particle-container {
             position: fixed;
@@ -129,6 +148,8 @@
         .theme-toggler {
             position: relative;
             z-index: 2;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         .container {
@@ -261,6 +282,7 @@
             margin-top: 70px;
             overflow: hidden;
             background: transparent;
+            width: 100%;
         }
 
         .page-header-video {
@@ -308,6 +330,7 @@
             color: var(--text-secondary);
             max-width: 800px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
         /* Preloader */
@@ -384,11 +407,13 @@
             justify-content: space-between;
             align-items: center;
             height: 70px;
+            width: 100%;
         }
 
         .nav-logo img {
             height: 66px;
             filter: brightness(1.2);
+            max-width: 100%;
         }
 
         .nav-menu {
@@ -656,6 +681,7 @@
         .services-overview {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .overview-content {
@@ -676,6 +702,7 @@
             line-height: 1.6;
             max-width: 800px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
         .overview-stats {
@@ -684,6 +711,7 @@
             gap: 40px;
             max-width: 1000px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
         .stat-item {
@@ -722,6 +750,7 @@
         .main-services {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .section-title {
@@ -733,12 +762,14 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            padding: 0 15px;
         }
 
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 40px;
+            padding: 0 15px;
         }
 
         .service-card {
@@ -854,6 +885,7 @@
         .service-process {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .process-steps {
@@ -862,6 +894,7 @@
             gap: 40px;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
         .process-step {
@@ -898,6 +931,7 @@
         .why-choose-us {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .why-choose-content {
@@ -905,6 +939,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 60px;
             align-items: center;
+            padding: 0 15px;
         }
 
         .why-choose-text h2 {
@@ -952,12 +987,14 @@
         .industries-section {
             padding: 100px 0;
             background: transparent;
+            width: 100%;
         }
 
         .industries-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
+            padding: 0 15px;
         }
 
         .industry-item {
@@ -1008,6 +1045,7 @@
             padding: 100px 0;
             background: transparent;
             text-align: center;
+            width: 100%;
         }
 
         .services-cta h2 {
@@ -1024,6 +1062,7 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            padding: 0 15px;
         }
 
         .cta-buttons {
@@ -1031,6 +1070,7 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
+            padding: 0 15px;
         }
 
         /* Footer */
@@ -1038,6 +1078,7 @@
             background: transparent;
             padding: 60px 0 20px;
             border-top: 1px solid rgba(0, 212, 255, 0.1);
+            width: 100%;
         }
 
         [data-theme="bw"] .footer {
@@ -1952,7 +1993,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/swiper/8.4.5/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countUp.min.js"></script>
     <script>
-        // Particle System
+        // Particle System (unchanged - keep your existing code)
         class ParticleSystem {
             constructor() {
                 this.canvas = document.getElementById('particleCanvas');
@@ -2089,7 +2130,7 @@
             new ParticleSystem();
         });
 
-        // Theme Toggle
+        // Theme Toggle (keep your existing code)
         const themeToggler = document.getElementById('themeToggler');
         const themeToggleBtn = document.querySelector('.theme-toggle-btn');
         const themeIcon = document.querySelector('.theme-toggle-btn i');
@@ -2158,18 +2199,16 @@
         // AOS
         AOS.init({ duration: 1000, once: true, offset: 100 });
 
-        // ===== FIXED MOBILE NAVIGATION - NO AUTO-CLOSING ON DROPDOWN TOGGLES =====
+        // ===== FIXED MOBILE NAVIGATION =====
         const mobileMenu = document.getElementById('mobile-menu');
         const navMenu = document.getElementById('nav-menu');
 
-        // Toggle mobile menu
         mobileMenu.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             this.classList.toggle('active');
             navMenu.classList.toggle('active');
             
-            // Prevent body scroll when menu is open
             if (navMenu.classList.contains('active')) {
                 document.body.style.overflow = 'hidden';
             } else {
@@ -2177,18 +2216,14 @@
             }
         });
 
-        // CRITICAL FIX: Only close menu when clicking ACTUAL navigation links (NOT dropdown toggles)
         document.querySelectorAll('.nav-link:not(.dropdown-toggle), .dropdown-link:not(.dropdown-submenu > .dropdown-link), .submenu li a').forEach(link => {
             link.addEventListener('click', function(e) {
-                // Close mobile menu
                 mobileMenu.classList.remove('active');
                 navMenu.classList.remove('active');
                 document.body.style.overflow = '';
-                // Let the link navigate normally
             });
         });
 
-        // Close mobile menu when clicking outside
         document.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {
                 if (!navMenu.contains(e.target) && !mobileMenu.contains(e.target)) {
@@ -2199,7 +2234,6 @@
             }
         });
 
-        // Mobile dropdown toggle - stays open until clicked again
         function setupMobileDropdowns() {
             if (window.innerWidth <= 992) {
                 document.querySelectorAll('.dropdown-toggle, .dropdown-submenu > .dropdown-link').forEach(item => {
@@ -2227,41 +2261,33 @@
             parent.classList.toggle('active');
         }
 
-        // ===== SUBMENU EDGE DETECTION =====
         function adjustSubmenuPosition() {
-            if (window.innerWidth <= 992) return; // Only for desktop
+            if (window.innerWidth <= 992) return;
             
             document.querySelectorAll('.dropdown-submenu').forEach(submenu => {
                 const submenuElement = submenu.querySelector('.submenu');
                 if (!submenuElement) return;
                 
-                // Remove existing right class
                 submenuElement.classList.remove('submenu-right');
                 
-                // Get positions
                 const rect = submenu.getBoundingClientRect();
                 const submenuWidth = 260;
                 
-                // Check if submenu would go off-screen
                 if (rect.right + submenuWidth > window.innerWidth) {
                     submenuElement.classList.add('submenu-right');
                 }
             });
         }
 
-        // Run on hover
         document.querySelectorAll('.dropdown-submenu').forEach(submenu => {
             submenu.addEventListener('mouseenter', adjustSubmenuPosition);
         });
 
-        // Run on window resize
         window.addEventListener('resize', adjustSubmenuPosition);
         window.addEventListener('load', adjustSubmenuPosition);
 
-        // Initialize mobile dropdowns on load
         document.addEventListener('DOMContentLoaded', setupMobileDropdowns);
 
-        // Handle window resize
         window.addEventListener('resize', function() {
             setupMobileDropdowns();
             
@@ -2272,7 +2298,6 @@
             }
         });
 
-        // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) {
@@ -2282,7 +2307,6 @@
             }
         });
 
-        // Back to top button
         const backToTopButton = document.getElementById('backToTop');
 
         window.addEventListener('scroll', function() {
@@ -2297,7 +2321,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Animated counters
         function animateCounters() {
             const counters = document.querySelectorAll('.stat-number');
             const observer = new IntersectionObserver(function(entries) {
@@ -2325,7 +2348,6 @@
 
         document.addEventListener('DOMContentLoaded', animateCounters);
 
-        // Button ripple effect
         document.querySelectorAll('.btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
