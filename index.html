@@ -8,13 +8,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swiper/8.4.5/swiper-bundle.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <style>
-        /* ===== RESET & BASE ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        html { overflow-x: hidden; max-width: 100%; }
-
+        /* CSS Variables with Theme Support */
         :root {
             --primary-color: #00d4ff;
             --secondary-color: #ff6b35;
@@ -29,9 +34,14 @@
             --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --theme-toggler-bg: rgba(10, 10, 10, 0.9);
+            
+            /* Particle colors */
             --particle-color: #00d4ff;
+            --particle-connection: rgba(0, 212, 255, 0.2);
+            --mouse-connection: rgba(124, 58, 237, 0.3);
         }
 
+        /* Black and White Theme Variables */
         [data-theme="bw"] {
             --primary-color: #1a73e8;
             --secondary-color: #666666;
@@ -42,9 +52,25 @@
             --text-primary: #1a1a1a;
             --text-secondary: #5f6368;
             --gradient-primary: linear-gradient(135deg, #1a73e8, #0d47a1);
+            --gradient-secondary: linear-gradient(135deg, #666666, #444444);
             --shadow-glow: 0 0 20px rgba(26, 115, 232, 0.3);
             --theme-toggler-bg: rgba(255, 255, 255, 0.95);
+            
+            /* Particle colors for white theme */
             --particle-color: #1a73e8;
+            --particle-connection: rgba(26, 115, 232, 0.2);
+            --mouse-connection: rgba(13, 71, 161, 0.3);
+        }
+
+        /* Smooth theme transitions */
+        body, .navbar, .hero, .stats, .services-preview, .projects-carousel,
+        .why-choose-us, .partners-section, .footer, .service-card, .stat-item,
+        .project-slide, .feature-item, .solar-system, .planet, .sun,
+        .whatsapp-float, .back-to-top, .particle-canvas {
+            transition: background-color 0.5s ease, 
+                        color 0.5s ease, 
+                        border-color 0.5s ease,
+                        box-shadow 0.5s ease;
         }
 
         body {
@@ -55,1109 +81,2009 @@
             overflow-x: hidden;
             position: relative;
             min-height: 100vh;
-            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* ===== PARTICLE CANVAS ===== */
+        /* Particle Canvas Container */
         #particle-container {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0; pointer-events: none;
-        }
-        .particle-canvas {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: block; pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        .navbar, .hero, .stats, .services-preview, .projects-carousel,
-        .why-choose-us, .partners-section, .footer,
-        .whatsapp-float, .back-to-top, .theme-toggler {
-            position: relative; z-index: 2;
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* Ensure content is above particles */
+        .navbar,
+        .hero,
+        .stats,
+        .services-preview,
+        .projects-carousel,
+        .why-choose-us,
+        .partners-section,
+        .footer,
+        .whatsapp-float,
+        .back-to-top,
+        .theme-toggler {
+            position: relative;
+            z-index: 2;
         }
 
         .container {
-            max-width: 1200px; width: 100%;
-            margin: 0 auto; padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        /* ===== THEME TOGGLER ===== */
+        /* Floating theme toggler */
         .theme-toggler {
-            position: fixed; bottom: 120px; right: 40px;
-            z-index: 1001; opacity: 0; transform: translateY(20px);
+            position: fixed;
+            bottom: 100px;
+            right: 40px;
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
-        .theme-toggler.show { opacity: 1; transform: translateY(0); }
+
+        .theme-toggler.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         .theme-toggle-btn {
-            width: 60px; height: 60px; border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
             background: var(--theme-toggler-bg);
             backdrop-filter: blur(10px);
             border: 2px solid var(--primary-color);
-            color: var(--primary-color); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.5rem;
             box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
             transition: all 0.3s ease;
-            position: relative; overflow: hidden;
+            position: relative;
+            overflow: hidden;
         }
+
+        [data-theme="bw"] .theme-toggle-btn {
+            box-shadow: 0 0 20px rgba(26, 115, 232, 0.3);
+        }
+
         .theme-toggle-btn:hover {
             transform: scale(1.1) rotate(15deg);
             box-shadow: 0 0 30px var(--primary-color);
+            animation: bounce 0.5s ease infinite alternate;
         }
-        .theme-toggle-btn::before {
-            content: ''; position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(transparent, var(--primary-color), transparent 30%);
-            animation: rotate 4s linear infinite; z-index: -1;
-        }
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
-        .theme-toggle-btn::after {
-            content: ''; position: absolute; inset: 3px;
-            background: var(--theme-toggler-bg); border-radius: 50%; z-index: -1;
-        }
-        .theme-toggle-btn i { z-index: 1; }
-        .theme-status {
-            position: absolute; top: -40px; right: 0;
-            background: var(--theme-toggler-bg); backdrop-filter: blur(10px);
-            padding: 8px 16px; border-radius: 20px;
-            font-size: 0.9rem; font-weight: 600;
-            color: var(--primary-color); border: 1px solid var(--primary-color);
-            opacity: 0; transform: translateY(10px);
-            transition: all 0.3s ease; white-space: nowrap;
-        }
-        .theme-toggle-btn:hover .theme-status { opacity: 1; transform: translateY(0); }
 
-        /* ===== PRELOADER ===== */
-        #preloader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--darker-bg);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 10000; transition: opacity 0.5s ease;
+        @keyframes bounce {
+            from { transform: scale(1.1) rotate(15deg) translateY(0); }
+            to { transform: scale(1.1) rotate(15deg) translateY(-5px); }
         }
-        .loader { text-align: center; }
+
+        .theme-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent,
+                var(--primary-color),
+                transparent 30%
+            );
+            animation: rotate 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .theme-toggle-btn::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: var(--theme-toggler-bg);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .theme-toggle-btn i {
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+
+        .theme-toggle-btn:hover i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Theme status indicator */
+        .theme-status {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: var(--theme-toggler-bg);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .theme-toggle-btn:hover .theme-status {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader {
+            text-align: center;
+        }
+
         .cyber-loader {
-            width: 60px; height: 60px; border: 3px solid transparent;
+            width: 60px;
+            height: 60px;
+            border: 3px solid transparent;
             border-top: 3px solid var(--primary-color);
-            border-radius: 50%; animation: spin 1s linear infinite;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
             margin: 0 auto 20px;
         }
-        .loader p { color: var(--primary-color); font-family: 'Orbitron', monospace; font-weight: 600; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* ===== NAVBAR ===== */
+        .loader p {
+            color: var(--primary-color);
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
         .navbar {
-            position: fixed; top: 0; width: 100%;
+            position: fixed;
+            top: 0;
+            width: 100%;
             background: rgba(10, 10, 10, 0.95);
-            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-            z-index: 1000; transition: var(--transition);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
             border-bottom: 1px solid rgba(0, 212, 255, 0.1);
         }
-        [data-theme="bw"] .navbar { background: rgba(255, 255, 255, 0.95); }
-        .navbar.scrolled { background: rgba(5, 5, 5, 0.98); box-shadow: var(--shadow-glow); }
+
+        [data-theme="bw"] .navbar {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 5, 5, 0.98);
+            box-shadow: var(--shadow-glow);
+        }
+
+        [data-theme="bw"] .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+        }
 
         .nav-container {
-            max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center; height: 70px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
         }
-        .nav-logo img { height: 68px; filter: brightness(1.2); }
-        .nav-menu { display: flex; list-style: none; gap: 30px; }
+
+        .nav-logo img {
+            height: 68px;
+            filter: brightness(1.2);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
         .nav-link {
-            color: var(--text-secondary); text-decoration: none;
-            font-weight: 500; font-size: 16px; transition: var(--transition); position: relative;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
         }
-        .nav-link:hover, .nav-link.active { color: var(--primary-color); }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
         .nav-link::after {
-            content: ''; position: absolute; bottom: -5px; left: 0;
-            width: 0; height: 2px; background: var(--gradient-primary);
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
             transition: width 0.3s ease;
         }
-        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
-        .nav-toggle { display: none; flex-direction: column; cursor: pointer; }
-        .bar { width: 25px; height: 3px; background: var(--primary-color); margin: 3px 0; transition: var(--transition); }
 
-        /* ===== HERO ===== */
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Hero Section */
         .hero {
-            position: relative; height: 100vh;
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
-        .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
-        .hero-video video { width: 100%; height: 100%; object-fit: cover; }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .hero-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .video-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: -1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
         }
-        [data-theme="bw"] .video-overlay { background: rgba(255,255,255,0.7); }
-        .hero-content { text-align: center; z-index: 1; }
+
+        [data-theme="bw"] .video-overlay {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+        }
+
         .hero-title {
-            font-family: 'Orbitron', monospace; font-size: 4rem; font-weight: 900;
-            margin-bottom: 20px; background: var(--gradient-primary);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            word-break: break-word;
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
         .typewriter {
-            overflow: hidden; border-right: 3px solid var(--primary-color); white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid var(--primary-color);
+            white-space: nowrap;
             animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
         }
-        @keyframes typing { from { width: 0; } to { width: 100%; } }
-        @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: var(--primary-color); } }
-        .hero-subtitle { font-size: 1.5rem; color: var(--text-secondary); margin-bottom: 40px; font-weight: 300; }
-        .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--primary-color); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
         .btn {
-            padding: 15px 30px; border: none; border-radius: 50px;
-            font-size: 16px; font-weight: 600; text-decoration: none;
-            cursor: pointer; transition: var(--transition); position: relative; overflow: hidden;
+            padding: 15px 30px;
+            border: none; 
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
-        .btn-primary { background: var(--gradient-primary); color: white; }
-        .btn-secondary { background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); }
-        .btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-glow); }
 
-        .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); }
-        .scroll-arrow {
-            width: 30px; height: 30px;
-            border-right: 2px solid var(--primary-color); border-bottom: 2px solid var(--primary-color);
-            transform: rotate(45deg); animation: bounceArrow 2s infinite;
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
         }
-        @keyframes bounceArrow {
-            0%,20%,50%,80%,100% { transform: translateY(0) rotate(45deg); }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-right: 2px solid var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            transform: rotate(45deg);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); }
             40% { transform: translateY(-10px) rotate(45deg); }
             60% { transform: translateY(-5px) rotate(45deg); }
         }
 
-        /* ===== STATS ===== */
-        .stats { padding: 100px 0; background: transparent; }
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px,100%), 1fr));
-            gap: 40px; text-align: center;
+        /* Stats Section */
+        .stats {
+            padding: 100px 0;
+            background: transparent;
         }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
         .stat-item {
-            padding: 30px; border-radius: 15px;
+            padding: 30px;
+            border-radius: 15px;
             background: rgba(0, 212, 255, 0.05);
             border: 1px solid rgba(0, 212, 255, 0.1);
-            transition: var(--transition); backdrop-filter: blur(10px);
-        }
-        [data-theme="bw"] .stat-item { border: 1px solid rgba(26,115,232,0.1); }
-        .stat-item:hover { transform: translateY(-10px); box-shadow: var(--shadow-glow); }
-        .stat-number { font-size: 3rem; font-weight: 900; color: var(--primary-color); font-family: 'Orbitron', monospace; }
-        .stat-label { font-size: 1.1rem; color: var(--text-secondary); margin-top: 10px; }
-
-        /* ===== SECTION TITLES ===== */
-        .section-title {
-            font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 60px;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            word-break: break-word;
-        }
-
-        /* ===== SERVICES PREVIEW ===== */
-        .services-preview { padding: 100px 0; background: transparent; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px,100%), 1fr)); gap: 30px; }
-        .service-card {
-            background: var(--card-bg); padding: 40px 30px; border-radius: 15px;
-            text-align: center; transition: var(--transition);
-            border: 1px solid rgba(0,212,255,0.1); position: relative; overflow: hidden;
+            transition: var(--transition);
             backdrop-filter: blur(10px);
         }
-        [data-theme="bw"] .service-card { border: 1px solid rgba(26,115,232,0.1); }
+
+        [data-theme="bw"] .stat-item {
+            border: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Services Preview */
+        .services-preview {
+            padding: 100px 0;
+            background: transparent;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="bw"] .service-card {
+            border: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
         .service-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0,212,255,0.1), transparent);
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
             transition: left 0.5s ease;
         }
-        .service-card:hover::before { left: 100%; }
-        .service-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-glow); }
-        .service-icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 20px; }
-        .service-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-primary); }
-        .service-card p { color: var(--text-secondary); margin-bottom: 25px; line-height: 1.6; }
-        .service-link { color: var(--primary-color); text-decoration: none; font-weight: 600; transition: var(--transition); }
-        .service-link:hover { color: var(--secondary-color); }
 
-        /* ===== PROJECTS CAROUSEL ===== */
-        .projects-carousel { padding: 100px 0; background: transparent; }
-        .project-swiper { padding: 20px 0 60px; }
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .service-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .service-link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Projects Carousel */
+        .projects-carousel {
+            padding: 100px 0;
+            background: transparent;
+        }
+
+        .project-swiper {
+            padding: 20px 0 60px;
+        }
+
         .project-slide {
-            background: var(--card-bg); border-radius: 15px; overflow: hidden;
-            transition: var(--transition); border: 1px solid rgba(0,212,255,0.1);
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 212, 255, 0.1);
             backdrop-filter: blur(10px);
         }
-        [data-theme="bw"] .project-slide { border: 1px solid rgba(26,115,232,0.1); }
-        .project-slide:hover { transform: translateY(-10px); box-shadow: var(--shadow-glow); }
-        .project-slide img { width: 100%; height: 250px; object-fit: cover; }
-        .project-info { padding: 30px; }
-        .project-info h3 { font-size: 1.5rem; margin-bottom: 10px; color: var(--text-primary); }
-        .project-info p { color: var(--text-secondary); }
-        .swiper-pagination-bullet { background: var(--primary-color); opacity: 0.5; }
-        .swiper-pagination-bullet-active { opacity: 1; }
-        .swiper-button-next, .swiper-button-prev { color: var(--primary-color); }
 
-        /* ===== WHY CHOOSE US ===== */
-        .why-choose-us { padding: 100px 0; background: transparent; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px,100%), 1fr)); gap: 40px; }
-        .feature-item {
-            text-align: center; padding: 40px 20px; background: var(--card-bg);
-            border-radius: 15px; border: 1px solid rgba(0,212,255,0.1); backdrop-filter: blur(10px);
+        [data-theme="bw"] .project-slide {
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
-        [data-theme="bw"] .feature-item { border: 1px solid rgba(26,115,232,0.1); }
-        .feature-icon { font-size: 3rem; color: var(--secondary-color); margin-bottom: 20px; }
-        .feature-item h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--text-primary); }
-        .feature-item p { color: var(--text-secondary); line-height: 1.6; }
 
-        /* ===================================================
-           3D SOLAR SYSTEM — PARTNERS SECTION
-           Based on Julian Garnier's CSS 3D Solar System
-           ================================================== */
-        .partners-section {
-            padding: 80px 0 60px;
+        .project-slide:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .project-slide img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .project-info {
+            padding: 30px;
+        }
+
+        .project-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .project-info p {
+            color: var(--text-secondary);
+        }
+
+        /* Why Choose Us */
+        .why-choose-us {
+            padding: 100px 0;
             background: transparent;
-            overflow: hidden;
         }
 
-        /* Universe container */
-        #universe {
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="bw"] .feature-item {
+            border: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Partners Section - Enhanced Solar System */
+        .partners-section {
+            padding: 100px 0;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .solar-system {
             position: relative;
             width: 100%;
-            height: 600px;
-            overflow: hidden;
-        }
-
-        #galaxy {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        #solar-system {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
             transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
-        /* Orbit rings */
-        .orbit {
+        .solar-system:active {
+            cursor: grabbing;
+        }
+
+        .sun {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            border: 1px solid rgba(0, 212, 255, 0.25);
-            border-radius: 50%;
-            transform-style: preserve-3d;
-            animation-name: orbit;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
-        }
-
-        /* Position container that stays upright */
-        .pos {
-            position: absolute;
-            top: 50%;
-            width: 2em;
-            height: 2em;
-            margin-top: -1em;
-            margin-left: -1em;
-            transform-style: preserve-3d;
-            animation-name: invert;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
-        }
-
-        /* The sun and planets */
-        #sun-fsm, .partner-planet {
-            position: absolute;
-            top: 50%; left: 50%;
-            border-radius: 50%;
-            transform-style: preserve-3d;
-        }
-
-        /* SUN = Fortishield logo */
-        #sun-fsm {
-            width: 5em; height: 5em;
-            margin-top: -2.5em; margin-left: -2.5em;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 10;
-            background: radial-gradient(circle at 35% 35%, #00d4ff, #050a1a);
-            box-shadow:
-                0 0 60px rgba(0, 212, 255, 0.8),
-                0 0 120px rgba(0, 212, 255, 0.4),
-                0 0 200px rgba(0, 212, 255, 0.2);
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
-            animation: sunPulse 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px var(--primary-color));
+            animation: sunPulse 3s ease-in-out infinite;
         }
 
-        #sun-fsm img {
-            width: 80%; height: 80%;
-            object-fit: cover; border-radius: 50%;
+        .sun img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 40px var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .sun img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 60px var(--primary-color);
         }
 
         @keyframes sunPulse {
-            0%, 100% {
-                box-shadow:
-                    0 0 60px rgba(0,212,255,0.8),
-                    0 0 120px rgba(0,212,255,0.4),
-                    0 0 200px rgba(0,212,255,0.2);
-            }
-            50% {
-                box-shadow:
-                    0 0 80px rgba(0,212,255,1),
-                    0 0 160px rgba(0,212,255,0.6),
-                    0 0 260px rgba(0,212,255,0.3);
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        /* Partner planet base */
-        .partner-planet {
-            width: 1em; height: 1em;
-            margin-top: -0.5em; margin-left: -0.5em;
-            background: #202020;
-            background-repeat: no-repeat;
-            background-size: cover;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
-            overflow: hidden;
-            cursor: pointer;
-            transition: box-shadow 0.3s ease;
+        .orbit-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
         }
 
-        .partner-planet img {
-            width: 100%; height: 100%;
-            object-fit: cover; border-radius: 50%;
+        .orbit-path {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px dashed var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            animation: orbitGlow 3s ease-in-out infinite;
         }
 
-        .partner-planet:hover {
-            box-shadow: 0 0 30px rgba(0,212,255,0.9), 0 0 60px rgba(0,212,255,0.5);
+        @keyframes orbitGlow {
+            0%, 100% { opacity: 0.3; box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); }
+            50% { opacity: 0.6; box-shadow: 0 0 30px rgba(0, 212, 255, 0.4); }
         }
 
-        /* Planet label tooltip */
+        .orbit-1 { width: 200px; height: 200px; }
+        .orbit-2 { width: 300px; height: 300px; }
+        .orbit-3 { width: 400px; height: 400px; }
+
+        .planet {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            filter: drop-shadow(0 0 15px var(--primary-color));
+        }
+
+        .planet img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 2px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .planet:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            z-index: 20;
+        }
+
+        .planet:hover img {
+            box-shadow: 0 0 30px var(--primary-color);
+            border-color: var(--secondary-color);
+        }
+
         .planet-label {
             position: absolute;
-            bottom: -2em;
+            bottom: -25px;
             left: 50%;
             transform: translateX(-50%);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
             white-space: nowrap;
-            font-size: 0.6em;
-            color: var(--primary-color);
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-            letter-spacing: 1px;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: var(--transition);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 20px;
+            border: 1px solid var(--primary-color);
             pointer-events: none;
-            text-shadow: 0 0 10px rgba(0,212,255,0.8);
-            background: rgba(0,0,0,0.7);
-            padding: 2px 8px;
-            border-radius: 10px;
-            border: 1px solid rgba(0,212,255,0.3);
         }
 
-        .pos:hover .planet-label { opacity: 1; }
-
-        /* ===== ORBIT ANIMATIONS ===== */
-        @keyframes orbit {
-            0% { transform: rotateZ(0deg); }
-            100% { transform: rotateZ(-360deg); }
+        .planet:hover .planet-label {
+            opacity: 1;
+            bottom: -30px;
         }
 
-        @keyframes invert {
-            0% { transform: rotateX(-90deg) rotateY(360deg) rotateZ(0deg); }
-            100% { transform: rotateX(-90deg) rotateY(0deg) rotateZ(0deg); }
+        .orbit-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: particleFloat 3s ease-in-out infinite;
         }
 
-        /* ===== 3D VIEW STATE ===== */
-        .view-3D #solar-system { transform: rotateX(75deg); }
-        .view-3D #sun-fsm { transform: rotateX(-90deg); }
-        .view-3D .partner-planet { transform: rotateX(0deg); }
-        .view-2D #solar-system { transform: rotateX(0deg); }
-        .view-2D .partner-planet { transform: rotateX(90deg); }
-
-        /* Zoom level */
-        .zoom-large #solar-system { width: 100%; font-size: 62%; }
-
-        /* ===== 6 PARTNER ORBITS & SPEEDS ===== */
-        /* Orbit 1 — Lik&Lambert (closest, fastest) */
-        #partner1-orbit { width: 14em; height: 14em; margin-top: -7em; margin-left: -7em; animation-duration: 5s; }
-        #partner1-orbit .pos { left: 50%; top: -1%; animation-duration: 5s; }
-        #partner1-orbit .partner-planet { animation-duration: 5s; font-size: 2.5em; }
-
-        /* Orbit 2 — Exim Bank */
-        #partner2-orbit { width: 22em; height: 22em; margin-top: -11em; margin-left: -11em; animation-duration: 9s; }
-        #partner2-orbit .pos { left: 100%; top: 50%; animation-duration: 9s; }
-        #partner2-orbit .partner-planet { animation-duration: 9s; font-size: 2.8em; }
-
-        /* Orbit 3 — CRDB Bank */
-        #partner3-orbit { width: 30em; height: 30em; margin-top: -15em; margin-left: -15em; animation-duration: 14s; }
-        #partner3-orbit .pos { left: 0%; top: 50%; animation-duration: 14s; }
-        #partner3-orbit .partner-planet { animation-duration: 14s; font-size: 3em; }
-
-        /* Orbit 4 — NMB Bank */
-        #partner4-orbit { width: 38em; height: 38em; margin-top: -19em; margin-left: -19em; animation-duration: 20s; }
-        #partner4-orbit .pos { left: 50%; top: 100%; animation-duration: 20s; }
-        #partner4-orbit .partner-planet { animation-duration: 20s; font-size: 3.2em; }
-
-        /* Orbit 5 — AWS */
-        #partner5-orbit { width: 46em; height: 46em; margin-top: -23em; margin-left: -23em; animation-duration: 27s; }
-        #partner5-orbit .pos { left: 100%; top: 50%; animation-duration: 27s; }
-        #partner5-orbit .partner-planet { animation-duration: 27s; font-size: 3.4em; }
-
-        /* Orbit 6 — Google Cloud (outermost, slowest) */
-        #partner6-orbit { width: 54em; height: 54em; margin-top: -27em; margin-left: -27em; animation-duration: 36s; }
-        #partner6-orbit .pos { left: 0%; top: 0%; animation-duration: 36s; }
-        #partner6-orbit .partner-planet { animation-duration: 36s; font-size: 3.6em; }
-
-        /* Sun size */
-        #sun-fsm { font-size: 5em; }
-
-        /* ===== RESPONSIVE FONT SCALING for universe ===== */
-        #universe { font-size: 14px; }
-        @media (max-width: 768px) {
-            #universe { font-size: 8px; height: 450px; }
-            .partners-section { padding: 60px 0 40px; }
-        }
-        @media (min-width: 769px) and (max-width: 1100px) {
-            #universe { font-size: 11px; }
-        }
-        @media (min-width: 1300px) {
-            #universe { font-size: 16px; }
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-10px); opacity: 1; }
         }
 
-        /* ===== SOLAR TOGGLE CONTROLS ===== */
-        .solar-controls {
-            display: flex; justify-content: center; gap: 15px;
-            margin-top: 20px; flex-wrap: wrap;
-        }
-        .solar-btn {
-            padding: 8px 20px; border: 1px solid var(--primary-color);
-            background: transparent; color: var(--primary-color);
-            border-radius: 20px; cursor: pointer; font-family: 'Rajdhani', sans-serif;
-            font-size: 0.9rem; font-weight: 600; letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
-        .solar-btn:hover, .solar-btn.active {
-            background: var(--primary-color); color: var(--dark-bg);
-        }
-
-        /* ===== FOOTER ===== */
+        /* Footer */
         .footer {
-            background: transparent; padding: 60px 0 20px;
-            border-top: 1px solid rgba(0,212,255,0.1);
+            background: transparent;
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
         }
-        [data-theme="bw"] .footer { border-top: 1px solid rgba(26,115,232,0.1); }
-        .footer-content {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px,100%), 1fr));
-            gap: 40px; margin-bottom: 40px;
-        }
-        .footer-section h3 { color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem; }
-        .footer-section p { color: var(--text-secondary); line-height: 1.6; }
-        .footer-section ul { list-style: none; }
-        .footer-section ul li { margin-bottom: 10px; }
-        .footer-section ul li a { color: var(--text-secondary); text-decoration: none; transition: var(--transition); }
-        .footer-section ul li a:hover { color: var(--primary-color); }
-        .footer-logo { height: 40px; margin-bottom: 20px; filter: brightness(1.2); }
-        .social-icons { display: flex; gap: 15px; }
-        .social-icon {
-            display: flex; align-items: center; justify-content: center;
-            width: 40px; height: 40px;
-            background: rgba(0,212,255,0.1); color: var(--primary-color);
-            border-radius: 50%; text-decoration: none; transition: var(--transition);
-        }
-        .social-icon:hover { background: var(--primary-color); color: white; transform: translateY(-3px); }
-        .footer-bottom {
-            text-align: center; padding-top: 20px;
-            border-top: 1px solid rgba(0,212,255,0.1); color: var(--text-secondary);
-        }
-        [data-theme="bw"] .footer-bottom { border-top: 1px solid rgba(26,115,232,0.1); }
 
-        /* ===== FLOATING BUTTONS ===== */
-        .whatsapp-float {
-            position: fixed; bottom: 40px; right: 40px;
-            width: 60px; height: 60px; background: #25d366; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; color: white; text-decoration: none;
-            z-index: 1000; animation: bounceWA 2s infinite; transition: var(--transition);
+        [data-theme="bw"] .footer {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
         }
-        .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(37,211,102,0.5); }
-        @keyframes bounceWA {
-            0%,20%,50%,80%,100% { transform: translateY(0); }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 20px;
+            filter: brightness(1.2);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="bw"] .footer-bottom {
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            text-decoration: none;
+            z-index: 1000;
+            animation: bounce-whatsapp 2s infinite;
+            transition: var(--transition);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
+        }
+
+        @keyframes bounce-whatsapp {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(-10px); }
             60% { transform: translateY(-5px); }
         }
 
+        /* Back to Top */
         .back-to-top {
-            position: fixed; bottom: 40px; left: 40px;
-            width: 50px; height: 50px; background: var(--gradient-primary);
-            border: none; border-radius: 50%; color: white; font-size: 20px;
-            cursor: pointer; opacity: 0; visibility: hidden;
-            transition: var(--transition); z-index: 1000;
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 1000;
         }
-        .back-to-top.show { opacity: 1; visibility: visible; }
-        .back-to-top:hover { transform: translateY(-3px); box-shadow: var(--shadow-glow); }
 
-        /* ===== RESPONSIVE ===== */
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Swiper Customization */
+        .swiper-pagination-bullet {
+            background: var(--primary-color);
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
             .nav-menu {
-                position: fixed; left: -100%; top: 70px;
-                flex-direction: column; background-color: rgba(5,5,5,0.98);
-                width: 100%; text-align: center; transition: 0.3s;
-                box-shadow: var(--shadow-glow); padding: 20px 0;
-                z-index: 999;
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(5, 5, 5, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-glow);
+                padding: 20px 0;
             }
-            [data-theme="bw"] .nav-menu { background-color: rgba(255,255,255,0.98); }
-            .nav-menu.active { left: 0; }
-            .nav-toggle { display: flex; }
-            .nav-toggle.active .bar:nth-child(2) { opacity: 0; }
-            .nav-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-            .nav-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-            .hero-title { font-size: 2.5rem; }
-            .hero-subtitle { font-size: 1.2rem; }
-            .hero-buttons { flex-direction: column; align-items: center; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .services-grid, .features-grid { grid-template-columns: 1fr; }
-            .theme-toggler { bottom: 80px; right: 20px; }
-            .theme-toggle-btn { width: 50px; height: 50px; font-size: 1.3rem; }
-            .theme-status { display: none; }
-            .footer-content { grid-template-columns: 1fr; text-align: center; }
-            .whatsapp-float { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 25px; }
-            .back-to-top { bottom: 80px; left: 20px; }
-            .solar-controls { gap: 8px; }
+
+            [data-theme="bw"] .nav-menu {
+                background-color: rgba(255, 255, 255, 0.98);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-toggler {
+                bottom: 80px;
+                right: 20px;
+            }
+            
+            .theme-toggle-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .theme-status {
+                top: -35px;
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 25px;
+            }
+
+            .back-to-top {
+                bottom: 80px;
+                left: 20px;
+            }
+
+            .solar-system {
+                height: 400px;
+            }
+
+            .sun { width: 80px; height: 80px; }
+            .sun img { width: 60px; height: 60px; }
+            .planet { width: 50px; height: 50px; }
+            .planet img { width: 35px; height: 35px; }
+            .orbit-1 { width: 150px; height: 150px; }
+            .orbit-2 { width: 220px; height: 220px; }
+            .orbit-3 { width: 290px; height: 290px; }
         }
 
         @media (max-width: 480px) {
-            .hero-title { font-size: 2rem; }
-            .section-title { font-size: 2rem; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .stat-number { font-size: 2.5rem; }
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
         }
 
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--dark-bg); }
-        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-color); }
-        ::selection { background: var(--primary-color); color: white; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Focus styles for accessibility */
+        button:focus,
+        a:focus,
+        input:focus,
+        textarea:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
-
-<!-- Particle Canvas -->
-<div id="particle-container">
-    <canvas id="particleCanvas" class="particle-canvas"></canvas>
-</div>
-
-<!-- Preloader -->
-<div id="preloader">
-    <div class="loader">
-        <div class="cyber-loader"></div>
-        <p>Loading Fortishield-Matrix...</p>
+    <!-- Particle Canvas Container -->
+    <div id="particle-container">
+        <canvas id="particleCanvas" class="particle-canvas"></canvas>
     </div>
-</div>
 
-<!-- Navbar -->
-<nav class="navbar" id="navbar">
-    <div class="nav-container">
-        <div class="nav-logo"><img src="Logo1.png" alt="Fortishield-Matrix Logo"></div>
-        <ul class="nav-menu" id="nav-menu">
-            <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
-            <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-            <li class="nav-item"><a href="Our Team.html" class="nav-link">Our Team</a></li>
-            <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
-            <li class="nav-item"><a href="projects.html" class="nav-link">Projects</a></li>
-            <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-        </ul>
-        <div class="nav-toggle" id="mobile-menu">
-            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    <!--Preloader--> 
+    <div id="preloader">
+        <div class="loader">
+            <div class="cyber-loader"></div>
+            <p>Loading Fortishield-Matrix...</p>
         </div>
     </div>
-</nav>
 
-<!-- Theme Toggler -->
-<div class="theme-toggler" id="themeToggler">
-    <button class="theme-toggle-btn" title="Toggle Theme">
-        <i class="fas fa-palette"></i>
-        <span class="theme-status">Color Theme</span>
-    </button>
-</div>
-
-<!-- Hero -->
-<section class="hero" id="hero">
-    <div class="hero-video">
-        <video autoplay muted loop playsinline id="hero-video">
-            <source src="video.mp4" type="video/mp4">
-        </video>
-        <div class="video-overlay"></div>
-    </div>
-    <div class="hero-content">
-        <h1 class="hero-title" data-aos="fade-up"><span class="typewriter">Fortishield-Matrix</span></h1>
-        <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">Professional Tech Solutions &amp; Cybersecurity Excellence</p>
-        <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400">
-            <a href="Our Team.html" class="btn btn-secondary">Our Team</a>
-            <a href="services.html" class="btn btn-primary">Our Services</a>
-            <a href="contact.html" class="btn btn-secondary">Get Started</a>
-        </div>
-    </div>
-    <div class="scroll-indicator"><div class="scroll-arrow"></div></div>
-</section>
-
-<!-- Stats -->
-<section class="stats" data-aos="fade-up">
-    <div class="container">
-        <div class="stats-grid">
-            <div class="stat-item" data-aos="zoom-in" data-aos-delay="100">
-                <div class="stat-number" data-count="3">3</div>
-                <div class="stat-label">Years Experience</div>
+    <!--Navigation--> 
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="Logo1.png" alt="Fortishield-Matrix Logo">
             </div>
-            <div class="stat-item" data-aos="zoom-in" data-aos-delay="200">
-                <div class="stat-number" data-count="16">16</div>
-                <div class="stat-label">Projects Completed</div>
-            </div>
-            <div class="stat-item" data-aos="zoom-in" data-aos-delay="300">
-                <div class="stat-number" data-count="16">16</div>
-                <div class="stat-label">Happy Clients</div>
-            </div>
-            <div class="stat-item" data-aos="zoom-in" data-aos-delay="400">
-                <div class="stat-number" data-count="5">5</div>
-                <div class="stat-label">24/7 Support</div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="Our Team.html" class="nav-link">Our Team</a>  
+                </li>              
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="projects.html" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
         </div>
-    </div>
-</section>
+    </nav>
 
-<!-- Services Preview -->
-<section class="services-preview" id="services">
-    <div class="container">
-        <h2 class="section-title" data-aos="fade-up">Our Services</h2>
-        <div class="services-grid">
-            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="service-icon"><i class="fas fa-code"></i></div>
-                <h3>System Development</h3>
-                <p>Custom software solutions tailored to your business needs</p>
-                <a href="service-system-development.html" class="service-link">Learn More</a>
-            </div>
-            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="service-icon"><i class="fas fa-server"></i></div>
-                <h3>Server Design</h3>
-                <p>Robust and scalable server infrastructure solutions</p>
-                <a href="service-server-design.html" class="service-link">Learn More</a>
-            </div>
-            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3>Cybersecurity</h3>
-                <p>Comprehensive security solutions to protect your assets</p>
-                <a href="service-cybersecurity.html" class="service-link">Learn More</a>
-            </div>
-            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
-                <div class="service-icon"><i class="fas fa-network-wired"></i></div>
-                <h3>Network Design</h3>
-                <p>Efficient and secure network architecture planning</p>
-                <a href="service-network-design.html" class="service-link">Learn More</a>
-            </div>
-            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
-                <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-                <h3>System Analysis</h3>
-                <p>Efficient and secure system analysis</p>
-                <a href="service-system-analysis.html" class="service-link">Learn More</a>
-            </div>
-            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
-                <div class="service-icon"><i class="fas fa-cloud"></i></div>
-                <h3>Cloud Solution</h3>
-                <p>Optimization and Multi-platform support in Cloud architecture</p>
-                <a href="service-cloud-solutions.html" class="service-link">Learn More</a>
+    <!-- Floating Theme Toggler -->
+    <div class="theme-toggler" id="themeToggler">
+        <button class="theme-toggle-btn" title="Toggle Theme">
+            <i class="fas fa-palette"></i>
+            <span class="theme-status">Color Theme</span>
+        </button>
+    </div>
+
+    <!--Hero Section-->
+    <section class="hero" id="hero">
+        <div class="hero-video">
+            <video autoplay muted loop playsinline id="hero-video">
+                <source src="video.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title" data-aos="fade-up"><span class="typewriter">Fortishield-Matrix</span></h1>
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">Professional Tech Solutions & Cybersecurity Excellence</p>
+            <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400">
+                <a href="Our Team.html" class="btn btn-secondary">Our Team</a>
+                <a href="services.html" class="btn btn-primary">Our Services</a>
+                <a href="contact.html" class="btn btn-secondary">Get Started</a>
             </div>
         </div>
-    </div>
-</section>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
 
-<!-- Projects Carousel -->
-<section class="projects-carousel" id="projects">
-    <div class="container">
-        <h2 class="section-title" data-aos="fade-up">Recent Projects</h2>
-        <div class="swiper project-swiper" data-aos="fade-up" data-aos-delay="200">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><div class="project-slide"><img src="FSM1.JPG" alt="Project 1"><div class="project-info"><h3>Enterprise Security System</h3><p>Complete cybersecurity overhaul for Fortune 500 company</p></div></div></div>
-                <div class="swiper-slide"><div class="project-slide"><img src="FSM2.jpg" alt="Project 2"><div class="project-info"><h3>Cloud Infrastructure</h3><p>Scalable cloud solution for growing tech startup</p></div></div></div>
-                <div class="swiper-slide"><div class="project-slide"><img src="FSM3.jpg" alt="Project 3"><div class="project-info"><h3>Custom ERP System</h3><p>Tailored enterprise resource planning solution</p></div></div></div>
+    <!--Stats Section--> 
+    <section class="stats" data-aos="fade-up">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-number" data-count="12">3</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-item" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-number" data-count="536">16</div>
+                    <div class="stat-label">Projects Completed</div>
+                </div>
+                <div class="stat-item" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="stat-number" data-count="67">16</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="stat-number" data-count="24">5</div>
+                    <div class="stat-label">24/7 Support</div>
+                </div>
             </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Why Choose Us -->
-<section class="why-choose-us" data-aos="fade-up">
-    <div class="container">
-        <h2 class="section-title">Why Choose Fortishield-Matrix?</h2>
-        <div class="features-grid">
-            <div class="feature-item" data-aos="fade-up" data-aos-delay="100"><div class="feature-icon"><i class="fas fa-award"></i></div><h3>Industry Expertise</h3><p>3+ years of experience in cutting-edge technology solutions</p></div>
-            <div class="feature-item" data-aos="fade-up" data-aos-delay="200"><div class="feature-icon"><i class="fas fa-clock"></i></div><h3>24/7 Support</h3><p>Round-the-clock technical support and maintenance</p></div>
-            <div class="feature-item" data-aos="fade-up" data-aos-delay="300"><div class="feature-icon"><i class="fas fa-lock"></i></div><h3>Security First</h3><p>Advanced security protocols in every solution we deliver</p></div>
+    <!--Services Preview--> 
+    <section class="services-preview" id="services">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>System Development</h3>
+                    <p>Custom software solutions tailored to your business needs</p>
+                    <a href="service-system-development.html" class="service-link">Learn More</a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Server Design</h3>
+                    <p>Robust and scalable server infrastructure solutions</p>
+                    <a href="service-server-design.html" class="service-link">Learn More</a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Cybersecurity</h3>
+                    <p>Comprehensive security solutions to protect your assets</p>
+                    <a href="service-cybersecurity.html" class="service-link">Learn More</a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="service-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Network Design</h3>
+                    <p>Efficient and secure network architecture planning</p>
+                    <a href="service-network-design.html" class="service-link">Learn More</a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="service-icon">
+                          <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>System Analysis</h3>
+                    <p>Efficient and secure system-analysis </p>
+                    <a href="service-system-analysis.html" class="service-link">Learn More</a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="service-icon">
+                         <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>Cloud Solution</h3>
+                    <p>The optimization and Multi-platform support in Cloud architecture</p>
+                    <a href="service-cloud-solutions.html" class="service-link">Learn More</a>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ================================================
-     OUR TRUSTED PARTNERS — CSS 3D SOLAR SYSTEM
-     ================================================ -->
-<section class="partners-section" data-aos="fade-up">
-    <div class="container">
-        <h2 class="section-title">Our Trusted Partners</h2>
-    </div>
+    <!--Projects Carousel--> 
+    <section class="projects-carousel" id="projects">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Recent Projects</h2>
+            <div class="swiper project-swiper" data-aos="fade-up" data-aos-delay="200">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="project-slide">
+                            <img src="FSM1.JPG" alt="Project 1">
+                            <div class="project-info">
+                                <h3>Enterprise Security System</h3>
+                                <p>Complete cybersecurity overhaul for Fortune 500 company</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="project-slide">
+                            <img src="FSM2.jpg" alt="Project 2">
+                            <div class="project-info">
+                                <h3>Cloud Infrastructure</h3>
+                                <p>Scalable cloud solution for growing tech startup</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="project-slide">
+                            <img src="FSM3.jpg" alt="Project 3">
+                            <div class="project-info">
+                                <h3>Custom ERP System</h3>
+                                <p>Tailored enterprise resource planning solution</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!--Why Choose Us-->
+    <section class="why-choose-us" data-aos="fade-up">
+        <div class="container">
+            <h2 class="section-title">Why Choose Fortishield-Matrix?</h2>
+            <div class="features-grid">
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Industry Expertise</h3>
+                    <p>12+ years of experience in cutting-edge technology solutions</p>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock technical support and maintenance</p>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Security First</h3>
+                    <p>Advanced security protocols in every solution we deliver</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Solar controls -->
-    <div class="solar-controls">
-        <button class="solar-btn active" id="btn-3d">3D View</button>
-        <button class="solar-btn" id="btn-2d">2D View</button>
-    </div>
-
-    <!-- The 3D Universe -->
-    <div id="universe" class="view-3D zoom-large scale-stretched set-speed opening">
-        <div id="galaxy">
-            <div id="solar-system">
-
-                <!-- SUN = Fortishield-Matrix logo -->
-                <div id="sun-fsm">
+    <!-- Partners Section - Enhanced Solar System -->
+    <section class="partners-section" data-aos="fade-up">
+        <div class="container">
+            <h2 class="section-title">Our Trusted Partners</h2>
+            <div class="solar-system" id="solarSystem">
+                <!-- Sun (Fortishield-Matrix Logo) -->
+                <div class="sun" id="sun">
                     <img src="FSM.LOGO.JPG" alt="Fortishield-Matrix">
                 </div>
-
-                <!-- ORBIT 1 — Lik&Lambert (closest) -->
-                <div class="orbit" id="partner1-orbit">
-                    <div class="pos">
-                        <div class="partner-planet" id="p-liklambert">
-                            <img src="logi.jpg" alt="Lik&Lambert">
-                        </div>
-                        <span class="planet-label">Lik&amp;Lambert</span>
-                    </div>
+                
+                <!-- Orbit 1 -->
+                <div class="orbit-path orbit-1" style="position: absolute;"></div>
+                <div class="planet" id="planet1" style="transform: translate(-50%, -50%) rotate(0deg) translateX(100px) rotate(0deg);">
+                    <img src="logi.jpg" alt="Lik&Lambert">
+                    <span class="planet-label">Lik&Lambert</span>
+                </div>
+                
+                <!-- Orbit 2 -->
+                <div class="orbit-path orbit-2" style="position: absolute;"></div>
+                <div class="planet" id="planet2" style="transform: translate(-50%, -50%) rotate(45deg) translateX(150px) rotate(-45deg);">
+                    <img src="exim-bank.png" alt="Exim Bank">
+                    <span class="planet-label">Financial Assistance</span>
+                </div>
+                
+                <!-- Orbit 3 -->
+                <div class="orbit-path orbit-3" style="position: absolute;"></div>
+                <div class="planet" id="planet3" style="transform: translate(-50%, -50%) rotate(90deg) translateX(200px) rotate(-90deg);">
+                    <img src="crdb-logo.jpg" alt="CRDB Bank">
+                    <span class="planet-label">Bank that listens</span>
                 </div>
 
-                <!-- ORBIT 2 — Exim Bank -->
-                <div class="orbit" id="partner2-orbit">
-                    <div class="pos">
-                        <div class="partner-planet" id="p-eximbank">
-                            <img src="exim-bank.png" alt="Exim Bank">
-                        </div>
-                        <span class="planet-label">Exim Bank</span>
-                    </div>
-                </div>
+                <!--Orbit 4 -->
+                <div class="orbit-path orbit-4" style="position: absolute;"></div>
+                <div class="planet" id="planet4" style="transform: translate(-50%, -50%) rotate(90deg) translateX(200px) rotate(-90deg);">
+                    <img src="nmb-bank.png" alt="NMB Bank">
+                    <span class="planet-label">Nation wide Bank</span>
+                </div> 
 
-                <!-- ORBIT 3 — CRDB Bank -->
-                <div class="orbit" id="partner3-orbit">
-                    <div class="pos">
-                        <div class="partner-planet" id="p-crdb">
-                            <img src="crdb-logo.jpg" alt="CRDB Bank">
-                        </div>
-                        <span class="planet-label">CRDB Bank</span>
-                    </div>
-                </div>
-
-                <!-- ORBIT 4 — NMB Bank -->
-                <div class="orbit" id="partner4-orbit">
-                    <div class="pos">
-                        <div class="partner-planet" id="p-nmb">
-                            <img src="nmb-bank.png" alt="NMB Bank">
-                        </div>
-                        <span class="planet-label">NMB Bank</span>
-                    </div>
-                </div>
-
-                <!-- ORBIT 5 — AWS -->
-                <div class="orbit" id="partner5-orbit">
-                    <div class="pos">
-                        <div class="partner-planet" id="p-aws">
-                            <img src="AWS.png" alt="Amazon Web Services">
-                        </div>
-                        <span class="planet-label">Amazon AWS</span>
-                    </div>
-                </div>
-
-                <!-- ORBIT 6 — Google Cloud (outermost) -->
-                <div class="orbit" id="partner6-orbit">
-                    <div class="pos">
-                        <div class="partner-planet" id="p-gcloud">
-                            <img src="googleCloud.png" alt="Google Cloud">
-                        </div>
-                        <span class="planet-label">Google Cloud</span>
-                    </div>
-                </div>
-
-            </div><!-- /solar-system -->
-        </div><!-- /galaxy -->
-    </div><!-- /universe -->
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-section">
-                <img src="Logo1.png" alt="Fortishield-Matrix Logo" class="footer-logo">
-                <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="Our Team.html">Our Team</a></li>
-                    <li><a href="services.html">Services</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Services</h3>
-                <ul>
-                    <li><a href="service-system-development.html">System Development</a></li>
-                    <li><a href="service-server-design.html">Server Design</a></li>
-                    <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
-                    <li><a href="service-network-design.html">Network Design</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Connect With Us</h3>
-                <div class="social-icons">
-                    <a href="https://facebook.com/fortishieldmatrix" target="_blank" rel="noopener" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://instagram.com/fortishieldmatrix_company.ltd" target="_blank" rel="noopener" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="https://linkedin.com/company/fortishieldmatrix" target="_blank" rel="noopener" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://github.com/fortishieldmatrix" target="_blank" rel="noopener" class="social-icon"><i class="fab fa-github"></i></a>
-                </div>
+                <!--Orbit 5-->
+                <div class="orbit-path orbit-5" style="position: absolute;"></div>
+                <div class="planet" id="planet5" style="transform: translate(-50%, -50%) rotate(90deg) translateX(200px) rotate(-90deg);">
+                    <img src="AWS.png" alt="Amazon Cloud">
+                    <span class="planet-label">Amazon Clouding</span>
+                </div> 
+                
+                 <!--Orbit 6-->
+                <div class="orbit-path orbit-6" style="position: absolute;"></div>
+                <div class="planet" id="planet6" style="transform: translate(-50%, -50%) rotate(90deg) translateX(200px) rotate(-90deg);">
+                    <img src="googleCloud.png" alt="Google Cloud">
+                    <span class="planet-label">Google Clouding</span>
+                </div> 
+               
+                <!-- Additional decorative particles -->
+                <div class="orbit-particle" style="top: 40%; left: 30%;"></div>
+                <div class="orbit-particle" style="top: 60%; left: 70%;"></div>
+                <div class="orbit-particle" style="top: 30%; left: 80%;"></div>
             </div>
         </div>
-        <div class="footer-bottom"><p>Powered by Fortishield-Matrix &copy; 2025</p></div>
-    </div>
-</footer>
+    </section>
 
-<a href="https://wa.me/+255743981440" class="whatsapp-float" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
-<button class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></button>
+    <!--Footer---> 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="Logo1.png" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li> 
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="https://facebook.com/fortishieldmatrix" target="_blank" rel="noopener noreferrer" class="social-icon" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com/fortishieldmatrix_company.ltd" target="_blank" rel="noopener noreferrer" class="social-icon" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/fortishieldmatrix" target="_blank" rel="noopener noreferrer" class="social-icon" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://github.com/fortishieldmatrix" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Powered by Fortishield-Matrix © 2025</p>
+            </div>
+        </div>
+    </footer>
 
-<!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/swiper/8.4.5/swiper-bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countUp.min.js"></script>
-<script>
-    // ===== PARTICLE SYSTEM =====
-    class ParticleSystem {
-        constructor() {
-            this.canvas = document.getElementById('particleCanvas');
-            this.ctx = this.canvas.getContext('2d');
-            this.particles = [];
-            this.mouse = { x: 0, y: 0 };
-            this.theme = document.documentElement.getAttribute('data-theme') || 'default';
-            this.init();
-        }
-        init() { this.resize(); this.createParticles(); this.setupEventListeners(); this.animate(); }
-        resize() { this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight; }
-        createParticles() {
-            const count = Math.min(100, Math.floor((this.canvas.width * this.canvas.height) / 15000));
-            this.particles = [];
-            for (let i = 0; i < count; i++) {
-                this.particles.push({
-                    x: Math.random() * this.canvas.width, y: Math.random() * this.canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
-                    radius: Math.random() * 2 + 1
-                });
+    <!--WhatsApp Floating Button--> 
+    <a href="https://wa.me/+255743981440" class="whatsapp-float" target="_blank" rel="noopener" title="Chat with us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!--Back to Top Button--> 
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!--Scripts-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swiper/8.4.5/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countUp.min.js"></script>
+    <script>
+        // Particle System
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.animationFrame = null;
+                this.theme = document.documentElement.getAttribute('data-theme') || 'default';
+                
+                this.init();
             }
-        }
-        setupEventListeners() {
-            window.addEventListener('resize', () => { this.resize(); this.createParticles(); });
-            window.addEventListener('mousemove', e => { this.mouse.x = e.clientX; this.mouse.y = e.clientY; });
-            new MutationObserver(() => { this.theme = document.documentElement.getAttribute('data-theme'); })
-                .observe(document.documentElement, { attributes: true });
-        }
-        getParticleColor() { return this.theme === 'bw' ? '#1a73e8' : '#00d4ff'; }
-        getConnectionColor(o) { return this.theme === 'bw' ? `rgba(26,115,232,${o})` : `rgba(0,212,255,${o})`; }
-        getMouseConnectionColor(o) { return this.theme === 'bw' ? `rgba(13,71,161,${o})` : `rgba(124,58,237,${o})`; }
-        animate() {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            const pc = this.getParticleColor();
-            this.particles.forEach((p, i) => {
-                p.x += p.vx; p.y += p.vy;
-                if (p.x < 0 || p.x > this.canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > this.canvas.height) p.vy *= -1;
-                const dx = this.mouse.x - p.x, dy = this.mouse.y - p.y;
-                if (Math.sqrt(dx*dx+dy*dy) < 150) { p.x -= dx*0.01; p.y -= dy*0.01; }
-                this.ctx.beginPath(); this.ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
-                this.ctx.fillStyle = pc + '99'; this.ctx.fill();
-                this.particles.slice(i+1).forEach(o => {
-                    const dx2=p.x-o.x, dy2=p.y-o.y, dist=Math.sqrt(dx2*dx2+dy2*dy2);
-                    if (dist<120) {
-                        this.ctx.beginPath(); this.ctx.moveTo(p.x,p.y); this.ctx.lineTo(o.x,o.y);
-                        this.ctx.strokeStyle=this.getConnectionColor(0.2*(1-dist/120)); this.ctx.lineWidth=0.5; this.ctx.stroke();
+            
+            init() {
+                this.resize();
+                this.createParticles();
+                this.setupEventListeners();
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const particleCount = Math.min(100, Math.floor((this.canvas.width * this.canvas.height) / 15000));
+                this.particles = [];
+                
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 2 + 1
+                    });
+                }
+            }
+            
+            setupEventListeners() {
+                window.addEventListener('resize', () => {
+                    this.resize();
+                    this.createParticles();
+                });
+                
+                window.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.attributeName === 'data-theme') {
+                            this.theme = document.documentElement.getAttribute('data-theme');
+                        }
+                    });
+                });
+                
+                observer.observe(document.documentElement, { attributes: true });
+            }
+            
+            getParticleColor() {
+                return this.theme === 'bw' ? '#1a73e8' : '#00d4ff';
+            }
+            
+            getConnectionColor(opacity) {
+                return this.theme === 'bw' 
+                    ? `rgba(26, 115, 232, ${opacity})` 
+                    : `rgba(0, 212, 255, ${opacity})`;
+            }
+            
+            getMouseConnectionColor(opacity) {
+                return this.theme === 'bw'
+                    ? `rgba(13, 71, 161, ${opacity})`
+                    : `rgba(124, 58, 237, ${opacity})`;
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                const particleColor = this.getParticleColor();
+                
+                this.particles.forEach((particle, i) => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                    
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        particle.x -= dx * 0.01;
+                        particle.y -= dy * 0.01;
+                    }
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = particleColor + '99';
+                    this.ctx.fill();
+                    
+                    this.particles.slice(i + 1).forEach((other) => {
+                        const dx = particle.x - other.x;
+                        const dy = particle.y - other.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 120) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particle.x, particle.y);
+                            this.ctx.lineTo(other.x, other.y);
+                            this.ctx.strokeStyle = this.getConnectionColor(0.2 * (1 - distance / 120));
+                            this.ctx.lineWidth = 0.5;
+                            this.ctx.stroke();
+                        }
+                    });
+                    
+                    const mouseDist = Math.sqrt(
+                        Math.pow(particle.x - this.mouse.x, 2) + 
+                        Math.pow(particle.y - this.mouse.y, 2)
+                    );
+                    
+                    if (mouseDist < 200) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(particle.x, particle.y);
+                        this.ctx.lineTo(this.mouse.x, this.mouse.y);
+                        this.ctx.strokeStyle = this.getMouseConnectionColor(0.3 * (1 - mouseDist / 200));
+                        this.ctx.lineWidth = 0.8;
+                        this.ctx.stroke();
                     }
                 });
-                const md=Math.sqrt(Math.pow(p.x-this.mouse.x,2)+Math.pow(p.y-this.mouse.y,2));
-                if (md<200) {
-                    this.ctx.beginPath(); this.ctx.moveTo(p.x,p.y); this.ctx.lineTo(this.mouse.x,this.mouse.y);
-                    this.ctx.strokeStyle=this.getMouseConnectionColor(0.3*(1-md/200)); this.ctx.lineWidth=0.8; this.ctx.stroke();
+                
+                this.animationFrame = requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Solar System Drag and Rotate
+        class SolarSystem {
+            constructor() {
+                this.container = document.getElementById('solarSystem');
+                if (!this.container) return;
+                
+                this.planets = [
+                    document.getElementById('planet1'),
+                    document.getElementById('planet2'),
+                    document.getElementById('planet3')
+                ];
+                
+                this.rotation = { x: 0, y: 0 };
+                this.targetRotation = { x: 0, y: 0 };
+                this.isDragging = false;
+                this.lastMouse = { x: 0, y: 0 };
+                this.radius = [100, 150, 200];
+                this.angles = [0, 45, 90];
+                
+                this.init();
+            }
+            
+            init() {
+                // Start automatic rotation
+                this.autoRotate();
+                
+                // Add drag functionality
+                this.container.addEventListener('mousedown', (e) => this.startDrag(e));
+                window.addEventListener('mousemove', (e) => this.drag(e));
+                window.addEventListener('mouseup', () => this.stopDrag());
+                
+                // Touch support
+                this.container.addEventListener('touchstart', (e) => this.startDrag(e.touches[0]));
+                window.addEventListener('touchmove', (e) => this.drag(e.touches[0]));
+                window.addEventListener('touchend', () => this.stopDrag());
+            }
+            
+            startDrag(e) {
+                this.isDragging = true;
+                this.lastMouse.x = e.clientX;
+                this.lastMouse.y = e.clientY;
+                this.container.style.cursor = 'grabbing';
+            }
+            
+            drag(e) {
+                if (!this.isDragging) return;
+                
+                const dx = e.clientX - this.lastMouse.x;
+                const dy = e.clientY - this.lastMouse.y;
+                
+                this.targetRotation.y += dx * 0.01;
+                this.targetRotation.x += dy * 0.01;
+                
+                this.lastMouse.x = e.clientX;
+                this.lastMouse.y = e.clientY;
+            }
+            
+            stopDrag() {
+                this.isDragging = false;
+                this.container.style.cursor = 'grab';
+            }
+            
+            autoRotate() {
+                if (!this.isDragging) {
+                    this.targetRotation.y += 0.005;
+                }
+                
+                // Smooth interpolation
+                this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.1;
+                this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.1;
+                
+                // Update planet positions
+                this.planets.forEach((planet, index) => {
+                    if (!planet) return;
+                    
+                    const angle = this.angles[index] + this.rotation.y;
+                    const x = Math.cos(angle) * this.radius[index];
+                    const y = Math.sin(angle) * this.radius[index];
+                    
+                    planet.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+                });
+                
+                requestAnimationFrame(() => this.autoRotate());
+            }
+        }
+
+        // Theme Toggle Functionality
+        const themeToggler = document.getElementById('themeToggler');
+        const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+        const themeIcon = document.querySelector('.theme-toggle-btn i');
+        const themeStatus = document.querySelector('.theme-status');
+
+        function getPreferredTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) return savedTheme;
+            
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                return 'bw';
+            }
+            return 'default';
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            if (theme === 'bw') {
+                themeIcon.className = 'fas fa-sun';
+                themeStatus.textContent = 'White Theme';
+                themeToggleBtn.title = 'Switch to Dark Theme';
+                
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 300);
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                themeStatus.textContent = 'Dark Theme';
+                themeToggleBtn.title = 'Switch to White Theme';
+                
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 300);
+            }
+        }
+
+        const currentTheme = getPreferredTheme();
+        applyTheme(currentTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'bw' ? 'default' : 'bw';
+            
+            document.body.style.opacity = '0.8';
+            themeToggler.style.opacity = '0';
+            
+            setTimeout(() => {
+                applyTheme(newTheme);
+                document.body.style.opacity = '1';
+                themeToggler.style.opacity = '1';
+            }, 300);
+        });
+
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop) {
+                themeToggler.classList.remove('show');
+            } else {
+                setTimeout(() => {
+                    themeToggler.classList.add('show');
+                }, 200);
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        let mouseMoveTimer;
+        document.addEventListener('mousemove', () => {
+            themeToggler.classList.add('show');
+            clearTimeout(mouseMoveTimer);
+            mouseMoveTimer = setTimeout(() => {
+                if (window.pageYOffset > 100) {
+                    themeToggler.classList.remove('show');
+                }
+            }, 3000);
+        });
+
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                applyTheme(e.matches ? 'bw' : 'default');
+            }
+        });
+
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
+            }, 1000);
+
+            // Initialize particle system
+            new ParticleSystem();
+            
+            // Initialize solar system
+            new SolarSystem();
+        });
+
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
-            requestAnimationFrame(() => this.animate());
-        }
-    }
-
-    // ===== 3D SOLAR SYSTEM INIT =====
-    function initSolarSystem() {
-        const universe = document.getElementById('universe');
-
-        // Remove 'opening' class after intro delay to start 3D view
-        setTimeout(() => {
-            universe.classList.remove('opening');
-        }, 2000);
-
-        // 3D / 2D toggle buttons
-        document.getElementById('btn-3d').addEventListener('click', function() {
-            universe.classList.remove('view-2D');
-            universe.classList.add('view-3D');
-            document.getElementById('btn-3d').classList.add('active');
-            document.getElementById('btn-2d').classList.remove('active');
         });
 
-        document.getElementById('btn-2d').addEventListener('click', function() {
-            universe.classList.remove('view-3D');
-            universe.classList.add('view-2D');
-            document.getElementById('btn-2d').classList.add('active');
-            document.getElementById('btn-3d').classList.remove('active');
-        });
-    }
+        // Animated counters
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const options = {
+                threshold: 0.7
+            };
 
-    // ===== PRELOADER =====
-    window.addEventListener('load', function() {
-        const preloader = document.getElementById('preloader');
-        setTimeout(() => {
-            preloader.style.opacity = '0';
-            setTimeout(() => { preloader.style.display = 'none'; }, 500);
-        }, 1000);
-        new ParticleSystem();
-        initSolarSystem();
-    });
-
-    // ===== THEME TOGGLE =====
-    const themeToggler = document.getElementById('themeToggler');
-    const themeToggleBtn = document.querySelector('.theme-toggle-btn');
-    const themeIcon = document.querySelector('.theme-toggle-btn i');
-    const themeStatus = document.querySelector('.theme-status');
-
-    function getPreferredTheme() {
-        const saved = localStorage.getItem('theme');
-        if (saved) return saved;
-        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'bw' : 'default';
-    }
-
-    function applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        themeIcon.className = theme === 'bw' ? 'fas fa-sun' : 'fas fa-moon';
-        themeStatus.textContent = theme === 'bw' ? 'White Theme' : 'Dark Theme';
-        themeToggleBtn.title = theme === 'bw' ? 'Switch to Dark Theme' : 'Switch to White Theme';
-        setTimeout(() => themeToggler.classList.add('show'), 300);
-    }
-
-    applyTheme(getPreferredTheme());
-
-    themeToggleBtn.addEventListener('click', () => {
-        const next = document.documentElement.getAttribute('data-theme') === 'bw' ? 'default' : 'bw';
-        document.body.style.opacity = '0.8'; themeToggler.style.opacity = '0';
-        setTimeout(() => { applyTheme(next); document.body.style.opacity='1'; themeToggler.style.opacity='1'; }, 300);
-    });
-
-    let lastST = 0;
-    window.addEventListener('scroll', () => {
-        const st = window.pageYOffset;
-        if (st > lastST) themeToggler.classList.remove('show');
-        else setTimeout(() => themeToggler.classList.add('show'), 200);
-        lastST = st;
-    });
-
-    let mmTimer;
-    document.addEventListener('mousemove', () => {
-        themeToggler.classList.add('show');
-        clearTimeout(mmTimer);
-        mmTimer = setTimeout(() => { if (window.pageYOffset > 100) themeToggler.classList.remove('show'); }, 3000);
-    });
-
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
-        if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'bw' : 'default');
-    });
-
-    // ===== AOS =====
-    AOS.init({ duration: 1000, once: true, offset: 100 });
-
-    // ===== MOBILE NAV =====
-    const mobileMenu = document.getElementById('mobile-menu');
-    const navMenu = document.getElementById('nav-menu');
-    mobileMenu.addEventListener('click', function() {
-        this.classList.toggle('active'); navMenu.classList.toggle('active');
-    });
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => { mobileMenu.classList.remove('active'); navMenu.classList.remove('active'); });
-    });
-
-    // ===== NAVBAR SCROLL =====
-    window.addEventListener('scroll', function() {
-        document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-    });
-
-    // ===== SMOOTH SCROLL =====
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-    });
-
-    // ===== COUNTERS =====
-    function animateCounters() {
-        const obs = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                const el = entry.target;
-                const target = parseInt(el.getAttribute('data-count'));
-                const cu = new CountUp(el, target, {
-                    duration: 2, useEasing: true, useGrouping: true, separator: ',',
-                    suffix: target === 24 ? '/7' : '+'
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = parseInt(counter.getAttribute('data-count'));
+                        const countUp = new CountUp(counter, target, {
+                            duration: 2,
+                            useEasing: true,
+                            useGrouping: true,
+                            separator: ',',
+                            suffix: target === 24 ? '/7' : '+'
+                        });
+                        
+                        if (!countUp.error) {
+                            countUp.start();
+                        } else {
+                            console.error(countUp.error);
+                        }
+                        
+                        observer.unobserve(counter);
+                    }
                 });
-                if (!cu.error) cu.start();
-                obs.unobserve(el);
+            }, options);
+
+            counters.forEach(counter => {
+                observer.observe(counter);
             });
-        }, { threshold: 0.7 });
-        document.querySelectorAll('.stat-number').forEach(el => obs.observe(el));
-    }
-    document.addEventListener('DOMContentLoaded', animateCounters);
+        }
 
-    // ===== SWIPER =====
-    new Swiper('.project-swiper', {
-        slidesPerView: 1, spaceBetween: 30, loop: true,
-        autoplay: { delay: 4000, disableOnInteraction: false },
-        pagination: { el: '.swiper-pagination', clickable: true },
-        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-        breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
-    });
+        // Initialize counters when DOM is loaded
+        document.addEventListener('DOMContentLoaded', animateCounters);
 
-    // ===== BACK TO TOP =====
-    const backToTopButton = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => backToTopButton.classList.toggle('show', window.pageYOffset > 300));
-    backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        // Project Swiper
+        const projectSwiper = new Swiper('.project-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                }
+            }
+        });
 
-    // ===== HERO VIDEO ROTATION =====
-    document.addEventListener('DOMContentLoaded', function() {
-        const heroVideos = ['cybersecurity.mp4', 'server.mp4', 'video.mp4'];
-        let idx = 0;
-        const heroVideo = document.getElementById('hero-video');
-        const heroSource = heroVideo.querySelector('source');
-        heroVideo.muted = true;
-        heroVideo.play().catch(() => { heroVideo.controls = true; });
-        setInterval(() => {
-            idx = (idx + 1) % heroVideos.length;
-            heroSource.src = heroVideos[idx];
-            heroVideo.load(); heroVideo.play().catch(() => {});
-        }, 10000);
-    });
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
 
-    // ===== PARALLAX HERO =====
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const hero = document.querySelector('.hero');
-        if (hero) hero.style.transform = `translateY(${scrolled * -0.5}px)`;
-    });
-</script>
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Hero video playback
+        document.addEventListener('DOMContentLoaded', function () {
+            const heroVideos = ['cybersecurity.mp4', 'server.mp4', 'video.mp4'];
+            let currentVideoIndex = 0;
+            const heroVideo = document.getElementById('hero-video');
+            const heroSource = heroVideo.querySelector('source');
+
+            heroVideo.setAttribute('playsinline', '');
+            heroVideo.muted = true;
+
+            function switchHeroVideo() {
+                currentVideoIndex = (currentVideoIndex + 1) % heroVideos.length;
+                heroSource.src = heroVideos[currentVideoIndex];
+                heroVideo.load();
+                heroVideo.play().catch(() => {});
+            }
+
+            heroVideo.play().catch(() => { heroVideo.controls = true; });
+            setInterval(switchHeroVideo, 10000);
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                const rate = scrolled * -0.5;
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        });
+
+        // Console welcome message
+        console.log(`
+
+███████╗ ██████╗ ██████╗ ████████╗██╗███████╗██╗  ██╗██╗███████╗██╗     ██████╗ 
+██╔════╝██╔═══██╗██╔══██╗╚══██╔══╝██║██╔════╝██║  ██║██║██╔════╝██║     ██╔══██╗
+█████╗  ██║   ██║██████╔╝   ██║   ██║███████╗███████║██║█████╗  ██║     ██║  ██║
+██╔══╝  ██║   ██║██╔══██╗   ██║   ██║╚════██║██╔══██║██║██╔══╝  ██║     ██║  ██║
+██║     ╚██████╔╝██║  ██║   ██║   ██║███████║██║  ██║██║███████╗███████╗██████╔╝
+╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚═════╝ 
+                                                                                  
+%cWelcome to Fortishield-Matrix!
+Professional Tech Solutions & Cybersecurity Excellence
+`, 
+'color: #00d4ff; font-family: monospace;',
+'color: #00d4ff; font-size: 16px; font-weight: bold;'
+        );
+    </script>
 </body>
 </html>
