@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacancies - Fortishield-Matrix | News & Events</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <style>
+        /* ============ Base (identical to homepage) ============ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: hidden; max-width: 100%; }
+
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #ff6b35;
+            --accent-color: #7c3aed;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-primary: linear-gradient(135deg, #00d4ff, #7c3aed);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #f59e0b);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --theme-toggler-bg: rgba(10, 10, 10, 0.9);
+        }
+        [data-theme="bw"] {
+            --primary-color: #1a73e8;
+            --secondary-color: #666666;
+            --accent-color: #0d47a1;
+            --dark-bg: #ffffff;
+            --darker-bg: #f5f7fa;
+            --card-bg: #f0f3f8;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5f6368;
+            --gradient-primary: linear-gradient(135deg, #1a73e8, #0d47a1);
+            --gradient-secondary: linear-gradient(135deg, #666666, #444444);
+            --shadow-glow: 0 0 20px rgba(26, 115, 232, 0.3);
+            --theme-toggler-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body, .navbar, .hero, .footer, .theme-toggler, .whatsapp-float, .back-to-top {
+            transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        #particle-container { position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+        .particle-canvas { position:absolute; top:0; left:0; width:100%; height:100%; display:block; pointer-events:none; }
+        .navbar, .hero, .footer, .whatsapp-float, .back-to-top, .theme-toggler, .careers-section { position:relative; z-index:2; }
+        .container { max-width:1200px; width:100%; margin:0 auto; padding:0 20px; }
+
+        /* Custom Scrollbar — identical to homepage */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-color); }
+        ::selection { background: var(--primary-color); color: white; }
+        button:focus, a:focus, input:focus, textarea:focus, select:focus { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+
+        /* ============ Theme Toggler ============ */
+        .theme-toggler { position: fixed; bottom: 100px; right: 40px; z-index: 1001; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .theme-toggler.show { opacity: 1; transform: translateY(0); }
+        .theme-toggle-btn { width: 60px; height: 60px; border-radius: 50%; background: var(--theme-toggler-bg); backdrop-filter: blur(10px); border: 2px solid var(--primary-color); color: var(--primary-color); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); transition: all 0.3s ease; position: relative; overflow: hidden; }
+        [data-theme="bw"] .theme-toggle-btn { box-shadow: 0 0 20px rgba(26, 115, 232, 0.3); }
+        .theme-toggle-btn:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 0 30px var(--primary-color); }
+        .theme-toggle-btn::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background: conic-gradient(transparent, var(--primary-color), transparent 30%); animation: rotate 4s linear infinite; z-index:-1; }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .theme-toggle-btn::after { content:''; position:absolute; inset:3px; background: var(--theme-toggler-bg); border-radius:50%; z-index:-1; }
+        .theme-toggle-btn i { transition: transform 0.5s ease; z-index:1; }
+        .theme-toggle-btn:hover i { animation: spin 1s linear infinite; }
+        @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+        .theme-status { position:absolute; top:-40px; right:0; background: var(--theme-toggler-bg); backdrop-filter: blur(10px); padding:8px 16px; border-radius:20px; font-size:0.9rem; font-weight:600; color: var(--primary-color); border:1px solid var(--primary-color); opacity:0; transform: translateY(10px); transition: all 0.3s ease; white-space:nowrap; box-shadow: var(--shadow-glow); }
+        .theme-toggle-btn:hover .theme-status { opacity:1; transform: translateY(0); }
+
+        /* ============ Preloader ============ */
+        #preloader { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--darker-bg); display:flex; justify-content:center; align-items:center; z-index:10000; transition: opacity 0.5s ease; }
+        .loader { text-align:center; }
+        .cyber-loader { width:60px; height:60px; border:3px solid transparent; border-top:3px solid var(--primary-color); border-radius:50%; animation: spin 1s linear infinite; margin:0 auto 20px; }
+        .loader p { color: var(--primary-color); font-family:'Orbitron',monospace; font-weight:600; }
+
+        /* ============ Navigation ============ */
+        .navbar { position: fixed; top:0; width:100%; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); z-index:1000; transition: var(--transition); border-bottom:1px solid rgba(0,212,255,0.1); }
+        [data-theme="bw"] .navbar { background: rgba(255,255,255,0.95); }
+        .navbar.scrolled { background: rgba(5,5,5,0.98); box-shadow: var(--shadow-glow); }
+        [data-theme="bw"] .navbar.scrolled { background: rgba(255,255,255,0.98); }
+        .nav-container { max-width:1200px; margin:0 auto; padding:0 20px; display:flex; justify-content:space-between; align-items:center; height:70px; }
+        .nav-logo img { height:68px; filter:brightness(1.2); }
+        .nav-menu { display:flex; list-style:none; gap:30px; }
+        .nav-link { color: var(--text-secondary); text-decoration:none; font-weight:500; font-size:16px; transition: var(--transition); position:relative; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-color); }
+        .nav-link::after { content:''; position:absolute; bottom:-5px; left:0; width:0; height:2px; background: var(--gradient-primary); transition: width 0.3s ease; }
+        .nav-link:hover::after, .nav-link.active::after { width:100%; }
+        .nav-toggle { display:none; flex-direction:column; cursor:pointer; }
+        .bar { width:25px; height:3px; background: var(--primary-color); margin:3px 0; transition: var(--transition); }
+
+        /* ============ Page Header (compact banner, TRA-style) ============ */
+        .page-header { position:relative; height:42vh; min-height:320px; max-height:420px; display:flex; align-items:center; justify-content:center; overflow:hidden; margin-top:70px; }
+        .page-header-bg { position:absolute; top:0; left:0; width:100%; height:100%; z-index:-2; }
+        .page-header-bg .bg-slide { position:absolute; top:0; left:0; width:100%; height:100%; background-size:cover; background-position:center; opacity:0; transition: opacity 2.4s ease-in-out; transform: scale(1.08); animation: slowZoom 14s ease-in-out infinite; }
+        .page-header-bg .bg-slide.active { opacity:1; }
+        @keyframes slowZoom { 0% { transform: scale(1.0); } 100% { transform: scale(1.08); } }
+        .page-header-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.72); z-index:1; }
+        [data-theme="bw"] .page-header-overlay { background: rgba(255,255,255,0.78); }
+        .page-header-content { text-align:center; z-index:1; padding:0 20px; }
+        .page-header-content h1 { font-family:'Orbitron', monospace; font-size:2.4rem; font-weight:900; margin-bottom:14px; background: var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .page-header-tagline { font-size:1rem; color: var(--text-secondary); font-weight:300; font-style:italic; letter-spacing:0.3px; max-width:520px; margin:0 auto; }
+
+        .section-title { font-size:1.9rem; font-weight:700; background: var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; word-break: break-word; }
+        .section-subtitle { color: var(--text-secondary); margin-bottom:24px; font-size:0.95rem; }
+        .content-section { padding:50px 0; }
+        .col-header-row { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-bottom:8px; flex-wrap:wrap; }
+        .col-header-row .filter-select { max-width:220px; }
+        .news-col .col-header-row { align-items:center; }
+
+        /* ============ Two-column layout: Vacancies (left) + News sidebar (right) ============ */
+        .two-col-layout { display:grid; grid-template-columns: 2fr 1fr; gap:0; align-items:start; }
+        @media (max-width: 900px) { .two-col-layout { grid-template-columns: 1fr; } }
+
+        .vacancies-col { padding-right:40px; border-right:1px solid rgba(0,212,255,0.15); }
+        [data-theme="bw"] .vacancies-col { border-right-color: rgba(26,115,232,0.15); }
+        @media (max-width: 900px) { .vacancies-col { padding-right:0; border-right:none; padding-bottom:30px; border-bottom:1px solid rgba(0,212,255,0.15); margin-bottom:30px; } }
+
+        .news-col { padding-left:40px; }
+        @media (max-width: 900px) { .news-col { padding-left:0; } }
+
+        .no-vacancies-notice { display:flex; align-items:center; gap:16px; background: rgba(0,212,255,0.05); border:1px solid rgba(0,212,255,0.15); border-radius:14px; padding:22px 26px; color: var(--text-secondary); font-size:1rem; }
+        [data-theme="bw"] .no-vacancies-notice { border-color: rgba(26,115,232,0.15); }
+        .no-vacancies-notice i { font-size:1.6rem; color: var(--primary-color); flex-shrink:0; }
+
+        /* News sidebar */
+        .news-sidebar { position: sticky; top:90px; }
+        .news-sidebar-title { font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color: var(--primary-color); margin-bottom:18px; padding-bottom:12px; border-bottom:2px solid rgba(0,212,255,0.15); display:flex; align-items:center; gap:8px; }
+        [data-theme="bw"] .news-sidebar-title { border-bottom-color: rgba(26,115,232,0.15); }
+        .news-sidebar-item { display:flex; gap:12px; padding:14px 0; border-bottom:1px solid rgba(0,212,255,0.07); }
+        [data-theme="bw"] .news-sidebar-item { border-bottom-color: rgba(26,115,232,0.07); }
+        .news-sidebar-item:last-child { border-bottom:none; padding-bottom:0; }
+        .news-sidebar-item:first-child { padding-top:0; }
+        .news-sidebar-thumb { width:64px; height:64px; border-radius:10px; overflow:hidden; flex-shrink:0; background: rgba(0,212,255,0.08); }
+        .news-sidebar-thumb img { width:100%; height:100%; object-fit:cover; }
+        .news-sidebar-text h4 { font-size:0.82rem; line-height:1.4; color: var(--text-primary); margin-bottom:6px; font-weight:600; }
+        .news-sidebar-text .news-sidebar-date { font-size:0.72rem; color: var(--text-secondary); display:flex; align-items:center; gap:5px; }
+        .news-sidebar-text .news-sidebar-date i { color: var(--primary-color); font-size:0.68rem; }
+        .news-sidebar-item a { text-decoration:none; display:flex; gap:12px; width:100%; transition: var(--transition); }
+        .news-sidebar-item a:hover h4 { color: var(--primary-color); }
+        .news-sidebar-viewmore { display:block; text-align:center; margin-top:16px; padding-top:16px; border-top:1px solid rgba(0,212,255,0.1); color: var(--primary-color); text-decoration:none; font-weight:600; font-size:0.85rem; }
+        [data-theme="bw"] .news-sidebar-viewmore { border-top-color: rgba(26,115,232,0.1); }
+        .news-sidebar-viewmore:hover { color: var(--secondary-color); }
+
+        /* ============ Vacancy Cards ============ */
+        .vacancy-toolbar { display:flex; gap:14px; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:40px; }
+        .vacancy-count { color: var(--text-secondary); font-size:0.95rem; }
+        .vacancy-count strong { color: var(--primary-color); }
+        .filter-select { background: var(--card-bg); border:1px solid rgba(0,212,255,0.2); color: var(--text-primary); padding:10px 16px; border-radius:10px; font-family:'Rajdhani',sans-serif; font-size:0.95rem; cursor:pointer; }
+        [data-theme="bw"] .filter-select { border-color: rgba(26,115,232,0.2); }
+
+        .vacancies-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(min(340px,100%),1fr)); gap:26px; }
+        .vacancy-card { background: var(--card-bg); border-radius:16px; padding:28px; border:1px solid rgba(0,212,255,0.1); transition: var(--transition); position:relative; overflow:hidden; backdrop-filter: blur(10px); display:flex; flex-direction:column; }
+        [data-theme="bw"] .vacancy-card { border-color: rgba(26,115,232,0.1); }
+        .vacancy-card::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg, transparent, rgba(0,212,255,0.08), transparent); transition: left 0.5s ease; }
+        .vacancy-card:hover::before { left:100%; }
+        .vacancy-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-glow); }
+        .vacancy-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; gap:10px; }
+        .vacancy-dept-icon { width:52px; height:52px; border-radius:14px; background: rgba(0,212,255,0.1); display:flex; align-items:center; justify-content:center; font-size:1.4rem; color: var(--primary-color); flex-shrink:0; }
+        .vacancy-badge { font-size:0.68rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; padding:5px 12px; border-radius:20px; white-space:nowrap; }
+        .vacancy-badge.open { background: rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.3); }
+        .vacancy-badge.closing { background: rgba(255,107,53,0.15); color: var(--secondary-color); border:1px solid rgba(255,107,53,0.3); }
+        .vacancy-card h3 { font-size:1.25rem; margin-bottom:8px; color: var(--text-primary); }
+        .vacancy-meta { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:14px; }
+        .vacancy-meta span { font-size:0.82rem; color: var(--text-secondary); display:flex; align-items:center; gap:6px; }
+        .vacancy-meta i { color: var(--primary-color); font-size:0.8rem; }
+        .vacancy-card p.desc { color: var(--text-secondary); font-size:0.9rem; line-height:1.6; margin-bottom:20px; flex-grow:1; }
+        .vacancy-footer { display:flex; justify-content:space-between; align-items:center; gap:10px; padding-top:16px; border-top:1px solid rgba(0,212,255,0.08); }
+        [data-theme="bw"] .vacancy-footer { border-top-color: rgba(26,115,232,0.08); }
+        .vacancy-deadline { font-size:0.78rem; color: var(--text-secondary); }
+        .vacancy-deadline strong { color: var(--secondary-color); }
+        .apply-btn { padding:10px 22px; border-radius:50px; background: var(--gradient-primary); color:#fff; text-decoration:none; font-weight:600; font-size:0.85rem; display:inline-flex; align-items:center; gap:8px; transition: var(--transition); }
+        .apply-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-glow); }
+
+        .empty-state { text-align:center; padding:60px 20px; color: var(--text-secondary); }
+        .empty-state i { font-size:3rem; color: var(--primary-color); opacity:0.5; margin-bottom:16px; display:block; }
+
+        /* ============ News & Events Cards ============ */
+        .news-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(min(320px,100%),1fr)); gap:26px; }
+        .news-card { background: var(--card-bg); border-radius:16px; overflow:hidden; border:1px solid rgba(0,212,255,0.1); transition: var(--transition); backdrop-filter: blur(10px); display:flex; flex-direction:column; }
+        [data-theme="bw"] .news-card { border-color: rgba(26,115,232,0.1); }
+        .news-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-glow); }
+        .news-thumb { height:190px; position:relative; overflow:hidden; }
+        .news-thumb img { width:100%; height:100%; object-fit:cover; transition: transform 0.5s ease; }
+        .news-card:hover .news-thumb img { transform: scale(1.08); }
+        .news-date-badge { position:absolute; top:14px; left:14px; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); color: var(--primary-color); font-family:'Orbitron',monospace; font-size:0.7rem; padding:8px 12px; border-radius:10px; text-align:center; line-height:1.3; }
+        .news-date-badge .day { display:block; font-size:1.1rem; font-weight:700; }
+        .news-type-tag { position:absolute; top:14px; right:14px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:5px 12px; border-radius:20px; background: rgba(124,58,237,0.85); color:#fff; }
+        .news-body { padding:22px; display:flex; flex-direction:column; flex-grow:1; }
+        .news-body h3 { font-size:1.15rem; margin-bottom:10px; color: var(--text-primary); line-height:1.4; }
+        .news-body p { color: var(--text-secondary); font-size:0.88rem; line-height:1.6; margin-bottom:16px; flex-grow:1; }
+        .news-readmore { color: var(--primary-color); text-decoration:none; font-weight:600; font-size:0.85rem; display:inline-flex; align-items:center; gap:6px; transition: var(--transition); }
+        .news-readmore:hover { gap:10px; color: var(--secondary-color); }
+        .view-more-wrap { text-align:center; margin-top:36px; }
+
+        /* ============ CTA strip ============ */
+        .cta-strip { margin-top:80px; padding:50px 40px; border-radius:20px; background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08)); border:1px solid rgba(0,212,255,0.15); text-align:center; }
+        [data-theme="bw"] .cta-strip { border-color: rgba(26,115,232,0.15); }
+        .cta-strip h3 { font-size:1.6rem; margin-bottom:12px; color: var(--text-primary); }
+        .cta-strip p { color: var(--text-secondary); margin-bottom:24px; max-width:520px; margin-left:auto; margin-right:auto; }
+
+        /* ============ Footer (identical) ============ */
+        .footer { background: transparent; padding:60px 0 20px; border-top:1px solid rgba(0,212,255,0.1); }
+        [data-theme="bw"] .footer { border-top-color: rgba(26,115,232,0.1); }
+        .footer-content { display:grid; grid-template-columns: repeat(auto-fit, minmax(min(250px,100%),1fr)); gap:40px; margin-bottom:40px; }
+        .footer-section h3 { color: var(--primary-color); margin-bottom:20px; font-size:1.2rem; }
+        .footer-section p { color: var(--text-secondary); line-height:1.6; }
+        .footer-section ul { list-style:none; }
+        .footer-section ul li { margin-bottom:10px; }
+        .footer-section ul li a { color: var(--text-secondary); text-decoration:none; transition: var(--transition); }
+        .footer-section ul li a:hover { color: var(--primary-color); }
+        .footer-logo { height:40px; margin-bottom:20px; filter:brightness(1.2); }
+        .social-icons { display:flex; gap:15px; }
+        .social-icon { display:flex; align-items:center; justify-content:center; width:40px; height:40px; background: rgba(0,212,255,0.1); color: var(--primary-color); border-radius:50%; text-decoration:none; transition: var(--transition); }
+        .social-icon:hover { background: var(--primary-color); color:white; transform: translateY(-3px); }
+        .footer-bottom { text-align:center; padding-top:20px; border-top:1px solid rgba(0,212,255,0.1); color: var(--text-secondary); }
+        [data-theme="bw"] .footer-bottom { border-top-color: rgba(26,115,232,0.1); }
+
+        .whatsapp-float { position:fixed; bottom:40px; right:40px; width:60px; height:60px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px; color:white; text-decoration:none; z-index:1000; animation: bounce-whatsapp 2s infinite; transition: var(--transition); }
+        .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(37,211,102,0.5); }
+        @keyframes bounce-whatsapp { 0%,20%,50%,80%,100%{transform:translateY(0);} 40%{transform:translateY(-10px);} 60%{transform:translateY(-5px);} }
+        .back-to-top { position:fixed; bottom:40px; left:40px; width:50px; height:50px; background: var(--gradient-primary); border:none; border-radius:50%; color:white; font-size:20px; cursor:pointer; opacity:0; visibility:hidden; transition: var(--transition); z-index:1000; }
+        .back-to-top.show { opacity:1; visibility:visible; }
+        .back-to-top:hover { transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+
+        /* ============ Responsive ============ */
+        @media (max-width:768px) {
+            .nav-menu { position:fixed; left:-100%; top:70px; flex-direction:column; background-color: rgba(5,5,5,0.98); width:100%; text-align:center; transition:0.3s; box-shadow: var(--shadow-glow); padding:20px 0; z-index:999; }
+            [data-theme="bw"] .nav-menu { background-color: rgba(255,255,255,0.98); }
+            .nav-menu.active { left:0; }
+            .nav-toggle { display:flex; }
+            .nav-toggle.active .bar:nth-child(2) { opacity:0; }
+            .nav-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .nav-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+            .hero-title { font-size:2.2rem; }
+            .hero-subtitle { font-size:1.05rem; }
+            .hero-buttons { flex-direction:column; align-items:center; }
+            .theme-toggler { bottom:80px; right:20px; }
+            .theme-toggle-btn { width:50px; height:50px; font-size:1.3rem; }
+            .theme-status { top:-35px; font-size:0.8rem; padding:6px 12px; }
+            .footer-content { grid-template-columns:1fr; text-align:center; }
+            .whatsapp-float { bottom:20px; right:20px; width:50px; height:50px; font-size:25px; }
+            .back-to-top { bottom:80px; left:20px; }
+            .section-title { font-size:1.9rem; }
+            .vacancy-toolbar { flex-direction:column; align-items:stretch; }
+            .cta-strip { padding:36px 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="particle-container"><canvas id="particleCanvas" class="particle-canvas"></canvas></div>
+
+    <div id="preloader">
+        <div class="loader">
+            <div class="cyber-loader"></div>
+            <p>Loading Vacancies...</p>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><img src="Logo1.png" alt="Fortishield-Matrix Logo"></div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="Our Team.html" class="nav-link">Our Team</a></li>
+                <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
+                <li class="nav-item"><a href="vacancies.html" class="nav-link active">Vacancies</a></li>
+                <li class="nav-item"><a href="projects.html" class="nav-link">Projects</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+    </nav>
+
+    <div class="theme-toggler" id="themeToggler">
+        <button class="theme-toggle-btn" title="Toggle Theme">
+            <i class="fas fa-palette"></i>
+            <span class="theme-status">Color Theme</span>
+        </button>
+    </div>
+
+    <!-- ============ PAGE HEADER — slow crossfading image slideshow background ============ -->
+    <section class="page-header">
+        <div class="page-header-bg" id="heroImageStack">
+            <!-- Add/replace with your own photos — team at work, office life, interview
+                 moments, whatever fits your "vacancy inspiration" feel. The JS below
+                 cycles through every .bg-slide here with a slow crossfade + gentle zoom. -->
+            <div class="bg-slide active" style="background-image:url('careers-hero-1.jpg');"></div>
+            <div class="bg-slide" style="background-image:url('careers-hero-2.jpg');"></div>
+            <div class="bg-slide" style="background-image:url('careers-hero-3.jpg');"></div>
+            <div class="page-header-overlay"></div>
+        </div>
+        <div class="page-header-content" data-aos="fade-up">
+            <h1>Vacancies</h1>
+            <p class="page-header-tagline">Great teams are built by people who dare to grow. Discover where you fit at Fortishield-Matrix.</p>
+        </div>
+    </section>
+
+    <!-- ============ VACANCIES (left) + NEWS SIDEBAR (right) — TRA two-column layout ============ -->
+    <section class="content-section">
+        <div class="container">
+            <div class="two-col-layout">
+
+                <!-- LEFT: Vacancies -->
+                <div class="vacancies-col" data-aos="fade-up">
+                    <div class="col-header-row">
+                        <h2 class="section-title">Open Vacancies</h2>
+                        <select class="filter-select" id="deptFilter" onchange="renderVacancies()" style="display:none;" title="Filter by department">
+                            <option value="">All Departments</option>
+                        </select>
+                    </div>
+                    <p class="section-subtitle">Every listing links directly to our Recruitment Management System for a guided application process. <span id="vacancyCountLine" style="display:none;">Showing <strong id="vacancyCount">0</strong> open positions.</span></p>
+
+                    <div class="vacancies-grid" id="vacanciesGrid">
+                        <!-- Populated by JS; shows a TRA-style "no vacancies" notice if empty -->
+                    </div>
+                </div>
+
+                <!-- RIGHT: News & Events sidebar -->
+                <div class="news-col" data-aos="fade-up">
+                    <aside class="news-sidebar">
+                        <div class="col-header-row">
+                            <div class="news-sidebar-title" style="margin-bottom:0;padding-bottom:0;border-bottom:none;"><i class="fas fa-newspaper"></i> News &amp; Events</div>
+                        </div>
+                        <p class="section-subtitle" style="visibility:hidden;">.</p>
+                        <div id="newsSidebarList" style="border-top:2px solid rgba(0,212,255,0.15); padding-top:4px;">
+                            <!-- Populated by JS -->
+                        </div>
+                        <a href="news.html" class="news-sidebar-viewmore">View More <i class="fas fa-arrow-right"></i></a>
+                    </aside>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CTA STRIP ============ -->
+    <section class="content-section">
+        <div class="container">
+            <div class="cta-strip" data-aos="fade-up">
+                <h3>Don't see a role that fits right now?</h3>
+                <p>We're always interested in meeting talented engineers, analysts, and security professionals. Send us your CV and we'll reach out when something opens up.</p>
+                <a href="http://192.168.1.165:8000/RMS.html" target="_blank" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Your CV</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="Logo1.png" alt="Fortishield-Matrix Logo" class="footer-logo">
+                    <p>Professional tech solutions and cybersecurity excellence for modern businesses.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="Our Team.html">Our Team</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="vacancies.html">Vacancies</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="service-system-development.html">System Development</a></li>
+                        <li><a href="service-server-design.html">Server Design</a></li>
+                        <li><a href="service-cybersecurity.html">Cybersecurity</a></li>
+                        <li><a href="service-network-design.html">Network Design</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="https://facebook.com/fortishieldmatrix" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/fortishieldmatrix_company.ltd" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/fortishieldmatrix" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/fortishieldmatrix" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom"><p>Powered by Fortishield-Matrix &copy; 2026</p></div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/+255743981440" class="whatsapp-float" target="_blank" rel="noopener" title="Chat with us on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <button class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        /* =========================================================
+           CONFIG — point this at your RMS backend endpoints.
+           Both should return JSON. If unreachable, demo data below
+           is shown instead so the page never looks broken.
+           ========================================================= */
+        const RMS_BASE_URL = 'http://192.168.1.165:8000';           // your RMS host
+        const VACANCIES_API_URL = RMS_BASE_URL + '/api/vacancies.php'; // expects JSON array
+        const NEWS_API_URL = RMS_BASE_URL + '/api/news_events.php';    // expects JSON array
+        const RMS_APPLY_BASE = RMS_BASE_URL + '/RMS.html';              // apply page, ?vacancy_id=ID appended
+
+        /* ---- Demo fallback data (shown if the API above isn't reachable) ---- */
+        const DEMO_VACANCIES = [
+            { id: 101, title: 'Backend Developer (PHP/MariaDB)', department: 'Engineering', location: 'Arusha, Tanzania', type: 'Full-time', posted: '2026-07-01', deadline: '2026-08-15', description: 'Build and maintain core modules across our EMS, RMS, and finance systems. Strong PHP/PDO and MariaDB experience required.' },
+            { id: 102, title: 'Cybersecurity Analyst', department: 'Cybersecurity', location: 'Arusha, Tanzania', type: 'Full-time', posted: '2026-06-20', deadline: '2026-07-31', description: 'Monitor client infrastructure, run vulnerability assessments, and support incident response across our SentriX product line.' },
+            { id: 103, title: 'Cloud Infrastructure Engineer', department: 'Cloud & Infrastructure', location: 'Remote (East Africa)', type: 'Contract', posted: '2026-06-10', deadline: '2026-07-25', description: 'Design and manage scalable cloud deployments on AWS/GCP for client projects across the region.' },
+            { id: 104, title: 'Business Development Associate', department: 'Sales & Business Development', location: 'Arusha, Tanzania', type: 'Full-time', posted: '2026-07-05', deadline: '2026-08-20', description: 'Identify and develop new client relationships across East African markets for our POS, CRM, and security product lines.' },
+        ];
+        const DEMO_NEWS = [
+            { id: 1, title: 'Fortishield-Matrix Launches Upgraded FSM.ESM Suite', type: 'Announcement', date: '2026-07-05', image: 'FSM1.JPG', excerpt: 'Our Employee Management, Recruitment, and Finance systems now run on a unified architecture with real-time dashboards and stronger security.' },
+            { id: 2, title: 'Open Day: Meet the Team — Arusha Office', type: 'Event', date: '2026-08-02', image: 'FSM2.jpg', excerpt: 'Join us for an open day at our Arusha office — tour our workspace, meet the engineering team, and learn about upcoming roles.' },
+            { id: 3, title: 'Partnership Milestone with Regional Banking Clients', type: 'Milestone', date: '2026-06-18', image: 'FSM3.jpg', excerpt: 'We are proud to expand our finance-sector partnerships, delivering secure infrastructure solutions to leading regional banks.' },
+        ];
+
+        let currentVacancies = [];
+
+        /* ---- Fetch helpers with graceful fallback ---- */
+        async function loadVacancies() {
+            try {
+                const res = await fetch(VACANCIES_API_URL, { credentials: 'omit' });
+                if (!res.ok) throw new Error('bad response');
+                const data = await res.json();
+                currentVacancies = Array.isArray(data) && data.length ? data : DEMO_VACANCIES;
+            } catch (e) {
+                currentVacancies = DEMO_VACANCIES;
+            }
+            populateDeptFilter();
+            renderVacancies();
+        }
+
+        function populateDeptFilter() {
+            const select = document.getElementById('deptFilter');
+            const depts = [...new Set(currentVacancies.map(v => v.department).filter(Boolean))].sort();
+            select.innerHTML = '<option value="">All Departments</option>' +
+                depts.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+        }
+
+        async function loadNews() {
+            let news;
+            try {
+                const res = await fetch(NEWS_API_URL, { credentials: 'omit' });
+                if (!res.ok) throw new Error('bad response');
+                const data = await res.json();
+                news = Array.isArray(data) && data.length ? data : DEMO_NEWS;
+            } catch (e) {
+                news = DEMO_NEWS;
+            }
+            renderNews(news);
+        }
+
+        function daysUntil(dateStr) {
+            const diff = (new Date(dateStr) - new Date());
+            return Math.ceil(diff / (1000 * 60 * 60 * 24));
+        }
+        function fmtDate(d) {
+            return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function renderVacancies() {
+            const filterEl = document.getElementById('deptFilter');
+            const filter = filterEl.value;
+            const grid = document.getElementById('vacanciesGrid');
+            const countLine = document.getElementById('vacancyCountLine');
+            const list = filter ? currentVacancies.filter(v => v.department === filter) : currentVacancies;
+
+            if (!currentVacancies.length) {
+                filterEl.style.display = 'none';
+                countLine.style.display = 'none';
+                grid.innerHTML = `<div class="no-vacancies-notice" style="grid-column:1/-1;">
+                    <i class="fas fa-circle-info"></i>
+                    <span>There are no available vacancies at the moment. Kindly check back later for any job openings.</span>
+                </div>`;
+                return;
+            }
+
+            filterEl.style.display = 'inline-block';
+            countLine.style.display = 'inline';
+            document.getElementById('vacancyCount').textContent = list.length;
+
+            if (!list.length) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+                    <i class="fas fa-folder-open"></i>
+                    <p>No open positions in this department right now. Check back soon or submit your CV below.</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(v => {
+                const dLeft = daysUntil(v.deadline);
+                const closingSoon = dLeft <= 7 && dLeft >= 0;
+                const deptIcons = {
+                    'Engineering': 'fa-code', 'Cybersecurity': 'fa-shield-halved',
+                    'Cloud & Infrastructure': 'fa-cloud', 'Operations': 'fa-gears',
+                    'Sales & Business Development': 'fa-chart-line'
+                };
+                const icon = deptIcons[v.department] || 'fa-briefcase';
+                return `
+                <div class="vacancy-card">
+                    <div class="vacancy-top">
+                        <div class="vacancy-dept-icon"><i class="fas ${icon}"></i></div>
+                        <span class="vacancy-badge ${closingSoon ? 'closing' : 'open'}">${closingSoon ? 'Closing Soon' : 'Open'}</span>
+                    </div>
+                    <h3>${escapeHtml(v.title)}</h3>
+                    <div class="vacancy-meta">
+                        <span><i class="fas fa-building"></i> ${escapeHtml(v.department)}</span>
+                        <span><i class="fas fa-location-dot"></i> ${escapeHtml(v.location)}</span>
+                        <span><i class="fas fa-clock"></i> ${escapeHtml(v.type)}</span>
+                    </div>
+                    <p class="desc">${escapeHtml(v.description)}</p>
+                    <div class="vacancy-footer">
+                        <div class="vacancy-deadline">Apply by <strong>${fmtDate(v.deadline)}</strong></div>
+                        <a href="${RMS_APPLY_BASE}?vacancy_id=${encodeURIComponent(v.id)}" target="_blank" class="apply-btn">
+                            Apply Now <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderNews(list) {
+            const wrap = document.getElementById('newsSidebarList');
+            wrap.innerHTML = list.map(n => {
+                const d = new Date(n.date);
+                const dateStr = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+                return `
+                <div class="news-sidebar-item">
+                    <a href="${n.url ? escapeHtml(n.url) : '#'}" ${n.url ? 'target="_blank"' : 'onclick="return false;"'}>
+                        <div class="news-sidebar-thumb">
+                            <img src="${escapeHtml(n.image)}" alt="${escapeHtml(n.title)}" onerror="this.src='FSM1.JPG'">
+                        </div>
+                        <div class="news-sidebar-text">
+                            <h4>${escapeHtml(n.title)}</h4>
+                            <div class="news-sidebar-date"><i class="fas fa-calendar"></i> ${dateStr}</div>
+                        </div>
+                    </a>
+                </div>`;
+            }).join('');
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str ?? '';
+            return div.innerHTML;
+        }
+
+        /* ============ Particle System (identical to homepage) ============ */
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.theme = document.documentElement.getAttribute('data-theme') || 'default';
+                this.init();
+            }
+            init() { this.resize(); this.createParticles(); this.setupEventListeners(); this.animate(); }
+            resize() { this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight; }
+            createParticles() {
+                const count = Math.min(100, Math.floor((this.canvas.width * this.canvas.height) / 15000));
+                this.particles = [];
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({ x: Math.random()*this.canvas.width, y: Math.random()*this.canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5, radius: Math.random()*2+1 });
+                }
+            }
+            setupEventListeners() {
+                window.addEventListener('resize', () => { this.resize(); this.createParticles(); });
+                window.addEventListener('mousemove', e => { this.mouse.x = e.clientX; this.mouse.y = e.clientY; });
+                new MutationObserver(() => { this.theme = document.documentElement.getAttribute('data-theme'); }).observe(document.documentElement, { attributes: true });
+            }
+            getParticleColor() { return this.theme === 'bw' ? '#1a73e8' : '#00d4ff'; }
+            getConnectionColor(o) { return this.theme === 'bw' ? `rgba(26,115,232,${o})` : `rgba(0,212,255,${o})`; }
+            getMouseConnectionColor(o) { return this.theme === 'bw' ? `rgba(13,71,161,${o})` : `rgba(124,58,237,${o})`; }
+            animate() {
+                this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+                const pc = this.getParticleColor();
+                this.particles.forEach((p,i) => {
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x<0||p.x>this.canvas.width) p.vx*=-1;
+                    if (p.y<0||p.y>this.canvas.height) p.vy*=-1;
+                    const dx=this.mouse.x-p.x, dy=this.mouse.y-p.y;
+                    if (Math.sqrt(dx*dx+dy*dy)<150){ p.x-=dx*0.01; p.y-=dy*0.01; }
+                    this.ctx.beginPath(); this.ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+                    this.ctx.fillStyle = pc+'99'; this.ctx.fill();
+                    this.particles.slice(i+1).forEach(o => {
+                        const dx2=p.x-o.x, dy2=p.y-o.y, dist=Math.sqrt(dx2*dx2+dy2*dy2);
+                        if (dist<120){ this.ctx.beginPath(); this.ctx.moveTo(p.x,p.y); this.ctx.lineTo(o.x,o.y); this.ctx.strokeStyle=this.getConnectionColor(0.2*(1-dist/120)); this.ctx.lineWidth=0.5; this.ctx.stroke(); }
+                    });
+                    const md = Math.sqrt(Math.pow(p.x-this.mouse.x,2)+Math.pow(p.y-this.mouse.y,2));
+                    if (md<200){ this.ctx.beginPath(); this.ctx.moveTo(p.x,p.y); this.ctx.lineTo(this.mouse.x,this.mouse.y); this.ctx.strokeStyle=this.getMouseConnectionColor(0.3*(1-md/200)); this.ctx.lineWidth=0.8; this.ctx.stroke(); }
+                });
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        /* ============ Theme Toggle ============ */
+        const themeToggler = document.getElementById('themeToggler');
+        const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+        const themeIcon = document.querySelector('.theme-toggle-btn i');
+        const themeStatus = document.querySelector('.theme-status');
+        function getPreferredTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved) return saved;
+            return window.matchMedia('(prefers-color-scheme: light)').matches ? 'bw' : 'default';
+        }
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeIcon.className = theme === 'bw' ? 'fas fa-sun' : 'fas fa-moon';
+            themeStatus.textContent = theme === 'bw' ? 'White Theme' : 'Dark Theme';
+            themeToggleBtn.title = theme === 'bw' ? 'Switch to Dark Theme' : 'Switch to White Theme';
+            setTimeout(() => themeToggler.classList.add('show'), 300);
+        }
+        applyTheme(getPreferredTheme());
+        themeToggleBtn.addEventListener('click', () => {
+            const next = document.documentElement.getAttribute('data-theme') === 'bw' ? 'default' : 'bw';
+            document.body.style.opacity = '0.8'; themeToggler.style.opacity = '0';
+            setTimeout(() => { applyTheme(next); document.body.style.opacity='1'; themeToggler.style.opacity='1'; }, 300);
+        });
+        let lastST = 0;
+        window.addEventListener('scroll', () => {
+            const st = window.pageYOffset;
+            if (st > lastST) themeToggler.classList.remove('show'); else setTimeout(() => themeToggler.classList.add('show'), 200);
+            lastST = st;
+        });
+        let mmTimer;
+        document.addEventListener('mousemove', () => {
+            themeToggler.classList.add('show'); clearTimeout(mmTimer);
+            mmTimer = setTimeout(() => { if (window.pageYOffset > 100) themeToggler.classList.remove('show'); }, 3000);
+        });
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'bw' : 'default');
+        });
+
+        /* ============ Boot ============ */
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => { preloader.style.opacity='0'; setTimeout(() => { preloader.style.display='none'; }, 500); }, 800);
+            new ParticleSystem();
+        });
+        AOS.init({ duration: 1000, once: true, offset: 100 });
+
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+        mobileMenu.addEventListener('click', function() { this.classList.toggle('active'); navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => { mobileMenu.classList.remove('active'); navMenu.classList.remove('active'); }));
+
+        window.addEventListener('scroll', function() {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => backToTopButton.classList.toggle('show', window.pageYOffset > 300));
+        backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initHeroImageSlideshow();
+            loadVacancies();
+            loadNews();
+        });
+
+        /* ============ Hero background: slow crossfading image slideshow ============ */
+        function initHeroImageSlideshow() {
+            const stack = document.getElementById('heroImageStack');
+            if (!stack) return;
+            const slides = Array.from(stack.querySelectorAll('.bg-slide'));
+            if (slides.length <= 1) return; // nothing to cycle
+
+            let current = 0;
+            const HOLD_MS = 6000; // how long each image shows before crossfading to the next
+
+            setInterval(() => {
+                const next = (current + 1) % slides.length;
+                slides[next].classList.add('active');
+                slides[current].classList.remove('active');
+                current = next;
+            }, HOLD_MS);
+        }
+    </script>
+</body>
+</html>
