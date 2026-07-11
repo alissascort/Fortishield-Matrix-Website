@@ -416,8 +416,8 @@
            is shown instead so the page never looks broken.
            ========================================================= */
         const RMS_BASE_URL = 'http://192.168.1.165:8000';           // your RMS host
-        const VACANCIES_API_URL = RMS_BASE_URL + 'vacancies.php'; // expects JSON array
-        const NEWS_API_URL = RMS_BASE_URL + 'news_events.php';    // expects JSON array
+        const VACANCIES_API_URL = RMS_BASE_URL + '/api/vacancies.php'; // expects JSON array
+        const NEWS_API_URL = RMS_BASE_URL + '/api/news_events.php';    // expects JSON array
         const RMS_APPLY_BASE = RMS_BASE_URL + '/RMS.html';              // apply page, ?vacancy_id=ID appended
 
         /* ---- Demo fallback data (shown if the API above isn't reachable) ---- */
