@@ -270,7 +270,7 @@
     <div id="preloader">
         <div class="loader">
             <div class="cyber-loader"></div>
-            <p>Loading Vacancies...</p>
+            <p>Loading Fortishield-Matrix...</p>
         </div>
     </div>
 
@@ -459,10 +459,11 @@
         async function loadNews() {
             let news;
             try {
-                const res = await fetch(NEWS_API_URL, { credentials: 'omit' });
+                const res = await fetch(NEWS_API_URL + '?limit=5', { credentials: 'omit' });
                 if (!res.ok) throw new Error('bad response');
-                const data = await res.json();
-                news = Array.isArray(data) && data.length ? data : DEMO_NEWS;
+                const payload = await res.json();
+                const list = Array.isArray(payload) ? payload : (payload.data || []);
+                news = list.length ? list : DEMO_NEWS;
             } catch (e) {
                 news = DEMO_NEWS;
             }
