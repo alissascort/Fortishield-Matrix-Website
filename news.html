@@ -156,6 +156,22 @@
         .notice-item .notice-date { font-size:0.72rem; color: var(--text-secondary); display:flex; align-items:center; gap:5px; }
         .notice-item .notice-date i { color: var(--secondary-color); font-size:0.68rem; }
 
+        /* ============ Read More detail modal ============ */
+        .news-modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; padding:20px; }
+        .news-modal-overlay.open { display:flex; }
+        .news-modal-box { background: var(--card-bg); border-radius:18px; max-width:640px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
+        .news-modal-img { width:100%; height:260px; object-fit:cover; }
+        .news-modal-body { padding:28px 30px; }
+        .news-modal-close { position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,0.6); color:#fff; border:none; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2; }
+        .news-modal-close:hover { background: var(--primary-color); }
+        .news-modal-meta { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+        .news-modal-type { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:5px 12px; border-radius:20px; background: rgba(124,58,237,0.15); color: var(--accent-color); }
+        .news-modal-date { font-size:0.82rem; color: var(--text-secondary); display:flex; align-items:center; gap:6px; }
+        .news-modal-body h2 { font-size:1.5rem; margin-bottom:16px; color: var(--text-primary); line-height:1.35; }
+        .news-modal-body p.full-text { color: var(--text-secondary); font-size:0.95rem; line-height:1.75; white-space:pre-line; }
+        .news-modal-body .news-modal-link { display:inline-flex; align-items:center; gap:8px; margin-top:20px; color: var(--primary-color); text-decoration:none; font-weight:600; }
+        .news-modal-body .news-modal-link:hover { color: var(--secondary-color); }
+
         .no-vacancies-notice { display:flex; align-items:center; gap:16px; background: rgba(0,212,255,0.05); border:1px solid rgba(0,212,255,0.15); border-radius:14px; padding:22px 26px; color: var(--text-secondary); font-size:1rem; }
         [data-theme="bw"] .no-vacancies-notice { border-color: rgba(26,115,232,0.15); }
         .no-vacancies-notice i { font-size:1.6rem; color: var(--primary-color); flex-shrink:0; }
@@ -290,7 +306,7 @@
     <div id="preloader">
         <div class="loader">
             <div class="cyber-loader"></div>
-            <p>Loading News & Events...</p>
+            <p>Loading Fortishield-Matrix...</p>
         </div>
     </div>
 
@@ -451,6 +467,7 @@
 
         let currentPage = 1;
         let totalPages = 1;
+        let currentNewsList = [];
 
         function fmtDate(d) {
             return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -483,8 +500,17 @@
                 const res = await fetch(NEWS_API_URL + '?page=' + page + '&limit=' + PER_PAGE, { credentials: 'omit' });
                 if (!res.ok) throw new Error('bad response');
                 const payload = await res.json();
-                const list = payload.data && payload.data.length ? payload.data : DEMO_NEWS;
-                totalPages = payload.total_pages || 1;
+                // Support both response shapes: old plain array, or new paginated {data, total_pages}
+                let list, tp;
+                if (Array.isArray(payload)) {
+                    list = payload;
+                    tp = 1;
+                } else {
+                    list = payload.data || [];
+                    tp = payload.total_pages || 1;
+                }
+                if (!list.length) list = DEMO_NEWS;
+                totalPages = tp;
                 renderNews(list);
                 renderPagination();
             } catch (e) {
@@ -502,6 +528,7 @@
         }
 
         function renderNews(list) {
+            currentNewsList = list;
             const grid = document.getElementById('newsGrid');
             if (!list.length) {
                 grid.innerHTML = '<div class="no-vacancies-notice" style="grid-column:1/-1;">' +
@@ -509,25 +536,45 @@
                     '<span>No news or events published yet. Check back soon.</span></div>';
                 return;
             }
-            grid.innerHTML = list.map(function(n) {
+            grid.innerHTML = list.map(function(n, idx) {
                 const d = new Date(n.date);
                 const month = d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
                 const day = d.getDate();
-                const url = n.url ? escapeHtml(n.url) : '#';
-                const target = n.url ? 'target="_blank"' : 'onclick="return false;"';
                 return '<div class="news-card">' +
                     '<div class="news-thumb">' +
-                        '<img src="' + escapeHtml(n.image) + '" alt="' + escapeHtml(n.title) + '" onerror="this.src=\'FSM1.JPG\'">' +
+                        '<img src="' + escapeHtml(n.image) + '" alt="' + escapeHtml(n.title) + '" onerror="this.src=' + "'FSM1.JPG'" + '">' +
                         '<div class="news-date-badge"><span class="day">' + day + '</span>' + month + '</div>' +
                         '<div class="news-type-tag">' + escapeHtml(n.type) + '</div>' +
                     '</div>' +
                     '<div class="news-body">' +
                         '<h3>' + escapeHtml(n.title) + '</h3>' +
                         '<p>' + escapeHtml(n.excerpt) + '</p>' +
-                        '<a href="' + url + '" ' + target + ' class="news-readmore">Read More <i class="fas fa-arrow-right"></i></a>' +
+                        '<a href="#" onclick="openNewsDetail(' + idx + '); return false;" class="news-readmore">Read More <i class="fas fa-arrow-right"></i></a>' +
                     '</div></div>';
             }).join('');
         }
+
+        function openNewsDetail(idx) {
+            const n = currentNewsList[idx];
+            if (!n) return;
+            const d = new Date(n.date);
+            document.getElementById('newsDetailImg').src = n.image || 'FSM1.JPG';
+            document.getElementById('newsDetailImg').style.display = 'block';
+            document.getElementById('newsDetailType').textContent = n.type || 'News';
+            document.getElementById('newsDetailDate').textContent = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('newsDetailTitle').textContent = n.title;
+            document.getElementById('newsDetailText').textContent = n.excerpt || '';
+            const linkEl = document.getElementById('newsDetailLink');
+            if (n.url) { linkEl.href = n.url; linkEl.style.display = 'inline-flex'; }
+            else { linkEl.style.display = 'none'; }
+            document.getElementById('newsDetailModal').classList.add('open');
+        }
+        function closeNewsDetail() {
+            document.getElementById('newsDetailModal').classList.remove('open');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeNewsDetail();
+        });
 
         function renderPagination() {
             const wrap = document.getElementById('newsPagination');
@@ -697,5 +744,22 @@
             }, HOLD_MS);
         }
     </script>
+    <!-- ============ Read More Detail Modal ============ -->
+    <div class="news-modal-overlay" id="newsDetailModal" onclick="if(event.target===this) closeNewsDetail()">
+        <div class="news-modal-box" style="position:relative;">
+            <button class="news-modal-close" onclick="closeNewsDetail()"><i class="fas fa-times"></i></button>
+            <img class="news-modal-img" id="newsDetailImg" src="" alt="" onerror="this.style.display='none'">
+            <div class="news-modal-body">
+                <div class="news-modal-meta">
+                    <span class="news-modal-type" id="newsDetailType"></span>
+                    <span class="news-modal-date"><i class="fas fa-calendar"></i> <span id="newsDetailDate"></span></span>
+                </div>
+                <h2 id="newsDetailTitle"></h2>
+                <p class="full-text" id="newsDetailText"></p>
+                <a href="#" class="news-modal-link" id="newsDetailLink" target="_blank" style="display:none;">Visit external link <i class="fas fa-arrow-up-right-from-square"></i></a>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
